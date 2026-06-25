@@ -76,11 +76,11 @@ export default function HomeRoute() {
 
 ### UI and Styles
 
-- **shadcn/ui** as the base component library
-- **Tailwind CSS** for styles (classes only, no inline CSS)
+- **Chakra UI** as the component library (traditional library, not copy-paste)
+- **Tailwind CSS** for custom styles when needed (classes only, no inline CSS)
 - **PostCSS** configured to optimize and clean generated classes
 - **Atomic Design** for component organization in infrastructure
-- **Design Tokens** in `tailwind.config.ts` for centralized theming
+- **Design Tokens** via Chakra UI theme system for centralized theming
 
 **Design Tokens Configuration**:
 
@@ -95,12 +95,12 @@ export default function HomeRoute() {
 **UI/UX Standards**:
 
 - Modern, professional design inspired by fintech apps (Nubank, Revolut, N26)
-- Always use shadcn/ui components as foundation
+- Always use Chakra UI components as foundation
 - Proper spacing, visual hierarchy, and responsive design
-- Interactive states (hover, focus, disabled, loading)
+- Interactive states (hover, focus, disabled, loading) built-in with Chakra
 - Icons from lucide-react library
 - Mobile-first approach
-- Accessibility considerations (ARIA labels, keyboard navigation)
+- Accessibility considerations built-in with Chakra UI (ARIA labels, keyboard navigation)
 
 ### Forms and Validation
 
@@ -302,9 +302,9 @@ export default function HomeRoute() {
 ```
 /src/shared/
 ├── ui/
-│   ├── components/         # shadcn/ui wrappers
-│   ├── hooks/
-│   └── utils/
+│   ├── components/         # Custom shared UI components (atoms, molecules, etc.)
+│   ├── hooks/              # Shared React hooks
+│   └── utils/              # UI utilities
 ├── domain/
 │   ├── value-objects/      # VOs shared between domains
 │   ├── errors/             # Base DomainError and shared errors
@@ -1516,21 +1516,6 @@ Although it's a mocked app, design decisions consider:
 3. **No Real Authentication**: No JWT, OAuth, or real security
 4. **No Concurrency Handling**: Race conditions in transactions are not considered
 5. **No Internationalization**: English translation only
-
----
-
-## Next Steps (Out of Scope)
-
-With more time, the following would be considered:
-
-1. **Real Backend**: Connect to REST or GraphQL API
-2. **Real Authentication**: JWT, refresh tokens, OAuth
-3. **Persistence**: Real database
-4. **Optimistic Updates**: Improve UX with optimistic updates
-5. **Internationalization**: i18n for multiple languages
-6. **Accessibility**: Full a11y audit
-7. **Performance**: Lighthouse analysis, optimizations
-8. **Monitoring**: Sentry, analytics, logs
 
 ---
 

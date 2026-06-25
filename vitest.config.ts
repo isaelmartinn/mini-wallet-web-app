@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: "jsdom",
+    environment: "node",
     setupFiles: ["./vitest.setup.ts"],
     include: ["**/*.spec.ts", "**/*.spec.tsx"],
     exclude: ["node_modules", "e2e/**", ".next/**"],
@@ -21,6 +21,11 @@ export default defineConfig({
         "**/*.config.js",
         ".next/",
       ],
+    },
+    server: {
+      deps: {
+        inline: ["@exodus/bytes", "html-encoding-sniffer"],
+      },
     },
   },
   resolve: {
