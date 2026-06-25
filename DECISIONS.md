@@ -16,34 +16,117 @@
 ## Technology Stack
 
 ### Framework and Language
+
 - **Next.js** with **App Router** (`app/` folder)
-- Strict **TypeScript** (no `any`, no inline types)
+- **TypeScript** with full strict mode enabled
 - **React 18+**
 
+**TypeScript Configuration**:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}
+```
+
+**Rules**:
+
+- No `any` types allowed (use `unknown` with type guards if needed)
+- No inline types (always define types/interfaces in separate files or at file top)
+- All function parameters and return types must be explicitly typed
+
 ### Rendering Strategy
-- Pure **CSR (Client-Side Rendering)**
+
+- Pure **CSR (Client-Side Rendering)** - NO Server-Side Rendering
 - **Justification**: Authenticated application without public content, no SEO required. All content is dynamic and user-personalized. CSR simplifies the mental model, avoids hydration complexity, and allows optimization with code splitting and lazy loading.
 
+**Implementation**:
+
+- Add `"use client"` directive at the top of ALL Next.js route files (`app/*/page.tsx`)
+- This forces client-only rendering (no SSR)
+- Root `layout.tsx` should also have `"use client"`
+- Domain components (`infrastructure/ui/pages/*`) do NOT need `"use client"` (they inherit from route)
+
+**Example**:
+
+```typescript
+// app/(dashboard)/home/page.tsx
+"use client"; // ← MANDATORY for CSR
+
+import { HomePage } from "#wallet/infrastructure/ui/pages";
+
+export default function HomeRoute() {
+  return <HomePage />;
+}
+```
+
+**Note**: Even though Next.js App Router defaults to Server Components, adding `"use client"` to route files ensures pure client-side rendering.
+
 ### Global State
+
 - **Zustand** for global state management
 - Store per domain when necessary
 
 ### UI and Styles
+
 - **shadcn/ui** as the base component library
 - **Tailwind CSS** for styles (classes only, no inline CSS)
 - **PostCSS** configured to optimize and clean generated classes
 - **Atomic Design** for component organization in infrastructure
+- **Design Tokens** in `tailwind.config.ts` for centralized theming
+
+**Design Tokens Configuration**:
+
+- Colors: Primary, secondary, semantic (success, error, warning, info), neutral
+- Spacing: Based on 4px grid system
+- Typography: Font sizes with line heights, font families
+- Border radius: Consistent rounding scale
+- Shadows: Predefined shadow levels
+- Z-index: Layering scale for overlays
+- Transitions: Standard animation durations
+
+**UI/UX Standards**:
+
+- Modern, professional design inspired by fintech apps (Nubank, Revolut, N26)
+- Always use shadcn/ui components as foundation
+- Proper spacing, visual hierarchy, and responsive design
+- Interactive states (hover, focus, disabled, loading)
+- Icons from lucide-react library
+- Mobile-first approach
+- Accessibility considerations (ARIA labels, keyboard navigation)
+
+### Forms and Validation
+
+- **React Hook Form** for form state management
+- **Zod** for schema validation
+- **Hybrid approach**: UI validation (Zod) + Business validation (Domain Value Objects)
+
+### Notifications and Toasts
+
+- **Sileo** for toast notifications
+- Minimal, opinionated toast component with SVG morphing and spring physics
+- Beautiful by default, no configuration required
 
 ### Testing
+
 - **Vitest** with **React Testing Library** for unit and integration tests
 - **Playwright** for E2E tests
 - **BDD** (Given, When, Then) for test structure
 
 ### Code Quality
+
 - **ESLint** with strict configuration
 - **Prettier** for formatting
 - **Husky** for pre-commit hooks
 - **eslint-plugin-boundaries** to enforce DDD rules
+- **eslint-plugin-perfectionist** for automatic sorting (imports, objects, exports, etc.)
 
 ---
 
@@ -77,6 +160,7 @@
 ```
 
 #### Domain Layer (Core)
+
 - **Entities**: Objects with identity and lifecycle
 - **Value Objects (VO)**: Immutable objects without identity
 - **Domain Services**: Business logic that doesn't belong to an entity
@@ -84,11 +168,13 @@
 - **No external dependencies**: Pure business logic only
 
 #### Application Layer (Use Cases)
+
 - **Use Cases**: Orchestration of business logic
 - Can depend on: Domain Layer
 - Cannot depend on: Infrastructure Layer
 
 #### Infrastructure Layer (Adapters)
+
 - **UI**: React components (Atomic Design), pages
 - **Repositories**: Persistence implementations
 - **API**: HTTP clients, API routes
@@ -166,13 +252,18 @@
 │   │   │   └── {page-name}/
 │   │   │       ├── {page-name}.page.tsx
 │   │   │       └── {page-name}.page.spec.tsx
+│   │   ├── schemas/
+│   │   │   └── {schema-name}.schema.ts
 │   │   └── index.ts
 │   ├── repositories/
 │   │   ├── {repository-name}/
 │   │   │   ├── {repository-name}.repository.ts
 │   │   │   ├── {repository-name}.repository.mock.ts
+│   │   │   ├── {repository-name}.fixtures.ts
 │   │   │   └── {repository-name}.repository.spec.ts
 │   │   └── index.ts
+│   ├── store/
+│   │   └── {domain}.store.ts
 │   ├── api/
 │   │   ├── {api-name}/
 │   │   │   └── {api-name}.api.ts
@@ -219,11 +310,14 @@
 │   ├── errors/             # Base DomainError and shared errors
 │   └── interfaces/         # Interfaces shared between domains
 ├── infrastructure/
-│   ├── store/              # Zustand stores
+│   ├── store/              # ONLY cross-domain stores (theme, notifications, etc.)
 │   ├── http/               # Base HTTP client
+│   ├── config/             # Mock configuration (delays, error rates)
 │   └── utils/
 └── index.ts
 ```
+
+**IMPORTANT**: Domain-specific stores (auth, wallet, transactions) should NOT be in `/src/shared/infrastructure/store/`. They belong in each domain's infrastructure layer.
 
 ---
 
@@ -232,21 +326,26 @@
 ### Identified Domains
 
 #### 1. `auth` (Identity & Access)
+
 **Responsibility**: Authentication and session management
 
 **Entities**:
+
 - `User` (authenticated user)
 
 **Value Objects**:
+
 - `Email`
 - `Phone`
 
 **Use Cases**:
+
 - `LoginUseCase`
 - `LogoutUseCase`
 - `ValidateSessionUseCase`
 
 **Business Rules**:
+
 - Email/phone format validation
 - Mocked session persistence
 - Authentication state management
@@ -254,40 +353,50 @@
 ---
 
 #### 2. `wallet` (Core Domain)
+
 **Responsibility**: Balance and user profile management
 
 **Entities**:
+
 - `Balance` (available balance)
 - `UserProfile` (name, basic info)
 
 **Value Objects**:
+
 - `Amount` (amount with validations)
 
 **Use Cases**:
+
 - `GetBalanceUseCase`
 - `GetUserProfileUseCase`
 
 **Business Rules**:
+
 - Balance always >= 0
 - Amount formatting (decimals, currency)
 
 ---
 
 #### 3. `transactions` (Transactions)
+
 **Responsibility**: Creation, validation, and listing of transactions
 
 **Entities**:
+
 - `Transaction` (transaction with state)
 - `Contact` (recipient/contact)
 
 **Value Objects**:
+
 - `Amount` (shared with wallet)
 - `TransactionStatus` (pending, success, failed)
 
 **Domain Services**:
+
 - `TransactionValidationService` (business validations)
 
 **Use Cases**:
+
 - `CreateTransactionUseCase`
 - `ConfirmTransactionUseCase`
 - `GetTransactionsUseCase`
@@ -295,6 +404,7 @@
 - `GetContactsUseCase`
 
 **Business Rules**:
+
 - Minimum amount > 0
 - Sufficient balance (query to wallet)
 - Recipient mandatory
@@ -340,20 +450,22 @@
 **`eslint-plugin-boundaries`** should be used to enforce these rules automatically.
 
 **Expected Configuration**:
+
 - Define boundaries by layer (domain, application, infrastructure)
 - Define boundaries by domain (auth, wallet, transactions)
 - Configure allowed dependency rules
 - Fail lint if any rule is violated
 
 **Violation Example**:
+
 ```typescript
 // ❌ INCORRECT - Domain importing from Infrastructure
 // src/contexts/auth/domain/entities/user/user.entity.ts
-import { api } from "#auth/infrastructure/api";  // ❌ Violation
+import { api } from "#auth/infrastructure/api"; // ❌ Violation
 
 // ❌ INCORRECT - One domain importing from another
 // src/contexts/transactions/domain/services/validation.service.ts
-import { Balance } from "#wallet/domain/entities";  // ❌ Violation
+import { Balance } from "#wallet/domain/entities"; // ❌ Violation
 
 // ✅ CORRECT - Use shared or interfaces
 import { BalanceProvider } from "#shared/domain/interfaces";
@@ -366,6 +478,7 @@ import { BalanceProvider } from "#shared/domain/interfaces";
 ### Naming Conventions
 
 #### Files
+
 - **Entities**: `{name}.entity.ts`
 - **Value Objects**: `{name}.vo.ts`
 - **Services**: `{name}.service.ts`
@@ -376,17 +489,44 @@ import { BalanceProvider } from "#shared/domain/interfaces";
 - **Interfaces**: `{name}.interface.ts`
 
 #### Folders
+
 - **kebab-case**: `transaction-validation/`
 - Always grouped, never loose files in root
 
 #### Barrels (index.ts)
+
+**MANDATORY RULE**: Use explicit individual exports, NOT `export *`.
+
 - Each subfolder must have its barrel at the root
-- Example: `/domain/entities/index.ts` exports all entities
+- Barrels provide controlled public API for each module
 - Allows clean imports: `import { User } from "#auth/domain/entities"`
+
+**Correct Implementation**:
+
+```typescript
+// ✅ CORRECT - Explicit exports
+// src/contexts/auth/domain/entities/index.ts
+export { User } from "./user/user.entity";
+export type { User as IUser } from "./user/user.interface";
+
+// ❌ INCORRECT - Wildcard exports
+export * from "./user/user.entity"; // Don't use this
+```
+
+**Reasons**:
+
+- Full control over public API
+- Prevents accidental exports of internal helpers
+- Avoids name conflicts between files
+- Better for tree-shaking and refactoring
+- Explicit is better than implicit
 
 ### Import Aliases
 
+**MANDATORY RULE**: Always use path aliases for imports. **NEVER** use relative paths (e.g., `../../../`). This ensures consistency, readability, and makes refactoring easier.
+
 **`tsconfig.json` Configuration**:
+
 ```json
 {
   "compilerOptions": {
@@ -402,10 +542,16 @@ import { BalanceProvider } from "#shared/domain/interfaces";
 ```
 
 **Usage**:
+
 ```typescript
+// ✅ CORRECT - Using aliases
 import { LoginUseCase } from "#auth/application/use-cases";
 import { Amount } from "#shared/domain/value-objects";
 import { Button } from "#shared/ui/components";
+
+// ❌ INCORRECT - Using relative paths
+import { LoginUseCase } from "../../../application/use-cases";
+import { Amount } from "../../../../shared/domain/value-objects";
 ```
 
 ### Code Style
@@ -422,12 +568,14 @@ import { Button } from "#shared/ui/components";
 **Fundamental Rule**: All entities, use cases, services, and repositories **MUST** have an interface.
 
 **Reasons**:
+
 1. **Dependency Inversion**: Allows injecting mock implementations in tests
 2. **Clear Contracts**: Explicitly defines expected behavior
 3. **Flexibility**: Makes it easier to change implementations without affecting consumers
 4. **Testing**: Allows easy mock creation
 
 **Mandatory Structure**:
+
 ```
 /entity-name/
   entityName.interface.ts    ← Interface (contract)
@@ -436,18 +584,21 @@ import { Button } from "#shared/ui/components";
 ```
 
 **Naming convention**:
+
 - Interfaces: `{name}.interface.ts` (no `I` prefix)
 - Always in separate files with `.interface.ts` for clarity
 
 ### Value Objects (VO)
 
 **Characteristics**:
+
 - Immutable
 - No identity (equality by value)
 - Validations in constructor
 - Business methods if applicable
 
 **Structural Example**:
+
 ```typescript
 // src/contexts/wallet/domain/value-objects/amount/amount.interface.ts
 export interface Amount {
@@ -473,19 +624,21 @@ export class Amount implements AmountInterface {
   }
 
   // Business methods
-  isGreaterThan(other: AmountInterface): boolean { }
-  add(other: AmountInterface): Amount { }
+  isGreaterThan(other: AmountInterface): boolean {}
+  add(other: AmountInterface): Amount {}
 }
 ```
 
 ### Entities
 
 **Characteristics**:
+
 - Have identity (ID)
 - Can mutate (but controlled)
 - Encapsulate business logic
 
 **Structural Example**:
+
 ```typescript
 // src/contexts/transactions/domain/entities/transaction/transaction.interface.ts
 export interface Transaction {
@@ -501,11 +654,11 @@ import { Transaction as TransactionInterface } from "./transaction.interface";
 export class Transaction implements TransactionInterface {
   private constructor(
     private readonly id: string,
-    private status: TransactionStatus,
+    private status: TransactionStatus
     // ...
   ) {}
 
-  static create(params: CreateTransactionParams): Transaction { }
+  static create(params: CreateTransactionParams): Transaction {}
 
   getId(): string {
     return this.id;
@@ -528,10 +681,12 @@ export class Transaction implements TransactionInterface {
 ### Domain Services
 
 **When to use**:
+
 - Business logic involving multiple entities
 - Complex validations that don't belong to a specific entity
 
 **Structural Example**:
+
 ```typescript
 // src/contexts/transactions/domain/services/transaction-validation/transaction-validation.service.ts
 export class TransactionValidationService {
@@ -547,11 +702,13 @@ export class TransactionValidationService {
 ### Use Cases
 
 **Characteristics**:
+
 - Orchestrate business logic
 - One use case = one user action
 - Can depend on repositories (injected)
 
 **Structural Example**:
+
 ```typescript
 // src/contexts/transactions/application/use-cases/create-transaction/createTransaction.interface.ts
 export interface CreateTransactionUseCase {
@@ -579,11 +736,13 @@ export class CreateTransactionUseCase implements CreateTransactionUseCaseInterfa
 ### Repositories
 
 **Characteristics**:
+
 - Interface in Domain or Application
 - Implementation in Infrastructure
 - Mock for testing
 
 **Structural Example**:
+
 ```typescript
 // src/contexts/transactions/domain/repositories/transaction.repository.interface.ts
 export interface TransactionRepository {
@@ -666,6 +825,7 @@ describe("CreateTransactionUseCase", () => {
 ```
 
 **Mandatory Structure**:
+
 - **First level**: `describe("SUTName")` (System Under Test)
 - **Second level**: `describe("Given [context/precondition]")`
 - **Third level**: `describe("When [action]")`
@@ -711,16 +871,18 @@ describe("LoginPage", () => {
 ### E2E Testing with Playwright
 
 **Fixtures**: Reusable test data
+
 ```typescript
 // e2e/fixtures/users.fixture.ts
 export const testUser = {
   phone: "+521234567890",
   name: "Juan Pérez",
-  balance: 5000
+  balance: 5000,
 };
 ```
 
 **Page Objects**: Encapsulate page interactions
+
 ```typescript
 // e2e/page-objects/login.page.ts
 export class LoginPage {
@@ -738,6 +900,7 @@ export class LoginPage {
 ```
 
 **E2E Flows**:
+
 ```typescript
 // e2e/flows/transactionFlow.spec.ts
 test.describe("Transaction Flow", () => {
@@ -766,27 +929,38 @@ test.describe("Transaction Flow", () => {
 
 ## Tool Configuration
 
-### Husky Pre-commit Hooks
+### Husky Pre-commit Hooks (v9)
 
 Every commit must verify:
+
 1. **Lint**: `eslint` on modified files
 2. **Format**: `prettier` on modified files
 3. **Tests**: Unit tests for modified files
 
-**Expected Configuration**:
+**Installation**:
+
+```bash
+npx husky init
+npm install --save-dev lint-staged
+```
+
+**Configuration**:
+
+`.husky/pre-commit`:
+
+```bash
+npm run lint-staged
+```
+
+`package.json`:
+
 ```json
 {
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "scripts": {
+    "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write",
-      "vitest related --run"
-    ]
+    "*.{ts,tsx}": ["eslint --fix", "prettier --write", "vitest related --run"]
   }
 }
 ```
@@ -794,20 +968,35 @@ Every commit must verify:
 ### ESLint
 
 **Required Plugins**:
+
 - `@typescript-eslint`
 - `eslint-plugin-react`
 - `eslint-plugin-react-hooks`
 - `eslint-plugin-boundaries` (to enforce DDD)
+- `eslint-plugin-perfectionist` (automatic sorting)
 
 **Important Rules**:
+
 - No `any`
 - No `console.log` in production
-- Sorted imports
-- DDD Boundaries
+- Automatic sorting of imports, objects, exports, JSX props (perfectionist)
+- DDD Boundaries enforcement
+
+**Perfectionist Configuration**:
+
+- Uses `recommended-natural` preset
+- Automatically sorts:
+  - Imports (alphabetically with natural sorting)
+  - Named imports/exports
+  - Object properties
+  - JSX props
+  - Module exports
+- Fixable with `--fix` flag
 
 ### Prettier
 
 **Configuration**:
+
 ```json
 {
   "semi": true,
@@ -821,11 +1010,13 @@ Every commit must verify:
 ### PostCSS and Tailwind
 
 **PostCSS** must be configured to:
+
 - Purge unused classes in production
 - Optimize the CSS bundle
 - Minify
 
 **Tailwind** configured with:
+
 - Paths to all files using classes
 - Custom theme if necessary
 - shadcn/ui plugins
@@ -851,11 +1042,13 @@ Every commit must verify:
 ```
 
 **Principle**: Next.js pages are **adapters** that:
+
 1. Receive HTTP requests
 2. Invoke domain use cases
 3. Return responses (HTML, JSON)
 
 **Clear Separation**:
+
 - `/app`: Next.js routes and adapters (infrastructure)
 - `/src/contexts`: Business logic (domain + application)
 - `/src/contexts/{domain}/infrastructure/ui`: Presentation components
@@ -880,6 +1073,7 @@ Every commit must verify:
 ```
 
 **Route Groups** `(auth)` and `(dashboard)`:
+
 - Allow different layouts without affecting the URL
 - `(auth)`: No navbar, centered
 - `(dashboard)`: With navbar, sidebar if applicable
@@ -887,16 +1081,19 @@ Every commit must verify:
 ### Pages and Components
 
 **Pages** (`app/*/page.tsx`):
+
 - These are Next.js components
 - Should be thin, orchestration only
 - Import components from `infrastructure/ui/pages`
 
 **Page Components** (`infrastructure/ui/pages`):
+
 - Contain presentation logic
 - Use use case hooks
 - Compose atomic components
 
 **Separation Example**:
+
 ```typescript
 // app/(dashboard)/home/page.tsx (INFRASTRUCTURE - Next.js Adapter)
 import { HomePage } from "#wallet/infrastructure/ui/pages";
@@ -920,6 +1117,7 @@ export class GetBalanceUseCase implements GetBalanceUseCaseInterface {
 ```
 
 **Data Flow**:
+
 1. User accesses `/home` → Next.js routes to `app/(dashboard)/home/page.tsx`
 2. `page.tsx` renders domain `<HomePage />`
 3. `<HomePage />` uses hooks that invoke use cases
@@ -932,17 +1130,18 @@ export class GetBalanceUseCase implements GetBalanceUseCaseInterface {
 
 ### Stores per Domain
 
-Each domain can have its store if it needs global state:
+**IMPORTANT**: Each domain's store **MUST** be located inside its own domain's infrastructure layer, NOT in shared.
 
 ```
-/src/shared/infrastructure/store/
-  /auth-store/
-    auth.store.ts
-  /wallet-store/
-    wallet.store.ts
-  /transactions-store/
-    transactions.store.ts
+/src/contexts/auth/infrastructure/store/
+  auth.store.ts
+/src/contexts/wallet/infrastructure/store/
+  wallet.store.ts
+/src/contexts/transactions/infrastructure/store/
+  transactions.store.ts
 ```
+
+**Exception**: Only stores that are truly cross-domain (e.g., theme, notifications, global UI state) should go in `/src/shared/infrastructure/store/`.
 
 ### Principles
 
@@ -950,10 +1149,12 @@ Each domain can have its store if it needs global state:
 - **Derived**: Use selectors for derived state
 - **Actions**: Methods in the store to mutate state
 - **Persistence**: Use Zustand middleware for localStorage if applicable
+- **Domain Isolation**: Each domain's store lives in its own infrastructure layer
 
 **Structural Example**:
+
 ```typescript
-// src/shared/infrastructure/store/auth-store/auth.store.ts
+// src/contexts/auth/infrastructure/store/auth.store.ts
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
@@ -968,6 +1169,172 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => set({ user: null, isAuthenticated: false }),
 }));
 ```
+
+---
+
+## Forms and Validation
+
+### Hybrid Validation Strategy
+
+The application uses a **two-layer validation approach**:
+
+1. **UI Layer Validation** (React Hook Form + Zod)
+2. **Domain Layer Validation** (Value Objects)
+
+### UI Layer Validation (Infrastructure)
+
+**Purpose**: Immediate user feedback for format, required fields, and basic constraints.
+
+**Tools**:
+
+- **React Hook Form**: Form state management with minimal re-renders
+- **Zod**: Schema validation with TypeScript inference
+- **@hookform/resolvers/zod**: Integration between RHF and Zod
+
+**Location**: `src/contexts/{domain}/infrastructure/ui/schemas/`
+
+**Example**:
+
+```typescript
+// src/contexts/auth/infrastructure/ui/schemas/login.schema.ts
+import { z } from "zod";
+
+export const loginSchema = z.object({
+  emailOrPhone: z
+    .string()
+    .min(1, "Este campo es requerido")
+    .max(100, "Máximo 100 caracteres"),
+});
+
+export type LoginFormData = z.infer<typeof loginSchema>;
+```
+
+**Usage in Component**:
+
+```typescript
+// src/contexts/auth/infrastructure/ui/pages/login-page/login-page.tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginFormData } from "../../schemas/login.schema";
+
+export function LoginPage() {
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: "onChange", // Validate on change
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
+    // Domain validation happens here
+    const result = await loginUseCase.execute(data);
+
+    if (result.isFailure()) {
+      form.setError("emailOrPhone", {
+        message: result.error.message,
+      });
+    }
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="emailOrPhone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email o Teléfono</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Iniciar sesión</Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+### Domain Layer Validation (Domain)
+
+**Purpose**: Business rules and complex validations.
+
+**Location**: Value Objects in `src/contexts/{domain}/domain/value-objects/`
+
+**Example**:
+
+```typescript
+// src/contexts/auth/domain/value-objects/email/email.vo.ts
+import { DomainError } from "#shared/domain/errors";
+
+export class Email {
+  private constructor(private readonly value: string) {}
+
+  static create(value: string): Result<Email, DomainError> {
+    // Business validation
+    if (!this.isValidFormat(value)) {
+      return Result.fail(new InvalidEmailError(value));
+    }
+
+    if (this.isBlacklisted(value)) {
+      return Result.fail(new BlacklistedEmailError(value));
+    }
+
+    return Result.ok(new Email(value));
+  }
+
+  private static isValidFormat(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  private static isBlacklisted(value: string): boolean {
+    // Business rule: check against blacklist
+    return false;
+  }
+
+  getValue(): string {
+    return this.value;
+  }
+}
+```
+
+### Validation Flow
+
+```
+User Input
+    ↓
+[Zod Schema] ← UI validation (format, required, length)
+    ↓
+[React Hook Form] ← Manages form state
+    ↓
+[onSubmit]
+    ↓
+[Value Object.create()] ← Domain validation (business rules)
+    ↓
+[Use Case] ← Executes business logic
+```
+
+### When to Use Each Layer
+
+| Validation Type        | Layer  | Tool              | Example                   |
+| ---------------------- | ------ | ----------------- | ------------------------- |
+| Required fields        | UI     | Zod               | `.min(1, "Required")`     |
+| Format (email, phone)  | UI     | Zod               | `.email()` or regex       |
+| Length constraints     | UI     | Zod               | `.min(3).max(50)`         |
+| Business rules         | Domain | Value Objects     | Blacklist check           |
+| Cross-field validation | Domain | Domain Services   | Amount <= Balance         |
+| Complex logic          | Domain | Entities/Services | Transaction state machine |
+
+### Benefits of Hybrid Approach
+
+1. **Better UX**: Immediate feedback with Zod (no server round-trip)
+2. **DDD Compliance**: Business logic stays in domain
+3. **Type Safety**: Zod infers TypeScript types
+4. **Performance**: React Hook Form minimizes re-renders
+5. **Separation of Concerns**: UI validation ≠ Business validation
+6. **Testability**: Each layer can be tested independently
 
 ---
 
@@ -1022,10 +1389,12 @@ type Result<T, E = Error> =
 
 ### UI Handling
 
-Components should handle errors and display appropriate messages:
-- Validation errors: Inline in forms
-- Business errors: Toasts or modals
-- Network errors: Error pages or retries
+**Error Display Strategy**:
+
+1. **Validation errors**: Inline in forms (React Hook Form)
+2. **Business errors**: Toast notifications (Sileo)
+3. **Network errors**: Toast with retry action (Sileo)
+4. **Loading states**: Promise toasts (Sileo)
 
 ---
 
@@ -1040,12 +1409,14 @@ Components should handle errors and display appropriate messages:
 ### Implementation
 
 These validations must be in:
+
 - **Domain Layer**: `TransactionValidationService` or in the `Transaction` entity
 - **NOT** just in the UI (UI can validate for UX, but it's not the only validation)
 
 ### Confirmation Scenarios
 
 Confirmation must handle randomly:
+
 - ✅ **Success**: Transaction confirmed
 - ❌ **Network Error**: Show error with retry option
 - ❌ **Insufficient Funds**: Descriptive error
@@ -1061,24 +1432,66 @@ Confirmation must handle randomly:
 ### Mocking Strategy
 
 - **Repositories**: Mock implementations with in-memory data
-- **API Routes**: Next.js API routes returning mocked data
-- **Delays**: Simulate network latency with `setTimeout`
-- **Errors**: Return errors randomly to test handling
+- **Delays**: Simulate network latency with configurable delays
+- **Errors**: Return errors randomly based on configurable percentages
+- **Fixtures**: Each domain has its own fixture files (DDD isolation)
+
+### Fixture Structure (DDD Compliant)
+
+**Per Domain** (respects boundaries):
+
+```
+/src/contexts/{domain}/infrastructure/repositories/{repository-name}/
+  {repository-name}.repository.ts
+  {repository-name}.repository.mock.ts
+  {repository-name}.fixtures.ts  ← Mock data here
+```
+
+**Example**:
+
+```
+/src/contexts/auth/infrastructure/repositories/auth-repository/
+  auth.fixtures.ts  ← Users mock data
+
+/src/contexts/wallet/infrastructure/repositories/wallet-repository/
+  wallet.fixtures.ts  ← Balance mock data
+
+/src/contexts/transactions/infrastructure/repositories/transaction-repository/
+  transaction.fixtures.ts  ← Transactions mock data
+```
+
+### Mock Configuration (Shared Infrastructure)
+
+Technical configuration for delays and error rates:
+
+```
+/src/shared/infrastructure/config/
+  mock.config.ts  ← Delays, error percentages
+```
+
+**Configuration includes**:
+
+- Network delay ranges (min/max ms)
+- Error rate percentages per operation
+- Easily modifiable for testing different scenarios
 
 ### Initial Data
 
 **Mocked User**:
+
 - Name: "Juan Pérez"
 - Phone: "+521234567890"
 - Email: "juan.perez@example.com"
 - Initial Balance: $5,000 MXN
 
 **Mocked Transactions**:
+
 - 5-10 historical transactions
 - Mix of sent and received
 - Different amounts and dates
 
 **Mocked Contacts**:
+
 - 3-5 favorite contacts
 - Names, phones/emails
 
@@ -1123,18 +1536,18 @@ With more time, the following would be considered:
 
 ## Summary of Key Decisions
 
-| Aspect | Decision | Justification |
-|---------|----------|---------------|
-| **Rendering** | CSR | Authenticated app, no SEO, dynamic content |
-| **Navigation** | App Router | Modern Next.js standard |
-| **State** | Zustand | Simple, performant, no boilerplate |
-| **E2E Testing** | Playwright | More modern and faster than Cypress |
-| **Architecture** | DDD + Hexagonal | Scalability, maintainability, clear boundaries |
-| **UI** | Atomic Design | Reuse, consistency, scalability |
-| **Components** | shadcn/ui | Quality components, customizable, no vendor lock-in |
-| **Styles** | Tailwind CSS | Productivity, consistency, small bundle |
-| **Quality** | ESLint + Prettier + Husky | Consistent code, early errors |
-| **DDD Enforcement** | eslint-plugin-boundaries | Automatically enforce architectural rules |
+| Aspect              | Decision                  | Justification                                       |
+| ------------------- | ------------------------- | --------------------------------------------------- |
+| **Rendering**       | CSR                       | Authenticated app, no SEO, dynamic content          |
+| **Navigation**      | App Router                | Modern Next.js standard                             |
+| **State**           | Zustand                   | Simple, performant, no boilerplate                  |
+| **E2E Testing**     | Playwright                | More modern and faster than Cypress                 |
+| **Architecture**    | DDD + Hexagonal           | Scalability, maintainability, clear boundaries      |
+| **UI**              | Atomic Design             | Reuse, consistency, scalability                     |
+| **Components**      | shadcn/ui                 | Quality components, customizable, no vendor lock-in |
+| **Styles**          | Tailwind CSS              | Productivity, consistency, small bundle             |
+| **Quality**         | ESLint + Prettier + Husky | Consistent code, early errors                       |
+| **DDD Enforcement** | eslint-plugin-boundaries  | Automatically enforce architectural rules           |
 
 ---
 
