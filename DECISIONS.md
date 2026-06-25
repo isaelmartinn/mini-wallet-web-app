@@ -1,62 +1,62 @@
-# Decisiones de Arquitectura - Mini Wallet Web App
+# Architectural Decisions - Mini Wallet Web App
 
-## Índice
+## Index
 
-1. [Stack Tecnológico](#stack-tecnológico)
-2. [Arquitectura General](#arquitectura-general)
-3. [Estructura de Carpetas](#estructura-de-carpetas)
-4. [Dominios (DDD)](#dominios-ddd)
-5. [Reglas de Dependencias](#reglas-de-dependencias)
-6. [Patrones y Convenciones](#patrones-y-convenciones)
+1. [Technology Stack](#technology-stack)
+2. [General Architecture](#general-architecture)
+3. [Folder Structure](#folder-structure)
+4. [Domains (DDD)](#domains-ddd)
+5. [Dependency Rules](#dependency-rules)
+6. [Patterns and Conventions](#patterns-and-conventions)
 7. [Testing](#testing)
-8. [Configuración de Herramientas](#configuración-de-herramientas)
+8. [Tool Configuration](#tool-configuration)
 
 ---
 
-## Stack Tecnológico
+## Technology Stack
 
-### Framework y Lenguaje
-- **Next.js** con **App Router** (carpeta `app/`)
-- **TypeScript** estricto (no `any`, no inline types)
+### Framework and Language
+- **Next.js** with **App Router** (`app/` folder)
+- Strict **TypeScript** (no `any`, no inline types)
 - **React 18+**
 
 ### Rendering Strategy
-- **CSR (Client-Side Rendering)** puro
-- **Justificación**: Aplicación autenticada sin contenido público, no requiere SEO. Todo el contenido es dinámico y personalizado por usuario. CSR simplifica el modelo mental, evita complejidad de hidratación, y permite optimizar con code splitting y lazy loading.
+- Pure **CSR (Client-Side Rendering)**
+- **Justification**: Authenticated application without public content, no SEO required. All content is dynamic and user-personalized. CSR simplifies the mental model, avoids hydration complexity, and allows optimization with code splitting and lazy loading.
 
-### Estado Global
-- **Zustand** para manejo de estado global
-- Store por dominio cuando sea necesario
+### Global State
+- **Zustand** for global state management
+- Store per domain when necessary
 
-### UI y Estilos
-- **shadcn/ui** como librería de componentes base
-- **Tailwind CSS** para estilos (solo clases, no inline CSS)
-- **PostCSS** configurado para optimizar y limpiar clases generadas
-- **Atomic Design** para organización de componentes en infraestructura
+### UI and Styles
+- **shadcn/ui** as the base component library
+- **Tailwind CSS** for styles (classes only, no inline CSS)
+- **PostCSS** configured to optimize and clean generated classes
+- **Atomic Design** for component organization in infrastructure
 
 ### Testing
-- **Vitest** con **React Testing Library** para pruebas unitarias e integración
-- **Playwright** para pruebas E2E
-- **BDD** (Given, When, Then) para estructura de tests
+- **Vitest** with **React Testing Library** for unit and integration tests
+- **Playwright** for E2E tests
+- **BDD** (Given, When, Then) for test structure
 
-### Calidad de Código
-- **ESLint** con configuración estricta
-- **Prettier** para formateo
-- **Husky** para pre-commit hooks
-- **eslint-plugin-boundaries** para enforcar reglas de DDD
+### Code Quality
+- **ESLint** with strict configuration
+- **Prettier** for formatting
+- **Husky** for pre-commit hooks
+- **eslint-plugin-boundaries** to enforce DDD rules
 
 ---
 
-## Arquitectura General
+## General Architecture
 
-### Principios Arquitectónicos
+### Architectural Principles
 
-1. **Domain-Driven Design (DDD)**: Separación por dominios de negocio
-2. **Hexagonal Architecture**: Separación entre dominio, aplicación e infraestructura
-3. **Screaming Architecture**: La estructura de carpetas grita el propósito del negocio
-4. **Atomic Design**: Para organización de componentes UI en la capa de infraestructura
+1. **Domain-Driven Design (DDD)**: Separation by business domains
+2. **Hexagonal Architecture**: Separation between domain, application, and infrastructure
+3. **Screaming Architecture**: Folder structure screams business purpose
+4. **Atomic Design**: For UI component organization in the infrastructure layer
 
-### Capas de la Arquitectura Hexagonal
+### Hexagonal Architecture Layers
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -76,29 +76,29 @@
 └─────────────────────────────────────────────┘
 ```
 
-#### Domain Layer (Núcleo)
-- **Entities**: Objetos con identidad y ciclo de vida
-- **Value Objects (VO)**: Objetos inmutables sin identidad
-- **Domain Services**: Lógica de negocio que no pertenece a una entidad
-- **Errors**: Errores de dominio específicos
-- **No dependencias externas**: Solo lógica de negocio pura
+#### Domain Layer (Core)
+- **Entities**: Objects with identity and lifecycle
+- **Value Objects (VO)**: Immutable objects without identity
+- **Domain Services**: Business logic that doesn't belong to an entity
+- **Errors**: Specific domain errors
+- **No external dependencies**: Pure business logic only
 
-#### Application Layer (Casos de Uso)
-- **Use Cases**: Orquestación de lógica de negocio
-- Puede depender de: Domain Layer
-- No puede depender de: Infrastructure Layer
+#### Application Layer (Use Cases)
+- **Use Cases**: Orchestration of business logic
+- Can depend on: Domain Layer
+- Cannot depend on: Infrastructure Layer
 
-#### Infrastructure Layer (Adaptadores)
-- **UI**: Componentes React (Atomic Design), páginas
-- **Repositories**: Implementaciones de persistencia
-- **API**: Clientes HTTP, API routes
-- Puede depender de: Domain y Application Layers
+#### Infrastructure Layer (Adapters)
+- **UI**: React components (Atomic Design), pages
+- **Repositories**: Persistence implementations
+- **API**: HTTP clients, API routes
+- Can depend on: Domain and Application Layers
 
 ---
 
-## Estructura de Carpetas
+## Folder Structure
 
-### Estructura Raíz
+### Root Structure
 
 ```
 /
@@ -106,11 +106,11 @@
 │   └── workflows/
 ├── .specs/
 ├── app/                    # Next.js App Router
-├── e2e/                    # Pruebas End-to-End
+├── e2e/                    # End-to-End Tests
 ├── public/
 ├── src/
-│   ├── contexts/           # Dominios (DDD)
-│   └── shared/             # Código compartido entre dominios
+│   ├── contexts/           # Domains (DDD)
+│   └── shared/             # Shared code between domains
 ├── .eslintrc.json
 ├── .prettierrc
 ├── postcss.config.mjs
@@ -120,9 +120,9 @@
 └── README.md
 ```
 
-### Estructura de un Dominio (Contexto)
+### Domain Structure (Context)
 
-**Regla fundamental**: Todo debe estar agrupado en carpetas, nunca archivos sueltos en la raíz de una carpeta.
+**Fundamental Rule**: Everything must be grouped in folders, never loose files in a folder root.
 
 ```
 /src/contexts/{domain}/
@@ -181,7 +181,7 @@
 └── index.ts
 ```
 
-### Estructura de Pruebas E2E
+### E2E Test Structure
 
 ```
 /e2e/
@@ -200,42 +200,42 @@
 └── playwright.config.ts
 ```
 
-**Justificación**: Las pruebas E2E prueban flujos completos que atraviesan múltiples dominios. No pertenecen a ningún dominio específico, por lo que viven en la raíz del proyecto.
+**Justification**: E2E tests test complete flows that span multiple domains. They don't belong to any specific domain, so they live at the project root.
 
-**Fixtures**: Datos de prueba reutilizables (usuarios mock, transacciones, etc.) que se usan en múltiples tests.
+**Fixtures**: Reusable test data (mock users, transactions, etc.) used across multiple tests.
 
-**Page Objects**: Patrón para encapsular la lógica de interacción con páginas, evitando repetir selectores y acciones en cada test.
+**Page Objects**: Pattern to encapsulate page interaction logic, avoiding repeated selectors and actions in each test.
 
-### Carpeta Shared
+### Shared Folder
 
 ```
 /src/shared/
 ├── ui/
-│   ├── components/         # Wrappers de shadcn/ui
+│   ├── components/         # shadcn/ui wrappers
 │   ├── hooks/
 │   └── utils/
 ├── domain/
-│   ├── value-objects/      # VOs compartidos entre dominios
-│   ├── errors/             # DomainError base y errores compartidos
-│   └── interfaces/         # Interfaces compartidas entre dominios
+│   ├── value-objects/      # VOs shared between domains
+│   ├── errors/             # Base DomainError and shared errors
+│   └── interfaces/         # Interfaces shared between domains
 ├── infrastructure/
 │   ├── store/              # Zustand stores
-│   ├── http/               # Cliente HTTP base
+│   ├── http/               # Base HTTP client
 │   └── utils/
 └── index.ts
 ```
 
 ---
 
-## Dominios (DDD)
+## Domains (DDD)
 
-### Dominios Identificados
+### Identified Domains
 
 #### 1. `auth` (Identity & Access)
-**Responsabilidad**: Autenticación y gestión de sesión
+**Responsibility**: Authentication and session management
 
-**Entidades**:
-- `User` (usuario autenticado)
+**Entities**:
+- `User` (authenticated user)
 
 **Value Objects**:
 - `Email`
@@ -246,46 +246,46 @@
 - `LogoutUseCase`
 - `ValidateSessionUseCase`
 
-**Reglas de Negocio**:
-- Validación de formato de email/teléfono
-- Persistencia de sesión mockeada
-- Manejo de estados de autenticación
+**Business Rules**:
+- Email/phone format validation
+- Mocked session persistence
+- Authentication state management
 
 ---
 
 #### 2. `wallet` (Core Domain)
-**Responsabilidad**: Gestión de saldo y perfil de usuario
+**Responsibility**: Balance and user profile management
 
-**Entidades**:
-- `Balance` (saldo disponible)
-- `UserProfile` (nombre, info básica)
+**Entities**:
+- `Balance` (available balance)
+- `UserProfile` (name, basic info)
 
 **Value Objects**:
-- `Amount` (monto con validaciones)
+- `Amount` (amount with validations)
 
 **Use Cases**:
 - `GetBalanceUseCase`
 - `GetUserProfileUseCase`
 
-**Reglas de Negocio**:
-- Saldo siempre >= 0
-- Formato de montos (decimales, moneda)
+**Business Rules**:
+- Balance always >= 0
+- Amount formatting (decimals, currency)
 
 ---
 
-#### 3. `transactions` (Transacciones)
-**Responsabilidad**: Creación, validación y listado de transacciones
+#### 3. `transactions` (Transactions)
+**Responsibility**: Creation, validation, and listing of transactions
 
-**Entidades**:
-- `Transaction` (transacción con estado)
-- `Contact` (destinatario/contacto)
+**Entities**:
+- `Transaction` (transaction with state)
+- `Contact` (recipient/contact)
 
 **Value Objects**:
-- `Amount` (compartido con wallet)
+- `Amount` (shared with wallet)
 - `TransactionStatus` (pending, success, failed)
 
 **Domain Services**:
-- `TransactionValidationService` (validaciones de negocio)
+- `TransactionValidationService` (business validations)
 
 **Use Cases**:
 - `CreateTransactionUseCase`
@@ -294,99 +294,99 @@
 - `AddContactUseCase`
 - `GetContactsUseCase`
 
-**Reglas de Negocio**:
-- Monto mínimo > 0
-- Saldo suficiente (consulta a wallet)
-- Destinatario obligatorio
-- Estados de transacción (éxito, error, timeout)
+**Business Rules**:
+- Minimum amount > 0
+- Sufficient balance (query to wallet)
+- Recipient mandatory
+- Transaction states (success, error, timeout)
 
 ---
 
-### Relación entre Dominios
+### Relationship Between Domains
 
 ```
 ┌──────────┐
 │   auth   │
 └────┬─────┘
-     │ proporciona sesión
+     │ provides session
      ▼
-┌──────────┐      consulta saldo      ┌──────────────┐
+┌──────────┐      queries balance      ┌──────────────┐
 │  wallet  │◄────────────────────────│ transactions │
 └──────────┘                          └──────────────┘
 ```
 
-**Nota**: `transactions` puede consultar `wallet` para validar saldo, pero no debe tener dependencia directa. Se debe usar una interfaz o evento.
+**Note**: `transactions` can query `wallet` to validate balance, but should not have a direct dependency. An interface or event should be used.
 
 ---
 
-## Reglas de Dependencias
+## Dependency Rules
 
-### Reglas de Capas (Hexagonal)
+### Layer Rules (Hexagonal)
 
-1. **Domain** no puede importar de **Application** ni **Infrastructure**
-2. **Application** puede importar de **Domain**, pero NO de **Infrastructure**
-3. **Infrastructure** puede importar de **Domain** y **Application**
+1. **Domain** cannot import from **Application** or **Infrastructure**
+2. **Application** can import from **Domain**, but NOT from **Infrastructure**
+3. **Infrastructure** can import from **Domain** and **Application**
 
-### Reglas de Dominios (DDD)
+### Domain Rules (DDD)
 
-4. Un dominio **NO** puede importar directamente de otro dominio
-5. Si se necesita comunicación entre dominios, usar:
-   - Interfaces en `shared/domain`
-   - Eventos de dominio
-   - Inyección de dependencias en Application Layer
+4. A domain **CANNOT** directly import from another domain
+5. If communication between domains is needed, use:
+   - Interfaces in `shared/domain`
+   - Domain events
+   - Dependency injection in Application Layer
 
-### Enforcement con ESLint
+### Enforcement with ESLint
 
-Se debe usar **`eslint-plugin-boundaries`** para enforcar estas reglas automáticamente.
+**`eslint-plugin-boundaries`** should be used to enforce these rules automatically.
 
-**Configuración esperada**:
-- Definir boundaries por capa (domain, application, infrastructure)
-- Definir boundaries por dominio (auth, wallet, transactions)
-- Configurar reglas de dependencias permitidas
-- Fallar en lint si se viola alguna regla
+**Expected Configuration**:
+- Define boundaries by layer (domain, application, infrastructure)
+- Define boundaries by domain (auth, wallet, transactions)
+- Configure allowed dependency rules
+- Fail lint if any rule is violated
 
-**Ejemplo de violación**:
+**Violation Example**:
 ```typescript
-// ❌ INCORRECTO - Domain importando de Infrastructure
+// ❌ INCORRECT - Domain importing from Infrastructure
 // src/contexts/auth/domain/entities/user/user.entity.ts
-import { api } from "#auth/infrastructure/api";  // ❌ Violación
+import { api } from "#auth/infrastructure/api";  // ❌ Violation
 
-// ❌ INCORRECTO - Un dominio importando de otro
+// ❌ INCORRECT - One domain importing from another
 // src/contexts/transactions/domain/services/validation.service.ts
-import { Balance } from "#wallet/domain/entities";  // ❌ Violación
+import { Balance } from "#wallet/domain/entities";  // ❌ Violation
 
-// ✅ CORRECTO - Usar shared o interfaces
+// ✅ CORRECT - Use shared or interfaces
 import { BalanceProvider } from "#shared/domain/interfaces";
 ```
 
 ---
 
-## Patrones y Convenciones
+## Patterns and Conventions
 
 ### Naming Conventions
 
-#### Archivos
+#### Files
 - **Entities**: `{name}.entity.ts`
 - **Value Objects**: `{name}.vo.ts`
 - **Services**: `{name}.service.ts`
 - **Use Cases**: `{name}.useCase.ts` (camelCase)
 - **Repositories**: `{name}.repository.ts`
 - **Components**: `{name}.tsx`
-- **Tests**: `{name}.spec.ts` o `{name}.spec.tsx`
+- **Tests**: `{name}.spec.ts` or `{name}.spec.tsx`
 - **Interfaces**: `{name}.interface.ts`
 
-#### Carpetas
+#### Folders
 - **kebab-case**: `transaction-validation/`
-- Siempre agrupadas, nunca archivos sueltos en raíz
+- Always grouped, never loose files in root
 
 #### Barrels (index.ts)
-- Cada subcarpeta debe tener su barrel en la raíz
-- Ejemplo: `/domain/entities/index.ts` exporta todas las entidades
-- Permite imports limpios: `import { User } from "#auth/domain/entities"`
+- Each subfolder must have its barrel at the root
+- Example: `/domain/entities/index.ts` exports all entities
+- Allows clean imports: `import { User } from "#auth/domain/entities"`
 
-### Alias de Imports
+### Import Aliases
 
-**Configuración en `tsconfig.json`**:
+**`tsconfig.json` Configuration**:
 ```json
 {
   "compilerOptions": {
@@ -401,7 +401,7 @@ import { BalanceProvider } from "#shared/domain/interfaces";
 }
 ```
 
-**Uso**:
+**Usage**:
 ```typescript
 import { LoginUseCase } from "#auth/application/use-cases";
 import { Amount } from "#shared/domain/value-objects";
@@ -410,44 +410,44 @@ import { Button } from "#shared/ui/components";
 
 ### Code Style
 
-- **Comillas dobles** siempre: `"string"`
-- **Indentación**: 2 espacios
-- **Salto de línea al final** de cada archivo
-- **No `any`**: Usar `unknown` si es necesario, luego type guard
-- **No inline types**: Siempre definir tipos/interfaces en archivos separados o al inicio del archivo
-- **Tailwind classes**: Solo clases de Tailwind, no inline CSS (`style={{}}`)
+- **Double quotes** always: `"string"`
+- **Indentation**: 2 spaces
+- **Newline at the end** of each file
+- **No `any`**: Use `unknown` if necessary, then type guard
+- **No inline types**: Always define types/interfaces in separate files or at the start of the file
+- **Tailwind classes**: Tailwind classes only, no inline CSS (`style={{}}`)
 
-### Uso Obligatorio de Interfaces
+### Mandatory Use of Interfaces
 
-**Regla fundamental**: Todas las entidades, use cases, servicios y repositorios **DEBEN** tener una interfaz.
+**Fundamental Rule**: All entities, use cases, services, and repositories **MUST** have an interface.
 
-**Razones**:
-1. **Inversión de dependencias**: Permite inyectar implementaciones mock en tests
-2. **Contratos claros**: Define explícitamente el comportamiento esperado
-3. **Flexibilidad**: Facilita cambiar implementaciones sin afectar consumidores
-4. **Testing**: Permite crear mocks fácilmente
+**Reasons**:
+1. **Dependency Inversion**: Allows injecting mock implementations in tests
+2. **Clear Contracts**: Explicitly defines expected behavior
+3. **Flexibility**: Makes it easier to change implementations without affecting consumers
+4. **Testing**: Allows easy mock creation
 
-**Estructura obligatoria**:
+**Mandatory Structure**:
 ```
 /entity-name/
-  entityName.interface.ts    ← Interfaz (contrato)
-  entityName.entity.ts       ← Implementación
+  entityName.interface.ts    ← Interface (contract)
+  entityName.entity.ts       ← Implementation
   entityName.entity.spec.ts  ← Tests
 ```
 
 **Naming convention**:
-- Interfaces: `{name}.interface.ts` (sin prefijo `I`)
-- Siempre en archivos separados con `.interface.ts` para claridad
+- Interfaces: `{name}.interface.ts` (no `I` prefix)
+- Always in separate files with `.interface.ts` for clarity
 
 ### Value Objects (VO)
 
-**Características**:
-- Inmutables
-- Sin identidad (igualdad por valor)
-- Validaciones en el constructor
-- Métodos de negocio si aplica
+**Characteristics**:
+- Immutable
+- No identity (equality by value)
+- Validations in constructor
+- Business methods if applicable
 
-**Ejemplo estructural**:
+**Structural Example**:
 ```typescript
 // src/contexts/wallet/domain/value-objects/amount/amount.interface.ts
 export interface Amount {
@@ -461,18 +461,18 @@ import { Amount as AmountInterface } from "./amount.interface";
 
 export class Amount implements AmountInterface {
   private constructor(private readonly value: number) {
-    // Validaciones en constructor
+    // Validations in constructor
   }
 
   static create(value: number): Amount {
-    // Factory method con validaciones
+    // Factory method with validations
   }
 
   getValue(): number {
     return this.value;
   }
 
-  // Métodos de negocio
+  // Business methods
   isGreaterThan(other: AmountInterface): boolean { }
   add(other: AmountInterface): Amount { }
 }
@@ -480,12 +480,12 @@ export class Amount implements AmountInterface {
 
 ### Entities
 
-**Características**:
-- Tienen identidad (ID)
-- Pueden mutar (pero controlado)
-- Encapsulan lógica de negocio
+**Characteristics**:
+- Have identity (ID)
+- Can mutate (but controlled)
+- Encapsulate business logic
 
-**Ejemplo estructural**:
+**Structural Example**:
 ```typescript
 // src/contexts/transactions/domain/entities/transaction/transaction.interface.ts
 export interface Transaction {
@@ -516,22 +516,22 @@ export class Transaction implements TransactionInterface {
   }
 
   confirm(): void {
-    // Lógica de negocio para confirmar
+    // Business logic to confirm
   }
 
   fail(reason: string): void {
-    // Lógica de negocio para fallar
+    // Business logic to fail
   }
 }
 ```
 
 ### Domain Services
 
-**Cuándo usar**:
-- Lógica de negocio que involucra múltiples entidades
-- Validaciones complejas que no pertenecen a una entidad específica
+**When to use**:
+- Business logic involving multiple entities
+- Complex validations that don't belong to a specific entity
 
-**Ejemplo estructural**:
+**Structural Example**:
 ```typescript
 // src/contexts/transactions/domain/services/transaction-validation/transaction-validation.service.ts
 export class TransactionValidationService {
@@ -539,19 +539,19 @@ export class TransactionValidationService {
     transaction: Transaction,
     balance: Balance
   ): ValidationResult {
-    // Lógica de validación compleja
+    // Complex validation logic
   }
 }
 ```
 
 ### Use Cases
 
-**Características**:
-- Orquestan la lógica de negocio
-- Un caso de uso = una acción del usuario
-- Pueden depender de repositorios (inyectados)
+**Characteristics**:
+- Orchestrate business logic
+- One use case = one user action
+- Can depend on repositories (injected)
 
-**Ejemplo estructural**:
+**Structural Example**:
 ```typescript
 // src/contexts/transactions/application/use-cases/create-transaction/createTransaction.interface.ts
 export interface CreateTransactionUseCase {
@@ -568,22 +568,22 @@ export class CreateTransactionUseCase implements CreateTransactionUseCaseInterfa
   ) {}
 
   async execute(params: CreateTransactionParams): Promise<Transaction> {
-    // 1. Validar
-    // 2. Crear entidad
-    // 3. Persistir
-    // 4. Retornar
+    // 1. Validate
+    // 2. Create entity
+    // 3. Persist
+    // 4. Return
   }
 }
 ```
 
 ### Repositories
 
-**Características**:
-- Interfaz en Domain o Application
-- Implementación en Infrastructure
-- Mock para testing
+**Characteristics**:
+- Interface in Domain or Application
+- Implementation in Infrastructure
+- Mock for testing
 
-**Ejemplo estructural**:
+**Structural Example**:
 ```typescript
 // src/contexts/transactions/domain/repositories/transaction.repository.interface.ts
 export interface TransactionRepository {
@@ -596,14 +596,14 @@ export interface TransactionRepository {
 import { TransactionRepository as TransactionRepositoryInterface } from "#transactions/domain/repositories";
 
 export class TransactionRepository implements TransactionRepositoryInterface {
-  // Implementación real (mock en este caso)
+  // Real implementation (mock in this case)
 }
 
 // src/contexts/transactions/infrastructure/repositories/transaction-repository/transaction.repository.mock.ts
 import { TransactionRepository as TransactionRepositoryInterface } from "#transactions/domain/repositories";
 
 export class TransactionRepositoryMock implements TransactionRepositoryInterface {
-  // Implementación para tests
+  // Implementation for tests
 }
 ```
 
@@ -611,28 +611,28 @@ export class TransactionRepositoryMock implements TransactionRepositoryInterface
 
 ## Testing
 
-### Estrategia de Testing
+### Testing Strategy
 
-1. **Pruebas Unitarias**: Domain (entities, VOs, services) y Application (use cases)
-2. **Pruebas de Integración**: Infrastructure (repositories, API clients)
-3. **Pruebas de Componentes**: UI components
-4. **Pruebas E2E**: Flujos completos de usuario
+1. **Unit Tests**: Domain (entities, VOs, services) and Application (use cases)
+2. **Integration Tests**: Infrastructure (repositories, API clients)
+3. **Component Tests**: UI components
+4. **E2E Tests**: Complete user flows
 
-### Ubicación de Tests
+### Test Location
 
-**Regla fundamental**: Los tests deben estar **junto** al archivo que prueban, **NO** en carpeta `__tests__`.
+**Fundamental Rule**: Tests must be **next to** the file they test, **NOT** in a `__tests__` folder.
 
 ```
 /use-cases/
   /create-transaction/
     createTransaction.useCase.ts
     createTransaction.interface.ts
-    createTransaction.useCase.spec.ts    ← Junto al archivo
+    createTransaction.useCase.spec.ts    ← Next to the file
 ```
 
-### Estructura de Tests (BDD)
+### Test Structure (BDD)
 
-Todos los tests deben seguir el patrón **Given-When-Then** con `describe` anidados:
+All tests must follow the **Given-When-Then** pattern with nested `describe`:
 
 ```typescript
 describe("CreateTransactionUseCase", () => {
@@ -665,23 +665,22 @@ describe("CreateTransactionUseCase", () => {
 });
 ```
 
-**Estructura obligatoria**:
-- **Primer nivel**: `describe("NombreDelSUT")` (System Under Test)
-- **Segundo nivel**: `describe("Given [contexto/precondición]")`
-- **Tercer nivel**: `describe("When [acción]")`
-- **Cuarto nivel**: `it("Then [resultado esperado]")`
+**Mandatory Structure**:
+- **First level**: `describe("SUTName")` (System Under Test)
+- **Second level**: `describe("Given [context/precondition]")`
+- **Third level**: `describe("When [action]")`
+- **Fourth level**: `it("Then [expected result]")`
 
-Esta estructura aplica para **tests unitarios, de integración y E2E**.
-```
+This structure applies to **unit, integration, and E2E tests**.
 
-### Testing con Vitest
+### Testing with Vitest
 
-- Usar `describe` para agrupar tests
-- Usar `it` o `test` para casos individuales
-- Usar `beforeEach` para setup común
-- Mocks con `vi.fn()` y `vi.mock()`
+- Use `describe` to group tests
+- Use `it` or `test` for individual cases
+- Use `beforeEach` for common setup
+- Mocks with `vi.fn()` and `vi.mock()`
 
-### Testing de Componentes
+### Component Testing
 
 ```typescript
 // src/contexts/auth/infrastructure/ui/pages/login-page/login-page.spec.tsx
@@ -709,9 +708,9 @@ describe("LoginPage", () => {
 });
 ```
 
-### Pruebas E2E con Playwright
+### E2E Testing with Playwright
 
-**Fixtures**: Datos de prueba reutilizables
+**Fixtures**: Reusable test data
 ```typescript
 // e2e/fixtures/users.fixture.ts
 export const testUser = {
@@ -721,7 +720,7 @@ export const testUser = {
 };
 ```
 
-**Page Objects**: Encapsular interacciones con páginas
+**Page Objects**: Encapsulate page interactions
 ```typescript
 // e2e/page-objects/login.page.ts
 export class LoginPage {
@@ -738,7 +737,7 @@ export class LoginPage {
 }
 ```
 
-**Flujos E2E**:
+**E2E Flows**:
 ```typescript
 // e2e/flows/transactionFlow.spec.ts
 test.describe("Transaction Flow", () => {
@@ -765,16 +764,16 @@ test.describe("Transaction Flow", () => {
 
 ---
 
-## Configuración de Herramientas
+## Tool Configuration
 
 ### Husky Pre-commit Hooks
 
-En cada commit se debe verificar:
-1. **Lint**: `eslint` sobre archivos modificados
-2. **Format**: `prettier` sobre archivos modificados
-3. **Tests**: Pruebas unitarias de archivos modificados
+Every commit must verify:
+1. **Lint**: `eslint` on modified files
+2. **Format**: `prettier` on modified files
+3. **Tests**: Unit tests for modified files
 
-**Configuración esperada**:
+**Expected Configuration**:
 ```json
 {
   "husky": {
@@ -794,21 +793,21 @@ En cada commit se debe verificar:
 
 ### ESLint
 
-**Plugins requeridos**:
+**Required Plugins**:
 - `@typescript-eslint`
 - `eslint-plugin-react`
 - `eslint-plugin-react-hooks`
-- `eslint-plugin-boundaries` (para enforcar DDD)
+- `eslint-plugin-boundaries` (to enforce DDD)
 
-**Reglas importantes**:
+**Important Rules**:
 - No `any`
-- No `console.log` en producción
-- Imports ordenados
-- Boundaries de DDD
+- No `console.log` in production
+- Sorted imports
+- DDD Boundaries
 
 ### Prettier
 
-**Configuración**:
+**Configuration**:
 ```json
 {
   "semi": true,
@@ -819,25 +818,25 @@ En cada commit se debe verificar:
 }
 ```
 
-### PostCSS y Tailwind
+### PostCSS and Tailwind
 
-**PostCSS** debe estar configurado para:
-- Purgar clases no usadas en producción
-- Optimizar el bundle de CSS
-- Minificar
+**PostCSS** must be configured to:
+- Purge unused classes in production
+- Optimize the CSS bundle
+- Minify
 
-**Tailwind** configurado con:
-- Paths a todos los archivos que usan clases
-- Tema personalizado si es necesario
-- Plugins de shadcn/ui
+**Tailwind** configured with:
+- Paths to all files using classes
+- Custom theme if necessary
+- shadcn/ui plugins
 
 ---
 
-## Flujo de Navegación (App Router)
+## Navigation Flow (App Router)
 
-### Ubicación de App Router en la Arquitectura
+### App Router Location in Architecture
 
-**Importante**: La carpeta `/app` de Next.js es parte de la **capa de infraestructura**, NO del dominio.
+**Important**: The Next.js `/app` folder is part of the **infrastructure layer**, NOT the domain.
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -851,17 +850,17 @@ En cada commit se debe verificar:
 └─────────────────────────────────────────────┘
 ```
 
-**Principio**: Las páginas de Next.js son **adaptadores** que:
-1. Reciben requests HTTP
-2. Invocan use cases del dominio
-3. Retornan respuestas (HTML, JSON)
+**Principle**: Next.js pages are **adapters** that:
+1. Receive HTTP requests
+2. Invoke domain use cases
+3. Return responses (HTML, JSON)
 
-**Separación clara**:
-- `/app`: Rutas y adaptadores de Next.js (infraestructura)
-- `/src/contexts`: Lógica de negocio (dominio + aplicación)
-- `/src/contexts/{domain}/infrastructure/ui`: Componentes de presentación
+**Clear Separation**:
+- `/app`: Next.js routes and adapters (infrastructure)
+- `/src/contexts`: Business logic (domain + application)
+- `/src/contexts/{domain}/infrastructure/ui`: Presentation components
 
-### Estructura de Rutas
+### Route Structure
 
 ```
 /app/
@@ -877,63 +876,63 @@ En cada commit se debe verificar:
 │       └── confirm/
 │           └── page.tsx       → /transactions/confirm
 ├── layout.tsx
-└── page.tsx                   → / (redirect a /login o /home)
+└── page.tsx                   → / (redirect to /login or /home)
 ```
 
-**Grupos de rutas** `(auth)` y `(dashboard)`:
-- Permiten layouts diferentes sin afectar la URL
-- `(auth)`: Sin navbar, centrado
-- `(dashboard)`: Con navbar, sidebar si aplica
+**Route Groups** `(auth)` and `(dashboard)`:
+- Allow different layouts without affecting the URL
+- `(auth)`: No navbar, centered
+- `(dashboard)`: With navbar, sidebar if applicable
 
-### Páginas y Componentes
+### Pages and Components
 
-**Páginas** (`app/*/page.tsx`):
-- Son componentes de Next.js
-- Deben ser delgadas, solo orquestación
-- Importan componentes de `infrastructure/ui/pages`
+**Pages** (`app/*/page.tsx`):
+- These are Next.js components
+- Should be thin, orchestration only
+- Import components from `infrastructure/ui/pages`
 
-**Componentes de página** (`infrastructure/ui/pages`):
-- Contienen la lógica de presentación
-- Usan hooks de use cases
-- Componen componentes atómicos
+**Page Components** (`infrastructure/ui/pages`):
+- Contain presentation logic
+- Use use case hooks
+- Compose atomic components
 
-**Ejemplo de separación**:
+**Separation Example**:
 ```typescript
-// app/(dashboard)/home/page.tsx (INFRAESTRUCTURA - Adaptador Next.js)
+// app/(dashboard)/home/page.tsx (INFRASTRUCTURE - Next.js Adapter)
 import { HomePage } from "#wallet/infrastructure/ui/pages";
 
 export default function HomeRoute() {
   return <HomePage />;
 }
 
-// src/contexts/wallet/infrastructure/ui/pages/home-page/homePage.tsx (INFRAESTRUCTURA - UI)
+// src/contexts/wallet/infrastructure/ui/pages/home-page/homePage.tsx (INFRASTRUCTURE - UI)
 export function HomePage() {
-  // Lógica de presentación, hooks, etc.
-  // Invoca use cases del dominio
+  // Presentation logic, hooks, etc.
+  // Invokes domain use cases
 }
 
-// src/contexts/wallet/application/use-cases/get-balance/getBalance.useCase.ts (APLICACIÓN)
+// src/contexts/wallet/application/use-cases/get-balance/getBalance.useCase.ts (APPLICATION)
 import { GetBalanceUseCase as GetBalanceUseCaseInterface } from "./getBalance.interface";
 
 export class GetBalanceUseCase implements GetBalanceUseCaseInterface {
-  // Lógica de negocio
+  // Business logic
 }
 ```
 
-**Flujo de datos**:
-1. Usuario accede a `/home` → Next.js enruta a `app/(dashboard)/home/page.tsx`
-2. `page.tsx` renderiza `<HomePage />` del dominio
-3. `<HomePage />` usa hooks que invocan use cases
-4. Use cases ejecutan lógica de negocio y retornan datos
-5. Componente renderiza la UI con los datos
+**Data Flow**:
+1. User accesses `/home` → Next.js routes to `app/(dashboard)/home/page.tsx`
+2. `page.tsx` renders domain `<HomePage />`
+3. `<HomePage />` uses hooks that invoke use cases
+4. Use cases execute business logic and return data
+5. Component renders UI with the data
 
 ---
 
-## Manejo de Estado con Zustand
+## State Management with Zustand
 
-### Stores por Dominio
+### Stores per Domain
 
-Cada dominio puede tener su store si necesita estado global:
+Each domain can have its store if it needs global state:
 
 ```
 /src/shared/infrastructure/store/
@@ -945,14 +944,14 @@ Cada dominio puede tener su store si necesita estado global:
     transactions.store.ts
 ```
 
-### Principios
+### Principles
 
-- **Minimal**: Solo estado que realmente necesita ser global
-- **Derivado**: Usar selectors para estado derivado
-- **Acciones**: Métodos en el store para mutar estado
-- **Persistencia**: Usar middleware de Zustand para localStorage si aplica
+- **Minimal**: Only state that really needs to be global
+- **Derived**: Use selectors for derived state
+- **Actions**: Methods in the store to mutate state
+- **Persistence**: Use Zustand middleware for localStorage if applicable
 
-**Ejemplo estructural**:
+**Structural Example**:
 ```typescript
 // src/shared/infrastructure/store/auth-store/auth.store.ts
 interface AuthState {
@@ -972,11 +971,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
 ---
 
-## Manejo de Errores
+## Error Handling
 
-### Errores de Dominio
+### Domain Errors
 
-Todos los errores de dominio deben extender de una clase base `DomainError`:
+All domain errors must extend a base `DomainError` class:
 
 ```typescript
 // src/shared/domain/errors/domainError.ts
@@ -992,7 +991,7 @@ export abstract class DomainError extends Error {
 }
 ```
 
-Cada dominio define sus propios errores extendiendo `DomainError`:
+Each domain defines its own errors by extending `DomainError`:
 
 ```typescript
 // src/contexts/transactions/domain/errors/insufficient-funds/insufficientFunds.error.ts
@@ -1011,9 +1010,9 @@ export class InsufficientFundsError extends DomainError {
 }
 ```
 
-### Manejo en Use Cases
+### Use Case Handling
 
-Los use cases deben retornar un `Result<T, E>` o lanzar errores de dominio:
+Use cases should return a `Result<T, E>` or throw domain errors:
 
 ```typescript
 type Result<T, E = Error> =
@@ -1021,122 +1020,122 @@ type Result<T, E = Error> =
   | { success: false; error: E };
 ```
 
-### Manejo en UI
+### UI Handling
 
-Los componentes deben manejar errores y mostrar mensajes apropiados:
-- Errores de validación: Inline en formularios
-- Errores de negocio: Toasts o modales
-- Errores de red: Páginas de error o reintentos
-
----
-
-## Reglas de Negocio (Transacciones)
-
-### Validaciones Obligatorias
-
-1. **Monto mínimo**: No se permite monto cero ni negativo
-2. **Saldo suficiente**: El monto no puede superar el saldo disponible
-3. **Destinatario obligatorio**: No se puede confirmar sin destinatario
-
-### Implementación
-
-Estas validaciones deben estar en:
-- **Domain Layer**: `TransactionValidationService` o en la entidad `Transaction`
-- **NO** solo en la UI (la UI puede validar para UX, pero no es la única validación)
-
-### Escenarios de Confirmación
-
-La confirmación debe manejar aleatoriamente:
-- ✅ **Éxito**: Transacción confirmada
-- ❌ **Error de red**: Mostrar error con opción de reintentar
-- ❌ **Fondos insuficientes**: Error descriptivo
-- ⏱️ **Timeout**: Manejar espera excesiva
-- ❓ **Error desconocido**: Fallback genérico
-
-**Implementación**: Mock en repository que retorna aleatoriamente estos estados.
+Components should handle errors and display appropriate messages:
+- Validation errors: Inline in forms
+- Business errors: Toasts or modals
+- Network errors: Error pages or retries
 
 ---
 
-## Datos Mockeados
+## Business Rules (Transactions)
 
-### Estrategia de Mocking
+### Mandatory Validations
 
-- **Repositories**: Implementaciones mock con datos en memoria
-- **API Routes**: Next.js API routes que retornan datos mockeados
-- **Delays**: Simular latencia de red con `setTimeout`
-- **Errores**: Retornar errores aleatoriamente para probar manejo
+1. **Minimum Amount**: Zero or negative amounts are not allowed
+2. **Sufficient Balance**: Amount cannot exceed available balance
+3. **Recipient Mandatory**: Cannot confirm without a recipient
 
-### Datos Iniciales
+### Implementation
 
-**Usuario mockeado**:
-- Nombre: "Juan Pérez"
-- Teléfono: "+521234567890"
+These validations must be in:
+- **Domain Layer**: `TransactionValidationService` or in the `Transaction` entity
+- **NOT** just in the UI (UI can validate for UX, but it's not the only validation)
+
+### Confirmation Scenarios
+
+Confirmation must handle randomly:
+- ✅ **Success**: Transaction confirmed
+- ❌ **Network Error**: Show error with retry option
+- ❌ **Insufficient Funds**: Descriptive error
+- ⏱️ **Timeout**: Handle excessive wait
+- ❓ **Unknown Error**: Generic fallback
+
+**Implementation**: Mock in repository that randomly returns these states.
+
+---
+
+## Mocked Data
+
+### Mocking Strategy
+
+- **Repositories**: Mock implementations with in-memory data
+- **API Routes**: Next.js API routes returning mocked data
+- **Delays**: Simulate network latency with `setTimeout`
+- **Errors**: Return errors randomly to test handling
+
+### Initial Data
+
+**Mocked User**:
+- Name: "Juan Pérez"
+- Phone: "+521234567890"
 - Email: "juan.perez@example.com"
-- Saldo inicial: $5,000 MXN
+- Initial Balance: $5,000 MXN
 
-**Transacciones mockeadas**:
-- 5-10 transacciones históricas
-- Mix de enviadas y recibidas
-- Diferentes montos y fechas
+**Mocked Transactions**:
+- 5-10 historical transactions
+- Mix of sent and received
+- Different amounts and dates
 
-**Contactos mockeados**:
-- 3-5 contactos favoritos
-- Nombres, teléfonos/emails
-
----
-
-## Consideraciones de Escalabilidad
-
-Aunque es una app mockeada, las decisiones de diseño consideran:
-
-1. **Separación de concerns**: Facilita agregar nuevos dominios (inversiones, préstamos, etc.)
-2. **Boundaries claras**: Permite escalar equipos (un equipo por dominio)
-3. **Testing robusto**: Confianza para refactorizar y agregar features
-4. **Code splitting**: Next.js automático por ruta, lazy loading manual si es necesario
-5. **Optimistic UI**: Actualizar UI antes de confirmar en servidor (para mejor UX)
+**Mocked Contacts**:
+- 3-5 favorite contacts
+- Names, phones/emails
 
 ---
 
-## Limitaciones Conocidas
+## Scalability Considerations
 
-1. **Sin backend real**: Todos los datos son mockeados en memoria
-2. **Sin persistencia**: Recargar la página pierde el estado (a menos que se use localStorage)
-3. **Sin autenticación real**: No hay JWT, OAuth, ni seguridad real
-4. **Sin manejo de concurrencia**: No se consideran race conditions en transacciones
-5. **Sin internacionalización**: Solo español
+Although it's a mocked app, design decisions consider:
+
+1. **Separation of Concerns**: Makes it easy to add new domains (investments, loans, etc.)
+2. **Clear Boundaries**: Allows teams to scale (one team per domain)
+3. **Robust Testing**: Confidence to refactor and add features
+4. **Code Splitting**: Automatic Next.js per route, manual lazy loading if needed
+5. **Optimistic UI**: Update UI before server confirmation (for better UX)
 
 ---
 
-## Próximos Pasos (Fuera de Scope)
+## Known Limitations
 
-Con más tiempo, se consideraría:
+1. **No Real Backend**: All data is mocked in memory
+2. **No Persistence**: Refreshing the page loses state (unless localStorage is used)
+3. **No Real Authentication**: No JWT, OAuth, or real security
+4. **No Concurrency Handling**: Race conditions in transactions are not considered
+5. **No Internationalization**: English translation only
 
-1. **Backend real**: Conectar a API REST o GraphQL
-2. **Autenticación real**: JWT, refresh tokens, OAuth
-3. **Persistencia**: Base de datos real
-4. **Optimistic updates**: Mejorar UX con actualizaciones optimistas
-5. **Internacionalización**: i18n para múltiples idiomas
-6. **Accesibilidad**: Auditoría completa de a11y
-7. **Performance**: Análisis con Lighthouse, optimizaciones
+---
+
+## Next Steps (Out of Scope)
+
+With more time, the following would be considered:
+
+1. **Real Backend**: Connect to REST or GraphQL API
+2. **Real Authentication**: JWT, refresh tokens, OAuth
+3. **Persistence**: Real database
+4. **Optimistic Updates**: Improve UX with optimistic updates
+5. **Internationalization**: i18n for multiple languages
+6. **Accessibility**: Full a11y audit
+7. **Performance**: Lighthouse analysis, optimizations
 8. **Monitoring**: Sentry, analytics, logs
 
 ---
 
-## Resumen de Decisiones Clave
+## Summary of Key Decisions
 
-| Aspecto | Decisión | Justificación |
+| Aspect | Decision | Justification |
 |---------|----------|---------------|
-| **Rendering** | CSR | App autenticada, sin SEO, contenido dinámico |
-| **Navegación** | App Router | Estándar moderno de Next.js |
-| **Estado** | Zustand | Simple, performante, sin boilerplate |
-| **Testing E2E** | Playwright | Más moderno y rápido que Cypress |
-| **Arquitectura** | DDD + Hexagonal | Escalabilidad, mantenibilidad, boundaries claras |
-| **UI** | Atomic Design | Reutilización, consistencia, escalabilidad |
-| **Componentes** | shadcn/ui | Componentes de calidad, customizables, no vendor lock-in |
-| **Estilos** | Tailwind CSS | Productividad, consistencia, bundle pequeño |
-| **Calidad** | ESLint + Prettier + Husky | Código consistente, errores tempranos |
-| **DDD Enforcement** | eslint-plugin-boundaries | Enforcar reglas arquitectónicas automáticamente |
+| **Rendering** | CSR | Authenticated app, no SEO, dynamic content |
+| **Navigation** | App Router | Modern Next.js standard |
+| **State** | Zustand | Simple, performant, no boilerplate |
+| **E2E Testing** | Playwright | More modern and faster than Cypress |
+| **Architecture** | DDD + Hexagonal | Scalability, maintainability, clear boundaries |
+| **UI** | Atomic Design | Reuse, consistency, scalability |
+| **Components** | shadcn/ui | Quality components, customizable, no vendor lock-in |
+| **Styles** | Tailwind CSS | Productivity, consistency, small bundle |
+| **Quality** | ESLint + Prettier + Husky | Consistent code, early errors |
+| **DDD Enforcement** | eslint-plugin-boundaries | Automatically enforce architectural rules |
 
 ---
 
-**Documento vivo**: Este archivo debe actualizarse conforme el proyecto evoluciona y se toman nuevas decisiones arquitectónicas.
+**Living Document**: This file should be updated as the project evolves and new architectural decisions are made.
