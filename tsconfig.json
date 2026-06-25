@@ -13,13 +13,23 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "#auth/*": ["src/contexts/auth/*"],
+      "#wallet/*": ["src/contexts/wallet/*"],
+      "#transactions/*": ["src/contexts/transactions/*"],
+      "#shared/*": ["src/shared/*"]
     }
   },
   "include": [
