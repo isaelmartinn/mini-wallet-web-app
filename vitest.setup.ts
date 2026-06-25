@@ -1,6 +1,32 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import { afterEach, beforeAll } from "vitest";
+
+beforeAll(() => {
+  const localStorageMock = (() => {
+    let store: Record<string, string> = {};
+
+    return {
+      clear: () => {
+        store = {};
+      },
+      getItem: (key: string) => {
+        return store[key] || null;
+      },
+      removeItem: (key: string) => {
+        delete store[key];
+      },
+      setItem: (key: string, value: string) => {
+        store[key] = value.toString();
+      },
+    };
+  })();
+
+  Object.defineProperty(global, "localStorage", {
+    configurable: true,
+    value: localStorageMock,
+  });
+});
 
 afterEach(() => {
   cleanup();

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test.describe("Smoke Test", () => {
   test.describe("Given the application is running", () => {
