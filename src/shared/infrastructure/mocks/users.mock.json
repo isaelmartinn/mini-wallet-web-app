@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "id": "user-1",
+      "name": "Juan Pérez",
+      "email": "juan@example.com",
+      "phone": "+521234567890",
+      "wallet": {
+        "fullName": "Juan Pérez García",
+        "balance": {
+          "amount": 5000.5,
+          "currency": "MXN"
+        }
+      }
+    },
+    {
+      "id": "user-2",
+      "name": "María García",
+      "email": "maria@example.com",
+      "phone": "+529876543210",
+      "wallet": {
+        "fullName": "María González López",
+        "balance": {
+          "amount": 12345.67,
+          "currency": "MXN"
+        }
+      }
+    },
+    {
+      "id": "user-3",
+      "name": "Test User",
+      "email": "test@test.com",
+      "phone": "+525555555555",
+      "wallet": {
+        "fullName": "Test User",
+        "balance": {
+          "amount": 1500.0,
+          "currency": "MXN"
+        }
+      }
+    }
+  ]
+}

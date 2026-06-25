@@ -141,7 +141,7 @@ describe("LoginUseCase", () => {
         ).rejects.toThrow(InvalidCredentialsError);
         await expect(
           loginUseCase.execute({ credential: "test@example.com" })
-        ).rejects.toThrow("User not found");
+        ).rejects.toThrow("Invalid credentials");
       });
 
       it("Then should call repository with correct credential", async () => {

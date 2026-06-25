@@ -1,8 +1,8 @@
-export default function HomePage() {
-  return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Inicio</h1>
-      <p className="text-gray-600">Home page placeholder</p>
-    </div>
-  );
+"use client";
+
+import { useAuthStore } from "#auth/infrastructure/store";
+import { HomePage } from "#wallet/infrastructure/ui/pages";
+
+export default function HomeRoute() {
+  return <HomePage authStore={useAuthStore} />;
 }
