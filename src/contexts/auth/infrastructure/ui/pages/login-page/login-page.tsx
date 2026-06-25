@@ -18,8 +18,7 @@ import { useForm } from "react-hook-form";
 import { sileo } from "sileo";
 
 import { LoginUseCase } from "#auth/application";
-import { AuthRepository, useAuthStore } from "#auth/infrastructure";
-import { mockUsers } from "#auth/infrastructure/repositories/auth-repository/auth.fixtures";
+import { AuthRepository, mockUsers, useAuthStore } from "#auth/infrastructure";
 import { AuthErrorMapper } from "#auth/infrastructure/ui/error-mapper";
 import { LoginFormData, loginSchema } from "#auth/infrastructure/ui/schemas";
 import {
@@ -121,6 +120,7 @@ export function LoginPage() {
 
                 <Input
                   {...form.register("credential")}
+                  data-testid="credential-input"
                   disabled={isLoading}
                   h={12}
                   placeholder="ejemplo@email.com o +521234567890"
@@ -139,6 +139,7 @@ export function LoginPage() {
               <VStack gap={6} pt={4} w="full">
                 <Button
                   colorScheme="blue"
+                  data-testid="login-button"
                   disabled={isLoading}
                   h={12}
                   loading={isLoading}

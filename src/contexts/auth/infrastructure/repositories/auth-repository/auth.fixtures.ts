@@ -1,22 +1,11 @@
 import { Email, Phone, User } from "#auth/domain";
+import { MOCK_USERS_DATA } from "#shared/infrastructure/mocks";
 
-export const mockUsers = [
+export const mockUsers = MOCK_USERS_DATA.map((data) =>
   User.create({
-    email: Email.create("juan@example.com"),
-    id: "user-1",
-    name: "Juan Pérez",
-    phone: Phone.create("+521234567890"),
-  }),
-  User.create({
-    email: Email.create("maria@example.com"),
-    id: "user-2",
-    name: "María García",
-    phone: Phone.create("+529876543210"),
-  }),
-  User.create({
-    email: Email.create("test@test.com"),
-    id: "user-3",
-    name: "Test User",
-    phone: Phone.create("+525555555555"),
-  }),
-];
+    email: Email.create(data.email),
+    id: data.id,
+    name: data.name,
+    phone: Phone.create(data.phone),
+  })
+);
