@@ -1,1 +1,1 @@
-export { useWalletStore } from "./wallet.store";
+export { useWalletStore } from "./wallet-store/wallet.store";

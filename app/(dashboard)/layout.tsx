@@ -1,10 +1,11 @@
 "use client";
 
-import { Box, Button, Container, HStack } from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { useAuthStore } from "#auth/infrastructure/store";
+import { UserHeaderCompact } from "#shared/infrastructure/ui/components";
 import { useThemeToken } from "#shared/infrastructure/ui/hooks";
 import { useWalletStore } from "#wallet/infrastructure/store";
 
@@ -16,6 +17,7 @@ export default function DashboardLayout({
   const router = useRouter();
   const clearSession = useAuthStore((state) => state.clearSession);
   const clearWallet = useWalletStore((state) => state.clearWallet);
+  const { isLoading, userProfile } = useWalletStore();
   const iconColor = useThemeToken("colors", "icon.primary");
 
   const handleLogout = () => {
@@ -26,9 +28,14 @@ export default function DashboardLayout({
 
   return (
     <Box bg="gray.50" minH="100vh">
-      <Box as="nav" bg="white" borderBottomWidth="1px" px={4} py={3}>
-        <Container maxW="container.xl">
-          <HStack justify="flex-end">
+      <Box as="nav" bg="white" borderBottomWidth="1px" py={3}>
+        <Box maxW="600px" mx="auto" px={{ base: 4, md: 6 }}>
+          <HStack justify="space-between">
+            <UserHeaderCompact
+              fullName={userProfile?.getFullName()}
+              initials={userProfile?.getInitials()}
+              isLoading={isLoading}
+            />
             <Button
               data-testid="logout-button"
               onClick={handleLogout}
@@ -39,11 +46,9 @@ export default function DashboardLayout({
               Cerrar sesión
             </Button>
           </HStack>
-        </Container>
+        </Box>
       </Box>
-      <Box as="main" py={4}>
-        {children}
-      </Box>
+      <Box as="main">{children}</Box>
     </Box>
   );
 }

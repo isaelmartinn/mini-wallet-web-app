@@ -19,7 +19,10 @@ import { sileo } from "sileo";
 
 import { LoginUseCase } from "#auth/application";
 import { AuthRepository, mockUsers, useAuthStore } from "#auth/infrastructure";
-import { AuthErrorMapper } from "#auth/infrastructure/ui/error-mapper";
+import {
+  AuthErrorMapper,
+  AuthFormErrorMapper,
+} from "#auth/infrastructure/ui/error-mapper";
 import { LoginFormData, loginSchema } from "#auth/infrastructure/ui/schemas";
 import {
   useFormErrorHandler,
@@ -45,7 +48,8 @@ export function LoginPage() {
 
   const { handleError } = useFormErrorHandler({
     form,
-    mappers: [new AuthErrorMapper()],
+    formErrorMappers: [new AuthFormErrorMapper()],
+    presentationMappers: [new AuthErrorMapper()],
   });
 
   const onSubmit = async (data: LoginFormData) => {

@@ -1,15 +1,22 @@
 "use client";
 
 import { Box, Container, VStack } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AuthStore, UserWithId } from "#shared/domain/interfaces";
 import { useAuthContext } from "#shared/infrastructure/hooks";
+import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
+import {
+  GetTransactionsUseCase,
+  MovementsList,
+  Transaction,
+  TransactionErrorMapper,
+  TransactionRepositoryImpl,
+} from "#transactions/index";
 import { GetBalanceUseCase, GetUserProfileUseCase } from "#wallet/application";
 import { WalletRepository } from "#wallet/infrastructure/repositories";
 import { useWalletStore } from "#wallet/infrastructure/store";
-
-import { BalanceCard, UserHeader } from "../../components";
+import { BalanceCard } from "#wallet/infrastructure/ui/components";
 
 interface HomePageProps<TUser extends UserWithId> {
   authStore: AuthStore<TUser>;
@@ -19,14 +26,16 @@ export function HomePage<TUser extends UserWithId>({
   authStore,
 }: HomePageProps<TUser>) {
   const { user } = useAuthContext(authStore);
-  const {
-    balance,
-    isLoading,
-    setBalance,
-    setLoading,
-    setUserProfile,
-    userProfile,
-  } = useWalletStore();
+  const { balance, isLoading, setBalance, setLoading, setUserProfile } =
+    useWalletStore();
+
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
+  const [transactionsError, setTransactionsError] = useState<null | string>(
+    null
+  );
+  const errorMappers = useMemo(() => [new TransactionErrorMapper()], []);
+  const { handleError } = useErrorHandler(errorMappers);
 
   useEffect(() => {
     const loadWalletData = async () => {
@@ -58,13 +67,45 @@ export function HomePage<TUser extends UserWithId>({
     loadWalletData();
   }, [user, setBalance, setUserProfile, setLoading]);
 
-  return (
-    <Box bg="gray.50" minH="100vh" py={8}>
-      <Container maxW="container.md">
-        <VStack gap={6} width="full">
-          <UserHeader isLoading={isLoading} userProfile={userProfile} />
+  useEffect(() => {
+    const loadTransactions = async () => {
+      if (!user) return;
 
+      setIsLoadingTransactions(true);
+      setTransactionsError(null);
+
+      try {
+        const transactionRepository = new TransactionRepositoryImpl();
+        const getTransactionsUseCase = new GetTransactionsUseCase(
+          transactionRepository
+        );
+
+        const transactionsData = await getTransactionsUseCase.execute();
+        setTransactions(transactionsData);
+      } catch (error) {
+        handleError(error);
+        setTransactionsError(
+          "No se pudieron cargar las transacciones. Por favor, intenta nuevamente."
+        );
+      } finally {
+        setIsLoadingTransactions(false);
+      }
+    };
+
+    loadTransactions();
+  }, [user, handleError]);
+
+  return (
+    <Box bg="gray.50" minH="calc(100vh - 57px)" py={8}>
+      <Container maxW="600px" mx="auto" px={{ base: 4, md: 6 }}>
+        <VStack align="stretch" gap={6} width="full">
           <BalanceCard balance={balance} isLoading={isLoading} />
+
+          <MovementsList
+            error={transactionsError}
+            isLoading={isLoadingTransactions}
+            transactions={transactions}
+          />
         </VStack>
       </Container>
     </Box>

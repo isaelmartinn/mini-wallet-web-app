@@ -16,6 +16,26 @@
 
 ## Implementation Guidelines
 
+### Shared Folder Structure
+
+The `src/shared/` folder is organized by purpose to avoid confusion:
+
+- **`src/shared/design-tokens/`** - Pure design configuration (theme, CSS utilities)
+  - `theme/` - Chakra UI theme configuration (colors, fonts, tokens)
+  - `utils/` - CSS utility functions (e.g., `cn()` for class merging)
+  - **NO React dependencies** - Pure configuration only
+
+- **`src/shared/infrastructure/ui/`** - React-specific UI infrastructure
+  - `hooks/` - Custom React hooks (`useErrorHandler`, `useThemeToken`, etc.)
+  - `components/` - Shared React components
+  - `error-mapper/` - Error mapping system (domain → UI)
+  - **React-dependent** - Hooks, components, state management
+
+**Key distinction:**
+
+- `design-tokens/` = Configuration (what)
+- `infrastructure/ui/` = Implementation (how)
+
 ### Chakra UI Components
 
 - **Use Chakra UI** as the component library
@@ -250,7 +270,7 @@ Use **two-layer validation**:
 ### Chakra UI Theme Tokens
 
 - **ALWAYS use Chakra UI theme tokens** instead of inline color values
-- **Location**: All theme tokens defined in `src/shared/ui/theme/chakra-theme.ts`
+- **Location**: All theme tokens defined in `src/shared/design-tokens/theme/chakra-theme.ts`
 - **NEVER use hardcoded color values** (e.g., `#1e88e5`, `rgb(30, 136, 229)`)
 - **NEVER use CSS variables** (e.g., `var(--chakra-colors-icon-primary)`)
 
