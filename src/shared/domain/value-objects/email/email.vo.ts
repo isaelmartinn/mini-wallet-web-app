@@ -24,6 +24,10 @@ export class Email implements EmailInterface {
     return new Email(trimmedValue.toLowerCase());
   }
 
+  static rehydrate(value: string): Email {
+    return new Email(value);
+  }
+
   equals(other: EmailInterface): boolean {
     return this.value === other.getValue();
   }

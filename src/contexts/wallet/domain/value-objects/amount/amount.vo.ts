@@ -22,6 +22,10 @@ export class Amount implements AmountInterface {
     return new Amount(roundedValue);
   }
 
+  static rehydrate(value: number): Amount {
+    return new Amount(value);
+  }
+
   add(other: AmountInterface): Amount {
     return Amount.create(this.value + other.getValue());
   }

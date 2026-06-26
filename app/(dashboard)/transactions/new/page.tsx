@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthStore } from "#auth/infrastructure/store";
-import { NewTransactionPage } from "#transactions/infrastructure/ui/pages";
+import { NewTransferPage } from "#payments/transfer/infrastructure/ui/pages";
 import { BalanceProviderAdapter } from "#wallet/infrastructure/providers/balance-provider/balance-provider.adapter";
 import { WalletRepository } from "#wallet/infrastructure/repositories";
 
@@ -10,7 +10,7 @@ const balanceProvider = new BalanceProviderAdapter(walletRepository);
 
 export default function NewTransactionRoute() {
   return (
-    <NewTransactionPage
+    <NewTransferPage
       authStore={useAuthStore}
       balanceProvider={balanceProvider}
     />

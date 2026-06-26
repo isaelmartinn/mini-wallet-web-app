@@ -30,6 +30,10 @@ export class Phone implements PhoneInterface {
     return new Phone(cleanedValue);
   }
 
+  static rehydrate(value: string): Phone {
+    return new Phone(value);
+  }
+
   equals(other: PhoneInterface): boolean {
     return this.value === other.getValue();
   }
