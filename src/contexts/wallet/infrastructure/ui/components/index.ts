@@ -1,2 +1,2 @@
-export { BalanceCard } from "./molecules/balance-card/balance-card";
-export { UserHeader } from "./molecules/user-header/user-header";
+export { BalanceCard } from "./molecules/balanceCard/balanceCard";
+export { UserHeader } from "./molecules/userHeader/userHeader";

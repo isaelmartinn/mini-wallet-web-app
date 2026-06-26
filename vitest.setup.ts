@@ -1,6 +1,16 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach, beforeAll } from "vitest";
+import { afterEach, beforeAll, vi } from "vitest";
+
+vi.mock("lucide-react", () => ({
+  AlertCircle: () => null,
+  ArrowDownLeft: () => null,
+  ArrowUpRight: () => null,
+  Clock: () => null,
+  Eye: () => null,
+  EyeOff: () => null,
+  XCircle: () => null,
+}));
 
 beforeAll(() => {
   const localStorageMock = (() => {

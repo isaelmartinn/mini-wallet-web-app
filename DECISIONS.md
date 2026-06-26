@@ -547,7 +547,7 @@ export * from "./user/user.entity"; // Don't use this
 // ✅ CORRECT - Using aliases
 import { LoginUseCase } from "#auth/application/use-cases";
 import { Amount } from "#shared/domain/value-objects";
-import { Button } from "#shared/ui/components";
+import { Button } from "#shared/infrastructure/ui/components";
 
 // ❌ INCORRECT - Using relative paths
 import { LoginUseCase } from "../../../application/use-cases";
