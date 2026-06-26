@@ -1,4 +1,7 @@
-import { EmailEmptyError, EmailInvalidFormatError } from "#auth/domain/errors";
+import {
+  EmailEmptyError,
+  EmailInvalidFormatError,
+} from "#shared/domain/errors";
 
 import { Email as EmailInterface } from "./email.interface";
 

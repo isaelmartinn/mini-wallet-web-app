@@ -1,6 +1,6 @@
 import type {
+  FormErrorMapper,
   FormErrorMapping,
-  IFormErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
 import { DomainError } from "#shared/domain/errors";
@@ -10,7 +10,7 @@ import { DomainError } from "#shared/domain/errors";
  * Translates auth domain errors to inline form field error messages.
  * Implements the Registry pattern for error code to form field mapping.
  */
-export class AuthFormErrorMapper implements IFormErrorMapper {
+export class AuthFormErrorMapper implements FormErrorMapper {
   private static readonly FORM_ERROR_MAPPINGS: Record<
     string,
     FormErrorMapping

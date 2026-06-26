@@ -1,6 +1,7 @@
 "use client";
 
 import { Box, Container, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { AuthStore, UserWithId } from "#shared/domain/interfaces";
@@ -10,7 +11,7 @@ import {
   GetTransactionsUseCase,
   MovementsList,
   Transaction,
-  TransactionErrorMapper,
+  TransactionListErrorMapper,
   TransactionRepositoryImpl,
 } from "#transactions/index";
 import { GetBalanceUseCase, GetUserProfileUseCase } from "#wallet/application";
@@ -25,6 +26,7 @@ interface HomePageProps<TUser extends UserWithId> {
 export function HomePage<TUser extends UserWithId>({
   authStore,
 }: HomePageProps<TUser>) {
+  const router = useRouter();
   const { user } = useAuthContext(authStore);
   const { balance, isLoading, setBalance, setLoading, setUserProfile } =
     useWalletStore();
@@ -34,8 +36,12 @@ export function HomePage<TUser extends UserWithId>({
   const [transactionsError, setTransactionsError] = useState<null | string>(
     null
   );
-  const errorMappers = useMemo(() => [new TransactionErrorMapper()], []);
+  const errorMappers = useMemo(() => [new TransactionListErrorMapper()], []);
   const { handleError } = useErrorHandler(errorMappers);
+
+  const handleSendMoney = () => {
+    router.push("/transactions/new");
+  };
 
   useEffect(() => {
     const loadWalletData = async () => {
@@ -99,7 +105,11 @@ export function HomePage<TUser extends UserWithId>({
     <Box bg="gray.50" minH="calc(100vh - 57px)" py={8}>
       <Container maxW="600px" mx="auto" px={{ base: 4, md: 6 }}>
         <VStack align="stretch" gap={6} width="full">
-          <BalanceCard balance={balance} isLoading={isLoading} />
+          <BalanceCard
+            balance={balance}
+            isLoading={isLoading}
+            onSendMoney={handleSendMoney}
+          />
 
           <MovementsList
             error={transactionsError}

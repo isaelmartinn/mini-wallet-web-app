@@ -18,6 +18,6 @@ export type {
 export {
   MovementItem,
   MovementsList,
-  TransactionErrorMapper,
+  TransactionListErrorMapper,
   TransactionRepositoryImpl,
 } from "./infrastructure";

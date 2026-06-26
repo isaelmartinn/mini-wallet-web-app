@@ -3,7 +3,7 @@ import { sileo } from "sileo";
 
 import type {
   ErrorPresentation,
-  IErrorMapper,
+  PresentationErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
 /**
@@ -14,7 +14,7 @@ import type {
  * @param mappers - Array of error mappers to try in order
  * @returns Object with handleError function
  */
-export function useErrorHandler(mappers: IErrorMapper[] = []) {
+export function useErrorHandler(mappers: PresentationErrorMapper[] = []) {
   const handleError = useCallback(
     (error: unknown) => {
       let presentation: ErrorPresentation | null = null;

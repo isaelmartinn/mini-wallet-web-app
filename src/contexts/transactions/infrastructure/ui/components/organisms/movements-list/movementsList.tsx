@@ -2,7 +2,8 @@ import { Box, Card, Heading, Spinner, Text, VStack } from "@chakra-ui/react";
 import { AlertCircle } from "lucide-react";
 
 import { Transaction } from "#transactions/domain";
-import { MovementItem } from "#transactions/infrastructure/ui/components/molecules/movement-item/movement-item";
+
+import { MovementItem } from "../../molecules/movement-item";
 
 interface MovementsListProps {
   error?: null | string;

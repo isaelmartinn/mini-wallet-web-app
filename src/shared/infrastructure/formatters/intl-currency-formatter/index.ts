@@ -1,0 +1,1 @@
+export { IntlCurrencyFormatter } from "./intlCurrencyFormatter";

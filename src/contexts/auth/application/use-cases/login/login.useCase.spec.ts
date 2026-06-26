@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { User } from "#auth/domain/entities";
 import { InvalidCredentialsError } from "#auth/domain/errors";
 import { AuthRepository } from "#auth/domain/repositories";
-import { Email, Phone } from "#auth/domain/value-objects";
+import { Email, Phone } from "#shared/domain/value-objects";
 
 import { LoginUseCase } from "./login.useCase";
 

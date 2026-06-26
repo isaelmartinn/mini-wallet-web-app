@@ -1,11 +1,11 @@
 import { DomainError } from "#shared/domain/errors";
 import {
+  ErrorMapper,
   ErrorPresentation,
   FormErrorMapping,
-  IErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
-export class TransactionErrorMapper implements IErrorMapper {
+export class TransactionListErrorMapper implements ErrorMapper {
   private static readonly ERROR_MESSAGES: Record<string, ErrorPresentation> = {
     TRANSACTION_DATE_INVALID: {
       description: "La fecha de la transacción no es válida",
@@ -24,7 +24,8 @@ export class TransactionErrorMapper implements IErrorMapper {
 
   toPresentation(error: unknown): ErrorPresentation | null {
     if (error instanceof DomainError) {
-      const presentation = TransactionErrorMapper.ERROR_MESSAGES[error.code];
+      const presentation =
+        TransactionListErrorMapper.ERROR_MESSAGES[error.code];
 
       if (presentation) {
         return presentation;

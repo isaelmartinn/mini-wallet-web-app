@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { Email, Phone } from "#auth/domain/value-objects";
+import { Email, Phone } from "#shared/domain/value-objects";
 
 import { User } from "./user.entity";
 

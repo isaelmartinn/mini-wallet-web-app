@@ -5,7 +5,8 @@ import { describe, expect, it } from "vitest";
 import { Transaction } from "#transactions/domain";
 import { TransactionStatus } from "#transactions/domain/value-objects/transaction-status/transaction-status.vo";
 import { TransactionType } from "#transactions/domain/value-objects/transaction-type/transaction-type.vo";
-import { MovementsList } from "#transactions/infrastructure/ui/components/organisms/movements-list/movements-list";
+
+import { MovementsList } from "./movementsList";
 
 function renderWithChakra(ui: React.ReactElement) {
   return render(<ChakraProvider value={defaultSystem}>{ui}</ChakraProvider>);

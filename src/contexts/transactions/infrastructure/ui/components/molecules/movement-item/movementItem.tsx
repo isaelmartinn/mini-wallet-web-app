@@ -2,7 +2,9 @@ import { Box, Grid, HStack, Icon, Text, VStack } from "@chakra-ui/react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { ArrowDownLeft, ArrowUpRight, Clock, XCircle } from "lucide-react";
+import { useMemo } from "react";
 
+import { IntlCurrencyFormatter } from "#shared/infrastructure";
 import { useThemeToken } from "#shared/infrastructure/ui/hooks";
 import { Transaction } from "#transactions/domain";
 
@@ -15,6 +17,7 @@ export function MovementItem({ transaction }: MovementItemProps) {
   const successColor = useThemeToken("colors", "green.500");
   const errorColor = useThemeToken("colors", "red.500");
   const warningColor = useThemeToken("colors", "orange.500");
+  const currencyFormatter = useMemo(() => new IntlCurrencyFormatter(), []);
 
   const isIncome = transaction.getType().isIncome();
   const isExpense = transaction.getType().isExpense();
@@ -22,10 +25,7 @@ export function MovementItem({ transaction }: MovementItemProps) {
   const isFailed = transaction.getStatus().isFailed();
 
   const amount = transaction.getAmount();
-  const formattedAmount = new Intl.NumberFormat("es-MX", {
-    currency: "MXN",
-    style: "currency",
-  }).format(amount);
+  const formattedAmount = currencyFormatter.format(amount, "MXN");
 
   const displayAmount = isExpense
     ? `-${formattedAmount}`

@@ -1,6 +1,6 @@
 import type {
   ErrorPresentation,
-  IPresentationErrorMapper,
+  PresentationErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
 import { DomainError } from "#shared/domain/errors";
@@ -10,7 +10,7 @@ import { DomainError } from "#shared/domain/errors";
  * Translates auth domain errors to user-facing Spanish messages for Sileo toasts.
  * Implements the Registry pattern for error code to presentation mapping.
  */
-export class AuthErrorMapper implements IPresentationErrorMapper {
+export class AuthErrorMapper implements PresentationErrorMapper {
   private static readonly ERROR_MESSAGES: Record<string, ErrorPresentation> = {
     EMAIL_EMPTY: {
       description: "El email no puede estar vacío",

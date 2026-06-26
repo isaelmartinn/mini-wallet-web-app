@@ -1,4 +1,4 @@
-import { Email, Phone } from "#auth/domain/value-objects";
+import { Email, Phone } from "#shared/domain/value-objects";
 
 import { User as UserInterface } from "./user.interface";
 

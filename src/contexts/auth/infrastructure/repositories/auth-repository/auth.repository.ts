@@ -1,6 +1,6 @@
 import { User } from "#auth/domain";
 import { AuthRepository as AuthRepositoryInterface } from "#auth/domain/repositories";
-import { Email, Phone } from "#auth/domain/value-objects";
+import { Email, Phone } from "#shared/domain/value-objects";
 
 import { mockUsers } from "./auth.fixtures";
 

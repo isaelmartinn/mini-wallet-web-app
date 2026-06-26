@@ -5,7 +5,7 @@ import { FormErrorMapping } from "./formErrorMapping";
  * Interface for error mappers that translate domain errors to UI presentations.
  * Implements the Adapter pattern to convert domain errors to user-facing messages.
  */
-export interface IErrorMapper {
+export interface ErrorMapper {
   /**
    * Converts an error to a form field error mapping.
    * @param error - The error to map (can be any type)

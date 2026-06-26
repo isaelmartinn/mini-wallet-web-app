@@ -1,14 +1,13 @@
 import { describe, expect, it } from "vitest";
 
+import { InvalidCredentialsError, ValidationError } from "#auth/domain/errors";
 import {
   EmailEmptyError,
   EmailInvalidFormatError,
-  InvalidCredentialsError,
   PhoneEmptyError,
   PhoneInvalidCountryCodeError,
   PhoneInvalidFormatError,
-  ValidationError,
-} from "#auth/domain/errors";
+} from "#shared/domain/errors";
 
 import { AuthErrorMapper } from "./auth-error-mapper";
 

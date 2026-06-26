@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { EmailEmptyError, EmailInvalidFormatError } from "#auth/domain/errors";
+import {
+  EmailEmptyError,
+  EmailInvalidFormatError,
+} from "#shared/domain/errors";
 
 import { Email } from "./email.vo";
 

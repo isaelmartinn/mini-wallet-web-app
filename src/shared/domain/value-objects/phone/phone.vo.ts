@@ -2,7 +2,7 @@ import {
   PhoneEmptyError,
   PhoneInvalidCountryCodeError,
   PhoneInvalidFormatError,
-} from "#auth/domain/errors";
+} from "#shared/domain/errors";
 
 import { Phone as PhoneInterface } from "./phone.interface";
 

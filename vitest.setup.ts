@@ -9,6 +9,8 @@ vi.mock("lucide-react", () => ({
   Clock: () => null,
   Eye: () => null,
   EyeOff: () => null,
+  Send: () => null,
+  User: () => null,
   XCircle: () => null,
 }));
 

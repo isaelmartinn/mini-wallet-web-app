@@ -1,0 +1,39 @@
+{
+  "contacts": [
+    {
+      "id": "contact-1",
+      "name": "María García",
+      "email": "maria.garcia@email.com",
+      "phone": "+525512345678",
+      "isFavorite": true
+    },
+    {
+      "id": "contact-2",
+      "name": "Juan Pérez",
+      "email": "juan.perez@email.com",
+      "phone": "+525587654321",
+      "isFavorite": true
+    },
+    {
+      "id": "contact-3",
+      "name": "Ana López",
+      "email": "ana.lopez@email.com",
+      "phone": "+525598765432",
+      "isFavorite": false
+    },
+    {
+      "id": "contact-4",
+      "name": "Carlos Martínez",
+      "email": "carlos.martinez@email.com",
+      "phone": "+525523456789",
+      "isFavorite": false
+    },
+    {
+      "id": "contact-5",
+      "name": "Lucía Rodríguez",
+      "email": "lucia.rodriguez@email.com",
+      "phone": "+525534567890",
+      "isFavorite": true
+    }
+  ]
+}

@@ -74,7 +74,7 @@ vi.mock("#transactions/index", () => ({
       {transactions && <div>Transactions: {transactions.length}</div>}
     </div>
   ),
-  TransactionErrorMapper: vi.fn(),
+  TransactionListErrorMapper: vi.fn(),
   TransactionRepositoryImpl: vi.fn().mockImplementation(() => ({
     getTransactions: vi.fn().mockResolvedValue([]),
   })),
