@@ -34,6 +34,7 @@ export default defineConfig({
       "#auth": path.resolve(__dirname, "src/contexts/auth"),
       "#wallet": path.resolve(__dirname, "src/contexts/wallet"),
       "#transactions": path.resolve(__dirname, "src/contexts/transactions"),
+      "#payments": path.resolve(__dirname, "src/contexts/payments"),
       "#shared": path.resolve(__dirname, "src/shared"),
     },
   },

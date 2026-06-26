@@ -5,8 +5,8 @@ import {
   PhoneEmptyError,
   PhoneInvalidCountryCodeError,
   PhoneInvalidFormatError,
-} from "#auth/domain/errors";
-import { Email, Phone } from "#auth/domain/value-objects";
+} from "#shared/domain/errors";
+import { Email, Phone } from "#shared/domain/value-objects";
 
 import { CredentialFactory } from "./credential-factory.service";
 

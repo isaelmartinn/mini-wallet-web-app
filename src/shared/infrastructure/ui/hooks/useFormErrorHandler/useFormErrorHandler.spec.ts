@@ -7,9 +7,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type {
   ErrorPresentation,
+  FormErrorMapper,
   FormErrorMapping,
-  IFormErrorMapper,
-  IPresentationErrorMapper,
+  PresentationErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
 import { useFormErrorHandler } from "./useFormErrorHandler";
@@ -20,7 +20,7 @@ vi.mock("sileo", () => ({
   },
 }));
 
-class MockFormErrorMapper implements IFormErrorMapper {
+class MockFormErrorMapper implements FormErrorMapper {
   toFormError(error: unknown): FormErrorMapping | null {
     if (error instanceof Error && error.message === "ErrorFormOnly") {
       return {
@@ -38,7 +38,7 @@ class MockFormErrorMapper implements IFormErrorMapper {
   }
 }
 
-class MockPresentationErrorMapper implements IPresentationErrorMapper {
+class MockPresentationErrorMapper implements PresentationErrorMapper {
   toPresentation(error: unknown): ErrorPresentation | null {
     if (error instanceof Error && error.message === "ErrorPresentationOnly") {
       return {

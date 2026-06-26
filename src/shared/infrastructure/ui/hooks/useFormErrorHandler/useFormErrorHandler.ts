@@ -5,16 +5,16 @@ import { sileo } from "sileo";
 
 import type {
   ErrorPresentation,
-  IFormErrorMapper,
-  IPresentationErrorMapper,
+  FormErrorMapper,
+  PresentationErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
 interface UseFormErrorHandlerOptions<TFieldValues extends FieldValues> {
   form: {
     setError: UseFormSetError<TFieldValues>;
   };
-  formErrorMappers?: IFormErrorMapper[];
-  presentationMappers?: IPresentationErrorMapper[];
+  formErrorMappers?: FormErrorMapper[];
+  presentationMappers?: PresentationErrorMapper[];
   showToast?: boolean;
 }
 

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { User } from "#auth/domain/entities";
-import { Email } from "#auth/domain/value-objects";
+import { Email } from "#shared/domain/value-objects";
 
 import { useAuthStore } from "./auth.store";
 

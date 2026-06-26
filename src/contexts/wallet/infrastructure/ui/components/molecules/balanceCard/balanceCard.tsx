@@ -2,36 +2,38 @@
 
 import {
   Box,
+  Button,
   Card,
   HStack,
   IconButton,
   Skeleton,
   Text,
+  VStack,
 } from "@chakra-ui/react";
-import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { Eye, EyeOff, Send } from "lucide-react";
+import { useMemo, useState } from "react";
 
+import { IntlCurrencyFormatter } from "#shared/infrastructure";
 import { useThemeToken } from "#shared/infrastructure/ui/hooks";
 import { Balance } from "#wallet/domain/entities";
 
 interface BalanceCardProps {
   balance: Balance | null;
   isLoading?: boolean;
+  onSendMoney?: () => void;
 }
 
-export function BalanceCard({ balance, isLoading = false }: BalanceCardProps) {
+export function BalanceCard({
+  balance,
+  isLoading = false,
+  onSendMoney,
+}: BalanceCardProps) {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const iconColor = useThemeToken("colors", "icon.primary");
+  const currencyFormatter = useMemo(() => new IntlCurrencyFormatter(), []);
 
   const toggleBalanceVisibility = () => {
     setIsBalanceVisible((prev) => !prev);
-  };
-
-  const formatCurrency = (amount: number, currency: string): string => {
-    return new Intl.NumberFormat("es-MX", {
-      currency,
-      style: "currency",
-    }).format(amount);
   };
 
   if (isLoading || !balance) {
@@ -45,42 +47,59 @@ export function BalanceCard({ balance, isLoading = false }: BalanceCardProps) {
     );
   }
 
-  const formattedBalance = formatCurrency(
-    balance.getAmount().getValue(),
-    balance.getCurrency()
-  );
+  const formattedBalance = balance
+    .getAmount()
+    .format(currencyFormatter, balance.getCurrency());
 
   return (
     <Card.Root bg="brand.50" p={6}>
       <Card.Body>
-        <Text color="gray.600" fontSize="sm" fontWeight="medium" mb={2}>
-          Saldo disponible
-        </Text>
-        <HStack justify="space-between">
+        <VStack align="stretch" gap={4}>
           <Box>
-            {isBalanceVisible ? (
-              <Text color="gray.900" fontSize="3xl" fontWeight="bold">
-                {formattedBalance}
-              </Text>
-            ) : (
-              <Text color="gray.900" fontSize="3xl" fontWeight="bold">
-                ••••••
-              </Text>
-            )}
+            <Text color="gray.600" fontSize="sm" fontWeight="medium" mb={2}>
+              Saldo disponible
+            </Text>
+            <HStack justify="space-between">
+              <Box>
+                {isBalanceVisible ? (
+                  <Text color="gray.900" fontSize="3xl" fontWeight="bold">
+                    {formattedBalance}
+                  </Text>
+                ) : (
+                  <Text color="gray.900" fontSize="3xl" fontWeight="bold">
+                    ••••••
+                  </Text>
+                )}
+              </Box>
+              <IconButton
+                aria-label={
+                  isBalanceVisible ? "Ocultar saldo" : "Mostrar saldo"
+                }
+                onClick={toggleBalanceVisibility}
+                size="sm"
+                variant="ghost"
+              >
+                {isBalanceVisible ? (
+                  <EyeOff color={iconColor} size={20} />
+                ) : (
+                  <Eye color={iconColor} size={20} />
+                )}
+              </IconButton>
+            </HStack>
           </Box>
-          <IconButton
-            aria-label={isBalanceVisible ? "Ocultar saldo" : "Mostrar saldo"}
-            onClick={toggleBalanceVisibility}
-            size="sm"
-            variant="ghost"
-          >
-            {isBalanceVisible ? (
-              <EyeOff color={iconColor} size={20} />
-            ) : (
-              <Eye color={iconColor} size={20} />
-            )}
-          </IconButton>
-        </HStack>
+
+          {onSendMoney && (
+            <Button
+              colorScheme="blue"
+              onClick={onSendMoney}
+              size="lg"
+              width="full"
+            >
+              <Send size={20} />
+              Enviar dinero
+            </Button>
+          )}
+        </VStack>
       </Card.Body>
     </Card.Root>
   );

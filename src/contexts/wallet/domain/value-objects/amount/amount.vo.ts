@@ -1,3 +1,4 @@
+import { CurrencyFormatter } from "#shared/domain/interfaces";
 import { AmountInvalidError, AmountNegativeError } from "#wallet/domain/errors";
 
 import { Amount as AmountInterface } from "./amount.interface";
@@ -21,8 +22,16 @@ export class Amount implements AmountInterface {
     return new Amount(roundedValue);
   }
 
+  static rehydrate(value: number): Amount {
+    return new Amount(value);
+  }
+
   add(other: AmountInterface): Amount {
     return Amount.create(this.value + other.getValue());
+  }
+
+  format(formatter: CurrencyFormatter, currency: string): string {
+    return formatter.format(this.value, currency);
   }
 
   getValue(): number {

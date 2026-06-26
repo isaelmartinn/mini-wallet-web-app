@@ -5,11 +5,29 @@ import { afterEach, beforeAll, vi } from "vitest";
 vi.mock("lucide-react", () => ({
   AlertCircle: () => null,
   ArrowDownLeft: () => null,
+  ArrowLeft: () => null,
   ArrowUpRight: () => null,
   Clock: () => null,
   Eye: () => null,
   EyeOff: () => null,
+  Send: () => null,
+  User: () => null,
+  UserPlus: () => null,
   XCircle: () => null,
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    back: vi.fn(),
+    forward: vi.fn(),
+    prefetch: vi.fn(),
+    push: vi.fn(),
+    refresh: vi.fn(),
+    replace: vi.fn(),
+  }),
+  useSearchParams: () => ({
+    get: vi.fn(),
+  }),
 }));
 
 beforeAll(() => {

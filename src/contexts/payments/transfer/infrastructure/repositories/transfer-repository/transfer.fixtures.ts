@@ -1,0 +1,72 @@
+import {
+  Transfer,
+  TransferStatus,
+  TransferType,
+} from "#payments/transfer/domain";
+
+export const TRANSACTION_FIXTURES = [
+  Transfer.create({
+    amount: 1500.0,
+    date: new Date("2024-06-24T10:30:00"),
+    description: "Transferencia a María García",
+    id: "txn-001",
+    status: TransferStatus.success(),
+    type: TransferType.expense(),
+  }),
+  Transfer.create({
+    amount: 3200.5,
+    date: new Date("2024-06-23T15:45:00"),
+    description: "Pago recibido de Juan Pérez",
+    id: "txn-002",
+    status: TransferStatus.success(),
+    type: TransferType.income(),
+  }),
+  Transfer.create({
+    amount: 850.0,
+    date: new Date("2024-06-22T09:15:00"),
+    description: "Compra en Amazon",
+    id: "txn-003",
+    status: TransferStatus.success(),
+    type: TransferType.expense(),
+  }),
+  Transfer.create({
+    amount: 500.0,
+    date: new Date("2024-06-21T18:20:00"),
+    description: "Transferencia a Carlos López",
+    id: "txn-004",
+    status: TransferStatus.pending(),
+    type: TransferType.expense(),
+  }),
+  Transfer.create({
+    amount: 2100.0,
+    date: new Date("2024-06-20T12:00:00"),
+    description: "Pago de nómina",
+    id: "txn-005",
+    status: TransferStatus.success(),
+    type: TransferType.income(),
+  }),
+  Transfer.create({
+    amount: 450.75,
+    date: new Date("2024-06-19T14:30:00"),
+    description: "Pago de servicios",
+    id: "txn-006",
+    status: TransferStatus.failed(),
+    type: TransferType.expense(),
+  }),
+  Transfer.create({
+    amount: 1200.0,
+    date: new Date("2024-06-18T11:00:00"),
+    description: "Transferencia recibida",
+    id: "txn-007",
+    status: TransferStatus.success(),
+    type: TransferType.income(),
+  }),
+  Transfer.create({
+    amount: 680.0,
+    date: new Date("2024-06-17T16:45:00"),
+    description: "Compra en supermercado",
+    id: "txn-008",
+    status: TransferStatus.success(),
+    type: TransferType.expense(),
+  }),
+];

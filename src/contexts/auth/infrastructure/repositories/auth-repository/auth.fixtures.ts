@@ -1,4 +1,5 @@
-import { Email, Phone, User } from "#auth/domain";
+import { User } from "#auth/domain";
+import { Email, Phone } from "#shared/domain/value-objects";
 import { MOCK_USERS_DATA } from "#shared/infrastructure/mocks";
 
 export const mockUsers = MOCK_USERS_DATA.map((data) =>
