@@ -1,5 +1,6 @@
+import { Amount } from "#shared/domain/value-objects";
 import { findMockUserById } from "#shared/infrastructure/mocks";
-import { Amount, Balance, UserProfile } from "#wallet/domain";
+import { Balance, UserProfile } from "#wallet/domain/entities";
 
 export function createMockBalance(userId: string): Balance {
   const mockUser = findMockUserById(userId);

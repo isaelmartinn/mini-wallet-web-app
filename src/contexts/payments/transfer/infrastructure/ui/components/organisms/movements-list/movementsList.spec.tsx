@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { Transfer } from "#payments/transfer/domain";
 import { TransferStatus } from "#payments/transfer/domain/value-objects/transfer-status/transferStatus.vo";
 import { TransferType } from "#payments/transfer/domain/value-objects/transfer-type/transferType.vo";
+import { Amount } from "#shared/domain/value-objects";
 
 import { MovementsList } from "./movementsList";
 
@@ -66,20 +67,24 @@ describe("MovementsList", () => {
       it("Then should display all transactions", () => {
         const transactions = [
           Transfer.create({
-            amount: 1500.0,
+            amount: Amount.create(1500.0),
             date: new Date("2024-06-25T10:30:00"),
             description: "Transferencia a María García",
             id: "txn-001",
+            recipientId: "recipient-1",
             status: TransferStatus.success(),
             type: TransferType.expense(),
+            userId: "user-1",
           }),
           Transfer.create({
-            amount: 3200.5,
+            amount: Amount.create(3200.5),
             date: new Date("2024-06-23T15:45:00"),
             description: "Pago recibido de Juan Pérez",
             id: "txn-002",
+            recipientId: "recipient-2",
             status: TransferStatus.success(),
             type: TransferType.income(),
+            userId: "user-1",
           }),
         ];
 

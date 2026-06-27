@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { Amount } from "#wallet/domain/value-objects";
+import { Amount } from "#shared/domain/value-objects";
 
 import { Balance } from "./balance.entity";
 

@@ -11,6 +11,7 @@ export interface TransferFormStepProps {
   isLoadingBalance: boolean;
   isLoadingContacts: boolean;
   isSubmitting: boolean;
+  onContactSelect?: (contact: Contact) => void;
   onSubmit: (data: NewTransferFormData) => void;
   preselectedContact?: Contact | null;
 }

@@ -4,12 +4,12 @@ import { es } from "date-fns/locale";
 import { ArrowDownLeft, ArrowUpRight, Clock, XCircle } from "lucide-react";
 import { useMemo } from "react";
 
+import { Transfer } from "#payments/transfer/domain/entities";
 import { IntlCurrencyFormatter } from "#shared/infrastructure";
 import { useThemeToken } from "#shared/infrastructure/ui/hooks";
-import { Transaction } from "#transactions/domain";
 
 interface MovementItemProps {
-  transaction: Transaction;
+  transaction: Transfer;
 }
 
 export function MovementItem({ transaction }: MovementItemProps) {
@@ -24,7 +24,7 @@ export function MovementItem({ transaction }: MovementItemProps) {
   const isPending = transaction.getStatus().isPending();
   const isFailed = transaction.getStatus().isFailed();
 
-  const amount = transaction.getAmount();
+  const amount = transaction.getAmount().getValue();
   const formattedAmount = currencyFormatter.format(amount, "MXN");
 
   const displayAmount = isExpense

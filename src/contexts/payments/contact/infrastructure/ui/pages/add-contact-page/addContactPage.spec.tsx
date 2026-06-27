@@ -1,3 +1,4 @@
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
@@ -21,12 +22,18 @@ describe("AddContactPage", () => {
     replace: vi.fn(),
   };
 
-  const mockRepository: ContactRepository = {
+  const mockRepository = {
     add: vi.fn().mockResolvedValue(undefined),
     findAll: vi.fn().mockResolvedValue([]),
+    findByEmail: vi.fn().mockResolvedValue(null),
     findById: vi.fn().mockResolvedValue(null),
+    findByName: vi.fn().mockResolvedValue(null),
+    findByPhone: vi.fn().mockResolvedValue(null),
     findFavorites: vi.fn().mockResolvedValue([]),
-  };
+    remove: vi.fn().mockResolvedValue(undefined),
+    STORAGE_KEY: "contacts",
+    update: vi.fn().mockResolvedValue(undefined),
+  } as unknown as ContactRepository;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -36,7 +43,11 @@ describe("AddContactPage", () => {
   describe("Given the add contact page is rendered", () => {
     describe("When the page loads", () => {
       it("Then should display the form with all fields", () => {
-        render(<AddContactPage contactRepository={mockRepository} />);
+        render(
+          <ChakraProvider value={defaultSystem}>
+            <AddContactPage contactRepository={mockRepository} />
+          </ChakraProvider>
+        );
 
         expect(screen.getByText("Agregar Contacto")).toBeInTheDocument();
         expect(screen.getByLabelText("Nombre")).toBeInTheDocument();
@@ -54,7 +65,11 @@ describe("AddContactPage", () => {
     describe("When submitting the form", () => {
       it("Then should create contact and redirect", async () => {
         const user = userEvent.setup();
-        render(<AddContactPage contactRepository={mockRepository} />);
+        render(
+          <ChakraProvider value={defaultSystem}>
+            <AddContactPage contactRepository={mockRepository} />
+          </ChakraProvider>
+        );
 
         await user.type(screen.getByLabelText("Nombre"), "Test User");
         await user.type(screen.getByLabelText("Email"), "test@example.com");
@@ -77,7 +92,11 @@ describe("AddContactPage", () => {
     describe("When submitting the form", () => {
       it("Then should show validation error", async () => {
         const user = userEvent.setup();
-        render(<AddContactPage contactRepository={mockRepository} />);
+        render(
+          <ChakraProvider value={defaultSystem}>
+            <AddContactPage contactRepository={mockRepository} />
+          </ChakraProvider>
+        );
 
         await user.type(screen.getByLabelText("Nombre"), "Test User");
         await user.type(screen.getByLabelText("Email"), "invalid-email");
@@ -98,7 +117,11 @@ describe("AddContactPage", () => {
     describe("When clicking back", () => {
       it("Then should navigate back", async () => {
         const user = userEvent.setup();
-        render(<AddContactPage contactRepository={mockRepository} />);
+        render(
+          <ChakraProvider value={defaultSystem}>
+            <AddContactPage contactRepository={mockRepository} />
+          </ChakraProvider>
+        );
 
         const backButton = screen
           .getByRole("button", { name: "" })

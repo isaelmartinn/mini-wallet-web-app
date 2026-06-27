@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { Amount, Balance } from "#wallet/domain";
+import { Amount } from "#shared/domain/value-objects";
+import { Balance } from "#wallet/domain/entities";
 import { WalletRepository } from "#wallet/domain/repositories";
 
 import { GetBalanceUseCase } from "./getBalance.useCase";

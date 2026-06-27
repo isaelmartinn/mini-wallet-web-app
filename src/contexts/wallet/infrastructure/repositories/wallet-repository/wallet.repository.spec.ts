@@ -9,7 +9,8 @@ describe("WalletRepository", () => {
   const testUserId = "user-001";
 
   beforeEach(() => {
-    repository = new WalletRepository();
+    WalletRepository.resetInstance();
+    repository = WalletRepository.getInstance();
   });
 
   describe("getBalance", () => {
@@ -41,11 +42,11 @@ describe("WalletRepository", () => {
           expect(result.getCurrency()).toBe("MXN");
         });
 
-        it("Then should return a new instance each time", async () => {
+        it("Then should return the same cached instance", async () => {
           const result1 = await repository.getBalance(testUserId);
           const result2 = await repository.getBalance(testUserId);
 
-          expect(result1).not.toBe(result2);
+          expect(result1).toBe(result2);
           expect(result1.getAmount().getValue()).toBe(
             result2.getAmount().getValue()
           );

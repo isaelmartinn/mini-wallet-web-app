@@ -1,6 +1,11 @@
 export { ContactNameEmptyError } from "./contactNameEmpty.error";
 export { InsufficientBalanceError } from "./insufficientBalance.error";
 export { InvalidAmountError } from "./invalidAmount.error";
+export { InvalidDescriptionError } from "./invalidDescription.error";
+export { InvalidStateTransitionError } from "./invalidStateTransition.error";
 export { RecipientRequiredError } from "./recipientRequired.error";
 export { TransferDateInvalidError } from "./transferDateInvalid.error";
 export { TransferFetchFailedError } from "./transferFetchFailed.error";
+export { TransferNetworkError } from "./transferNetworkError.error";
+export { TransferTimeoutError } from "./transferTimeout.error";
+export { TransferUnknownError } from "./transferUnknownError.error";

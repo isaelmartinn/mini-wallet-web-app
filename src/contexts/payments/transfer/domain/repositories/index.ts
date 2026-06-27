@@ -1,1 +1,5 @@
-export type { TransferRepository } from "./transfer.repository.interface";
+export type {
+  ConfirmTransferResult,
+  CreateTransferParams,
+  TransferRepository,
+} from "./transfer.repository.interface";

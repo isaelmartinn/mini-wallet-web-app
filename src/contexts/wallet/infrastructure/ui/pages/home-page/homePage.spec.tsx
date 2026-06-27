@@ -7,7 +7,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AuthStore } from "#shared/domain/interfaces";
-import { Amount } from "#wallet/domain/value-objects";
+import { Amount } from "#shared/domain/value-objects";
 import { useWalletStore } from "#wallet/infrastructure/store";
 
 import { HomePage } from "./homePage";

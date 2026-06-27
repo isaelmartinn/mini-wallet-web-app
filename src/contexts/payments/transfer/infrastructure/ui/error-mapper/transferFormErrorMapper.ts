@@ -68,12 +68,22 @@ export class TransferFormErrorMapper
 
   toFormError(error: unknown): FormErrorMapping | null {
     if (error instanceof DomainError) {
-      return (
-        TransferFormErrorMapper.FORM_ERROR_MAPPINGS[error.code] || {
-          fieldName: "amount",
-          message: error.message,
-        }
+      const formError = TransferFormErrorMapper.FORM_ERROR_MAPPINGS[error.code];
+
+      if (formError) {
+        return formError;
+      }
+
+      console.error(
+        `[TransferFormErrorMapper] Unmapped form error code: ${error.code}`,
+        error
       );
+
+      return {
+        fieldName: "amount",
+        message:
+          "Ocurrió un error de validación. Por favor, verifica los datos.",
+      };
     }
     return null;
   }
@@ -86,8 +96,14 @@ export class TransferFormErrorMapper
         return presentation;
       }
 
+      console.error(
+        `[TransferFormErrorMapper] Unmapped error code: ${error.code}`,
+        error
+      );
+
       return {
-        description: error.message,
+        description:
+          "Ocurrió un error de validación. Por favor, verifica los datos e intenta nuevamente.",
         title: "Error de validación",
       };
     }

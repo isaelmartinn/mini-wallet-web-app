@@ -1,5 +1,5 @@
+import { AmountInvalidError, AmountNegativeError } from "#shared/domain/errors";
 import { CurrencyFormatter } from "#shared/domain/interfaces";
-import { AmountInvalidError, AmountNegativeError } from "#wallet/domain/errors";
 
 import { Amount as AmountInterface } from "./amount.interface";
 

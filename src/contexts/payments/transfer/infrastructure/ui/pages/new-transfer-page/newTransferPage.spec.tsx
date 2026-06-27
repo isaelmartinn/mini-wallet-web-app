@@ -33,12 +33,20 @@ vi.mock("#shared/infrastructure/hooks", () => ({
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: vi.fn(),
+    replace: vi.fn(),
+  }),
+  useSearchParams: () => ({
+    get: vi.fn().mockReturnValue(null),
+    toString: vi.fn().mockReturnValue(""),
   }),
 }));
 
 vi.mock("lucide-react", () => ({
   ArrowLeft: () => <div>ArrowLeft Icon</div>,
   Send: () => <div>Send Icon</div>,
+  Star: () => <div>Star Icon</div>,
+  User: () => <div>User Icon</div>,
+  UserPlus: () => <div>UserPlus Icon</div>,
 }));
 
 vi.mock("#payments/transfer/infrastructure/repositories", () => ({

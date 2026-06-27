@@ -1,4 +1,8 @@
-import { TransferValidationService } from "#payments/transfer/domain/services";
+import { ContactRepository } from "#payments/contact/domain/repositories";
+import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
+import { TransferRepository } from "#payments/transfer/domain/repositories";
+import { Amount } from "#shared/domain/value-objects";
+import { WalletRepository } from "#wallet/domain/repositories";
 
 import {
   PrepareTransferParams,
@@ -8,12 +12,26 @@ import {
 
 export class PrepareTransferUseCase implements PrepareTransferUseCaseInterface {
   constructor(
-    private readonly transferValidationService: TransferValidationService
+    private readonly transferRepository: TransferRepository,
+    private readonly walletRepository: WalletRepository,
+    private readonly contactRepository: ContactRepository
   ) {}
 
   async execute(params: PrepareTransferParams): Promise<PrepareTransferResult> {
-    await this.transferValidationService.validateTransfer({
-      amount: params.amount,
+    const amount = Amount.create(params.amount);
+
+    const balance = await this.walletRepository.getBalance(params.userId);
+
+    if (balance.getAmount().isLessThan(amount)) {
+      throw new InsufficientBalanceError();
+    }
+
+    const contact = await this.contactRepository.findById(params.recipientId);
+    const recipientName = contact ? contact.getName() : "Destinatario";
+
+    const transfer = await this.transferRepository.create({
+      amount,
+      description: `Transferencia a ${recipientName}`,
       recipientId: params.recipientId,
       userId: params.userId,
     });
@@ -21,6 +39,7 @@ export class PrepareTransferUseCase implements PrepareTransferUseCaseInterface {
     return {
       amount: params.amount,
       recipientId: params.recipientId,
+      transferId: transfer.getId(),
       userId: params.userId,
     };
   }

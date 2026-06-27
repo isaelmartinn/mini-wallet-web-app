@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { AmountInvalidError, AmountNegativeError } from "#wallet/domain/errors";
+import { AmountInvalidError, AmountNegativeError } from "#shared/domain/errors";
 
 import { Amount } from "./amount.vo";
 

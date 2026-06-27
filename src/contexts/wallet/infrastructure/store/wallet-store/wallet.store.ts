@@ -20,12 +20,13 @@ type WalletStore = WalletActions & WalletState;
 export const useWalletStore = create<WalletStore>((set) => ({
   balance: null,
 
-  clearWallet: () =>
+  clearWallet: () => {
     set({
       balance: null,
       isLoading: false,
       userProfile: null,
-    }),
+    });
+  },
 
   isLoading: false,
 
