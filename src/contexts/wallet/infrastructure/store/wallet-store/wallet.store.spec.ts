@@ -1,8 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
+import { Amount } from "#shared/domain/value-objects";
 import { Balance, UserProfile } from "#wallet/domain/entities";
-import { Amount } from "#wallet/domain/value-objects";
 
 import { useWalletStore } from "./wallet.store";
 

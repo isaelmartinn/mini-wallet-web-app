@@ -1,4 +1,6 @@
-export { DomainError } from "./domainError/domainError";
+export { AmountInvalidError } from "./amountInvalid.error";
+export { AmountNegativeError } from "./amountNegative.error";
+export { DomainError } from "./domainError";
 export { EmailEmptyError } from "./emailEmptyError";
 export { EmailInvalidFormatError } from "./emailInvalidFormatError";
 export { PhoneEmptyError } from "./phoneEmptyError";

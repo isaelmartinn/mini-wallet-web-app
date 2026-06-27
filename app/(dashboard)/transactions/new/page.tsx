@@ -5,7 +5,7 @@ import { NewTransferPage } from "#payments/transfer/infrastructure/ui/pages";
 import { BalanceProviderAdapter } from "#wallet/infrastructure/providers/balance-provider/balance-provider.adapter";
 import { WalletRepository } from "#wallet/infrastructure/repositories";
 
-const walletRepository = new WalletRepository();
+const walletRepository = WalletRepository.getInstance();
 const balanceProvider = new BalanceProviderAdapter(walletRepository);
 
 export default function NewTransactionRoute() {

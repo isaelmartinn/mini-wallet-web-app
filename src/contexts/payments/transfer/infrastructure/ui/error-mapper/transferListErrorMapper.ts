@@ -30,9 +30,15 @@ export class TransferListErrorMapper implements ErrorMapper {
         return presentation;
       }
 
+      console.error(
+        `[TransferListErrorMapper] Unmapped error code: ${error.code}`,
+        error
+      );
+
       return {
-        description: error.message,
-        title: "Error de validación",
+        description:
+          "Ocurrió un problema. Por favor, intenta nuevamente o contacta a soporte.",
+        title: "Error inesperado",
       };
     }
 

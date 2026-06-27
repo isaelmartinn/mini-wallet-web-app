@@ -19,18 +19,18 @@ import {
   PrepareTransferResult,
   PrepareTransferUseCase,
 } from "#payments/transfer/application/use-cases";
-import { TransferValidationService } from "#payments/transfer/domain/services";
+import { TransferRepositoryImpl } from "#payments/transfer/infrastructure/repositories";
 import {
   TransferFormStep,
   TransferSummaryStep,
 } from "#payments/transfer/infrastructure/ui/components";
+import { NewTransferFormData } from "#payments/transfer/infrastructure/ui/components/organisms/transfer-form-step";
 import { TransferFormErrorMapper } from "#payments/transfer/infrastructure/ui/error-mapper/transferFormErrorMapper";
 import { AuthStore, UserWithId } from "#shared/domain/interfaces";
 import { BalanceProvider } from "#shared/domain/interfaces/balanceProvider.interface";
 import { useAuthContext } from "#shared/infrastructure/hooks";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-
-import { NewTransferFormData } from "../../components/organisms/transfer-form-step";
+import { WalletRepository } from "#wallet/infrastructure/repositories";
 
 interface NewTransferPageProps<TUser extends UserWithId> {
   authStore: AuthStore<TUser>;
@@ -115,9 +115,13 @@ export function NewTransferPage<TUser extends UserWithId>({
 
     setIsSubmitting(true);
     try {
-      const validationService = new TransferValidationService(balanceProvider);
+      const transferRepository = new TransferRepositoryImpl();
+      const walletRepository = WalletRepository.getInstance();
+      const contactRepository = new ContactRepository();
       const prepareTransferUseCase = new PrepareTransferUseCase(
-        validationService
+        transferRepository,
+        walletRepository,
+        contactRepository
       );
 
       const draft = await prepareTransferUseCase.execute({
@@ -135,6 +139,10 @@ export function NewTransferPage<TUser extends UserWithId>({
     }
   };
 
+  const handleContactSelect = (contact: Contact) => {
+    setSelectedContact(contact);
+  };
+
   const handleBack = () => {
     if (step === "summary") {
       setStep("form");
@@ -144,7 +152,13 @@ export function NewTransferPage<TUser extends UserWithId>({
   };
 
   const handleConfirm = () => {
-    router.push("/home");
+    if (!transferDraft || !selectedContact) return;
+
+    const params = new URLSearchParams({
+      transferId: transferDraft.transferId,
+    });
+
+    router.push(`/transactions/confirm?${params.toString()}`);
   };
 
   if (!user) {
@@ -178,6 +192,7 @@ export function NewTransferPage<TUser extends UserWithId>({
               isLoadingBalance={isLoadingBalance}
               isLoadingContacts={isLoadingContacts}
               isSubmitting={isSubmitting}
+              onContactSelect={handleContactSelect}
               onSubmit={onSubmit}
               preselectedContact={selectedContact}
             />

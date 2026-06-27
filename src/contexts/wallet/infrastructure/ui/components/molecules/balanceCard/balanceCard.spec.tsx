@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
-import { Amount } from "#wallet/domain/value-objects";
+import { Amount } from "#shared/domain/value-objects";
 
 import { BalanceCard } from "./balanceCard";
 

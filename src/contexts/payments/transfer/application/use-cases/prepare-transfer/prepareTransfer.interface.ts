@@ -7,6 +7,7 @@ export interface PrepareTransferParams {
 export interface PrepareTransferResult {
   amount: number;
   recipientId: string;
+  transferId: string;
   userId: string;
 }
 

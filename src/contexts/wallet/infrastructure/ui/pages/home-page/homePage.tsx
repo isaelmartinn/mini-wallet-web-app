@@ -48,7 +48,7 @@ export function HomePage<TUser extends UserWithId>({
       setLoading(true);
 
       try {
-        const walletRepository = new WalletRepository();
+        const walletRepository = WalletRepository.getInstance();
         const getBalanceUseCase = new GetBalanceUseCase(walletRepository);
         const getUserProfileUseCase = new GetUserProfileUseCase(
           walletRepository
@@ -82,7 +82,9 @@ export function HomePage<TUser extends UserWithId>({
         const transferRepository = new TransferRepositoryImpl();
         const getTransfersUseCase = new GetTransfersUseCase(transferRepository);
 
-        const transfersData = await getTransfersUseCase.execute();
+        const transfersData = await getTransfersUseCase.execute({
+          userId: user.getId(),
+        });
         setTransactions(transfersData);
       } catch (error) {
         handleError(error);

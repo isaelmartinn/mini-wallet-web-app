@@ -34,6 +34,7 @@ export function TransferFormStep({
   isLoadingBalance,
   isLoadingContacts,
   isSubmitting,
+  onContactSelect,
   onSubmit,
   preselectedContact,
 }: TransferFormStepProps) {
@@ -61,6 +62,7 @@ export function TransferFormStep({
     setSelectedContact(contact);
     form.setValue("recipientId", contact.getId());
     form.clearErrors("recipientId");
+    onContactSelect?.(contact);
   };
 
   return (

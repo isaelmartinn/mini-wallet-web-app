@@ -117,7 +117,6 @@ describe("TransferFormStep", () => {
         const amountInput = screen.getByPlaceholderText("$0.00");
         await user.type(amountInput, "100");
 
-        // Trigger blur to ensure the value is processed
         await user.tab();
 
         const submitButton = screen.getByRole("button", { name: /Continuar/i });

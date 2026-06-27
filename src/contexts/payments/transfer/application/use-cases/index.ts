@@ -1,4 +1,12 @@
-export type { GetTransfersUseCase as IGetTransfersUseCase } from "./get-transfers/getTransfers.interface";
+export type {
+  ConfirmTransferParams,
+  ConfirmTransferUseCase as IConfirmTransferUseCase,
+} from "./confirm-transfer/confirmTransfer.interface";
+export { ConfirmTransferUseCase } from "./confirm-transfer/confirmTransfer.useCase";
+export type {
+  GetTransfersParams,
+  GetTransfersUseCase as IGetTransfersUseCase,
+} from "./get-transfers/getTransfers.interface";
 export { GetTransfersUseCase } from "./get-transfers/getTransfers.useCase";
 export type {
   PrepareTransferUseCase as IPrepareTransferUseCase,

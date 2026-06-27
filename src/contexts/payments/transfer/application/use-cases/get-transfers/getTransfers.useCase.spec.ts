@@ -5,6 +5,7 @@ import {
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
+import { Amount } from "#shared/domain/value-objects";
 
 import { GetTransfersUseCase } from "./getTransfers.useCase";
 
@@ -14,7 +15,10 @@ describe("GetTransfersUseCase", () => {
 
   beforeEach(() => {
     mockRepository = {
-      findAll: vi.fn(),
+      confirm: vi.fn(),
+      create: vi.fn(),
+      findById: vi.fn(),
+      findByUserId: vi.fn(),
     };
     useCase = new GetTransfersUseCase(mockRepository);
   });
@@ -24,68 +28,78 @@ describe("GetTransfersUseCase", () => {
       it("Then should return all transfers", async () => {
         const mockTransfers = [
           Transfer.create({
-            amount: 1000,
+            amount: Amount.create(1000),
             date: new Date("2024-06-25"),
             description: "Transfer 1",
             id: "1",
+            recipientId: "contact-1",
             status: TransferStatus.success(),
             type: TransferType.expense(),
+            userId: "user-1",
           }),
           Transfer.create({
-            amount: 2000,
+            amount: Amount.create(2000),
             date: new Date("2024-06-24"),
             description: "Transfer 2",
             id: "2",
+            recipientId: "contact-2",
             status: TransferStatus.success(),
             type: TransferType.income(),
+            userId: "user-1",
           }),
         ];
 
-        vi.mocked(mockRepository.findAll).mockResolvedValue(mockTransfers);
+        vi.mocked(mockRepository.findByUserId).mockResolvedValue(mockTransfers);
 
-        const result = await useCase.execute();
+        const result = await useCase.execute({ userId: "user-1" });
 
         expect(result).toHaveLength(2);
-        expect(mockRepository.findAll).toHaveBeenCalledOnce();
+        expect(mockRepository.findByUserId).toHaveBeenCalledWith("user-1");
       });
     });
 
     describe("When transfers are in random order", () => {
       it("Then should return transfers sorted by date (most recent first)", async () => {
         const oldTransfer = Transfer.create({
-          amount: 1000,
+          amount: Amount.create(1000),
           date: new Date("2024-06-20"),
           description: "Old transfer",
           id: "1",
+          recipientId: "contact-1",
           status: TransferStatus.success(),
           type: TransferType.expense(),
+          userId: "user-1",
         });
 
         const recentTransfer = Transfer.create({
-          amount: 2000,
+          amount: Amount.create(2000),
           date: new Date("2024-06-25"),
           description: "Recent transfer",
           id: "2",
+          recipientId: "contact-2",
           status: TransferStatus.success(),
           type: TransferType.income(),
+          userId: "user-1",
         });
 
         const middleTransfer = Transfer.create({
-          amount: 1500,
+          amount: Amount.create(1500),
           date: new Date("2024-06-23"),
           description: "Middle transfer",
           id: "3",
+          recipientId: "contact-3",
           status: TransferStatus.pending(),
           type: TransferType.expense(),
+          userId: "user-1",
         });
 
-        vi.mocked(mockRepository.findAll).mockResolvedValue([
+        vi.mocked(mockRepository.findByUserId).mockResolvedValue([
           oldTransfer,
           recentTransfer,
           middleTransfer,
         ]);
 
-        const result = await useCase.execute();
+        const result = await useCase.execute({ userId: "user-1" });
 
         expect(result[0]?.getId()).toBe("2");
         expect(result[1]?.getId()).toBe("3");
@@ -97,12 +111,12 @@ describe("GetTransfersUseCase", () => {
   describe("Given an empty repository", () => {
     describe("When executing the use case", () => {
       it("Then should return an empty array", async () => {
-        vi.mocked(mockRepository.findAll).mockResolvedValue([]);
+        vi.mocked(mockRepository.findByUserId).mockResolvedValue([]);
 
-        const result = await useCase.execute();
+        const result = await useCase.execute({ userId: "user-1" });
 
         expect(result).toHaveLength(0);
-        expect(mockRepository.findAll).toHaveBeenCalledOnce();
+        expect(mockRepository.findByUserId).toHaveBeenCalledWith("user-1");
       });
     });
   });
@@ -111,9 +125,11 @@ describe("GetTransfersUseCase", () => {
     describe("When executing the use case", () => {
       it("Then should propagate the error", async () => {
         const error = new Error("Repository error");
-        vi.mocked(mockRepository.findAll).mockRejectedValue(error);
+        vi.mocked(mockRepository.findByUserId).mockRejectedValue(error);
 
-        await expect(useCase.execute()).rejects.toThrow("Repository error");
+        await expect(useCase.execute({ userId: "user-1" })).rejects.toThrow(
+          "Repository error"
+        );
       });
     });
   });

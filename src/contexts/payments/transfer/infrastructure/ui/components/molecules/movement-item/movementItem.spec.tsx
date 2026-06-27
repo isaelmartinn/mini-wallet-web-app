@@ -2,9 +2,12 @@ import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Transaction } from "#transactions/domain";
-import { TransactionStatus } from "#transactions/domain/value-objects/transaction-status/transaction-status.vo";
-import { TransactionType } from "#transactions/domain/value-objects/transaction-type/transaction-type.vo";
+import { Transfer } from "#payments/transfer/domain/entities";
+import {
+  TransferStatus,
+  TransferType,
+} from "#payments/transfer/domain/value-objects";
+import { Amount } from "#shared/domain/value-objects";
 
 import { MovementItem } from "./movementItem";
 
@@ -16,13 +19,15 @@ describe("MovementItem", () => {
   describe("Given a successful expense transaction", () => {
     describe("When rendering the component", () => {
       it("Then should display transaction details with negative amount", () => {
-        const transaction = Transaction.create({
-          amount: 1500.0,
+        const transaction = Transfer.create({
+          amount: Amount.create(1500.0),
           date: new Date("2024-06-25T10:30:00"),
           description: "Transferencia a María García",
           id: "txn-001",
-          status: TransactionStatus.success(),
-          type: TransactionType.expense(),
+          recipientId: "recipient-1",
+          status: TransferStatus.success(),
+          type: TransferType.expense(),
+          userId: "user-1",
         });
 
         renderWithChakra(<MovementItem transaction={transaction} />);
@@ -36,13 +41,15 @@ describe("MovementItem", () => {
       });
 
       it("Then should not display status text", () => {
-        const transaction = Transaction.create({
-          amount: 1500.0,
+        const transaction = Transfer.create({
+          amount: Amount.create(1500.0),
           date: new Date("2024-06-25T10:30:00"),
           description: "Test transaction",
           id: "txn-001",
-          status: TransactionStatus.success(),
-          type: TransactionType.expense(),
+          recipientId: "recipient-1",
+          status: TransferStatus.success(),
+          type: TransferType.expense(),
+          userId: "user-1",
         });
 
         renderWithChakra(<MovementItem transaction={transaction} />);
@@ -56,13 +63,15 @@ describe("MovementItem", () => {
   describe("Given a successful income transaction", () => {
     describe("When rendering the component", () => {
       it("Then should display transaction details with positive amount", () => {
-        const transaction = Transaction.create({
-          amount: 3200.5,
+        const transaction = Transfer.create({
+          amount: Amount.create(3200.5),
           date: new Date("2024-06-23T15:45:00"),
           description: "Pago recibido de Juan Pérez",
           id: "txn-002",
-          status: TransactionStatus.success(),
-          type: TransactionType.income(),
+          recipientId: "recipient-2",
+          status: TransferStatus.success(),
+          type: TransferType.income(),
+          userId: "user-1",
         });
 
         renderWithChakra(<MovementItem transaction={transaction} />);
@@ -80,13 +89,15 @@ describe("MovementItem", () => {
   describe("Given a pending transaction", () => {
     describe("When rendering the component", () => {
       it("Then should display pending status", () => {
-        const transaction = Transaction.create({
-          amount: 500.0,
+        const transaction = Transfer.create({
+          amount: Amount.create(500.0),
           date: new Date("2024-06-21T18:20:00"),
           description: "Transferencia a Carlos López",
           id: "txn-004",
-          status: TransactionStatus.pending(),
-          type: TransactionType.expense(),
+          recipientId: "recipient-4",
+          status: TransferStatus.pending(),
+          type: TransferType.expense(),
+          userId: "user-2",
         });
 
         renderWithChakra(<MovementItem transaction={transaction} />);
@@ -99,13 +110,15 @@ describe("MovementItem", () => {
   describe("Given a failed transaction", () => {
     describe("When rendering the component", () => {
       it("Then should display failed status", () => {
-        const transaction = Transaction.create({
-          amount: 450.75,
+        const transaction = Transfer.create({
+          amount: Amount.create(450.75),
           date: new Date("2024-06-19T14:30:00"),
           description: "Pago de servicios",
           id: "txn-006",
-          status: TransactionStatus.failed(),
-          type: TransactionType.expense(),
+          recipientId: "recipient-6",
+          status: TransferStatus.failed(),
+          type: TransferType.expense(),
+          userId: "user-2",
         });
 
         renderWithChakra(<MovementItem transaction={transaction} />);

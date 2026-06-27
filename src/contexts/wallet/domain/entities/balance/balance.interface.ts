@@ -1,4 +1,4 @@
-import { Amount } from "#wallet/domain/value-objects";
+import { Amount } from "#shared/domain/value-objects";
 
 export interface Balance {
   getAmount(): Amount;

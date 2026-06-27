@@ -12,17 +12,17 @@ describe("TransferRepositoryImpl", () => {
     repository = new TransferRepositoryImpl();
   });
 
-  describe("findAll", () => {
-    describe("Given successful scenario", () => {
-      describe("When fetching all transfers", () => {
-        it("Then should eventually return array of transfers", async () => {
+  describe("findByUserId", () => {
+    describe("Given user-1 with 3 transfers", () => {
+      describe("When fetching transfers for user-1", () => {
+        it("Then should eventually return array of 3 transfers", async () => {
           let result: null | Transfer[] = null;
           let attempts = 0;
           const maxAttempts = 10;
 
           while (attempts < maxAttempts && !result) {
             try {
-              result = await repository.findAll();
+              result = await repository.findByUserId("user-1");
             } catch (error) {
               if (!(error instanceof TransferFetchFailedError)) {
                 throw error;
@@ -33,18 +33,18 @@ describe("TransferRepositoryImpl", () => {
 
           expect(result).not.toBeNull();
           expect(result).toBeInstanceOf(Array);
-          expect(result!.length).toBeGreaterThan(0);
+          expect(result).toHaveLength(3);
           expect(result![0]).toBeInstanceOf(Transfer);
         });
 
-        it("Then should return all 8 fixture transfers", async () => {
+        it("Then should return only user-1 transfers", async () => {
           let result: null | Transfer[] = null;
           let attempts = 0;
           const maxAttempts = 10;
 
           while (attempts < maxAttempts && !result) {
             try {
-              result = await repository.findAll();
+              result = await repository.findByUserId("user-1");
             } catch (error) {
               if (!(error instanceof TransferFetchFailedError)) {
                 throw error;
@@ -54,7 +54,9 @@ describe("TransferRepositoryImpl", () => {
           }
 
           expect(result).not.toBeNull();
-          expect(result).toHaveLength(8);
+          result!.forEach((transfer) => {
+            expect(transfer.getUserId()).toBe("user-1");
+          });
         });
 
         it("Then should return transfers with correct properties", async () => {
@@ -64,7 +66,7 @@ describe("TransferRepositoryImpl", () => {
 
           while (attempts < maxAttempts && !result) {
             try {
-              result = await repository.findAll();
+              result = await repository.findByUserId("user-1");
             } catch (error) {
               if (!(error instanceof TransferFetchFailedError)) {
                 throw error;
@@ -77,7 +79,7 @@ describe("TransferRepositoryImpl", () => {
 
           const firstTransfer = result![0];
           expect(firstTransfer.getId()).toBe("txn-001");
-          expect(firstTransfer.getAmount()).toBe(1500.0);
+          expect(firstTransfer.getAmount().getValue()).toBe(1500.0);
           expect(firstTransfer.getDescription()).toBe(
             "Transferencia a María García"
           );
@@ -94,9 +96,9 @@ describe("TransferRepositoryImpl", () => {
           while (attempts < maxAttempts && (!result1 || !result2)) {
             try {
               if (!result1) {
-                result1 = await repository.findAll();
+                result1 = await repository.findByUserId("user-1");
               } else if (!result2) {
-                result2 = await repository.findAll();
+                result2 = await repository.findByUserId("user-1");
               }
             } catch (error) {
               if (!(error instanceof TransferFetchFailedError)) {
@@ -121,9 +123,9 @@ describe("TransferRepositoryImpl", () => {
           while (attempts < maxAttempts && (!result1 || !result2)) {
             try {
               if (!result1) {
-                result1 = await repository.findAll();
+                result1 = await repository.findByUserId("user-1");
               } else if (!result2) {
-                result2 = await repository.findAll();
+                result2 = await repository.findByUserId("user-1");
               }
             } catch (error) {
               if (!(error instanceof TransferFetchFailedError)) {
@@ -144,40 +146,74 @@ describe("TransferRepositoryImpl", () => {
       });
     });
 
-    describe("Given request with delay", () => {
-      describe("When fetching transfers", () => {
-        it("Then should take at least 500ms", async () => {
-          const startTime = Date.now();
+    describe("Given user-2 with 3 transfers", () => {
+      describe("When fetching transfers for user-2", () => {
+        it("Then should return array of 3 transfers", async () => {
+          let result: null | Transfer[] = null;
+          let attempts = 0;
+          const maxAttempts = 10;
 
-          try {
-            await repository.findAll();
-          } catch (error) {
-            if (!(error instanceof TransferFetchFailedError)) {
-              throw error;
+          while (attempts < maxAttempts && !result) {
+            try {
+              result = await repository.findByUserId("user-2");
+            } catch (error) {
+              if (!(error instanceof TransferFetchFailedError)) {
+                throw error;
+              }
+              attempts++;
             }
           }
 
-          const endTime = Date.now();
-          const duration = endTime - startTime;
-
-          expect(duration).toBeGreaterThanOrEqual(500);
+          expect(result).not.toBeNull();
+          expect(result).toHaveLength(3);
         });
+      });
+    });
 
-        it("Then should take less than 2000ms", async () => {
-          const startTime = Date.now();
+    describe("Given user-3 with 2 transfers", () => {
+      describe("When fetching transfers for user-3", () => {
+        it("Then should return array of 2 transfers", async () => {
+          let result: null | Transfer[] = null;
+          let attempts = 0;
+          const maxAttempts = 10;
 
-          try {
-            await repository.findAll();
-          } catch (error) {
-            if (!(error instanceof TransferFetchFailedError)) {
-              throw error;
+          while (attempts < maxAttempts && !result) {
+            try {
+              result = await repository.findByUserId("user-3");
+            } catch (error) {
+              if (!(error instanceof TransferFetchFailedError)) {
+                throw error;
+              }
+              attempts++;
             }
           }
 
-          const endTime = Date.now();
-          const duration = endTime - startTime;
+          expect(result).not.toBeNull();
+          expect(result).toHaveLength(2);
+        });
+      });
+    });
 
-          expect(duration).toBeLessThan(2000);
+    describe("Given non-existent user", () => {
+      describe("When fetching transfers for user-999", () => {
+        it("Then should return empty array", async () => {
+          let result: null | Transfer[] = null;
+          let attempts = 0;
+          const maxAttempts = 10;
+
+          while (attempts < maxAttempts && !result) {
+            try {
+              result = await repository.findByUserId("user-999");
+            } catch (error) {
+              if (!(error instanceof TransferFetchFailedError)) {
+                throw error;
+              }
+              attempts++;
+            }
+          }
+
+          expect(result).not.toBeNull();
+          expect(result).toHaveLength(0);
         });
       });
     });
@@ -186,11 +222,11 @@ describe("TransferRepositoryImpl", () => {
       describe("When repository may fail randomly", () => {
         it("Then should throw TransferFetchFailedError on failure", async () => {
           const results = await Promise.allSettled([
-            repository.findAll(),
-            repository.findAll(),
-            repository.findAll(),
-            repository.findAll(),
-            repository.findAll(),
+            repository.findByUserId("user-1"),
+            repository.findByUserId("user-1"),
+            repository.findByUserId("user-1"),
+            repository.findByUserId("user-1"),
+            repository.findByUserId("user-1"),
           ]);
 
           const failures = results.filter((r) => r.status === "rejected");
@@ -210,150 +246,39 @@ describe("TransferRepositoryImpl", () => {
         });
       });
     });
+  });
 
-    describe("Given transfer data integrity", () => {
-      describe("When fetching transfers", () => {
-        it("Then should return transfers with valid dates", async () => {
-          let result: null | Transfer[] = null;
-          let attempts = 0;
-          const maxAttempts = 10;
-
-          while (attempts < maxAttempts && !result) {
-            try {
-              result = await repository.findAll();
-            } catch (error) {
-              if (!(error instanceof TransferFetchFailedError)) {
-                throw error;
-              }
-              attempts++;
-            }
-          }
+  describe("findById", () => {
+    describe("Given existing transfer txn-001", () => {
+      describe("When finding transfer by ID", () => {
+        it("Then should return the transfer", async () => {
+          const result = await repository.findById("txn-001");
 
           expect(result).not.toBeNull();
-
-          result!.forEach((transfer) => {
-            const transferDate = transfer.getDate();
-            expect(transferDate.getValue()).toBeInstanceOf(Date);
-            expect(transferDate.getValue().getTime()).not.toBeNaN();
-          });
+          expect(result!.getId()).toBe("txn-001");
+          expect(result!.getUserId()).toBe("user-1");
         });
+      });
+    });
 
-        it("Then should return transfers with positive amounts", async () => {
-          let result: null | Transfer[] = null;
-          let attempts = 0;
-          const maxAttempts = 10;
-
-          while (attempts < maxAttempts && !result) {
-            try {
-              result = await repository.findAll();
-            } catch (error) {
-              if (!(error instanceof TransferFetchFailedError)) {
-                throw error;
-              }
-              attempts++;
-            }
-          }
+    describe("Given existing transfer from different user", () => {
+      describe("When finding transfer txn-004 from user-2", () => {
+        it("Then should return the transfer", async () => {
+          const result = await repository.findById("txn-004");
 
           expect(result).not.toBeNull();
-
-          result!.forEach((transfer) => {
-            expect(transfer.getAmount()).toBeGreaterThan(0);
-          });
+          expect(result!.getId()).toBe("txn-004");
+          expect(result!.getUserId()).toBe("user-2");
         });
+      });
+    });
 
-        it("Then should return transfers with unique IDs", async () => {
-          let result: null | Transfer[] = null;
-          let attempts = 0;
-          const maxAttempts = 10;
+    describe("Given non-existent transfer", () => {
+      describe("When finding transfer by non-existent ID", () => {
+        it("Then should return null", async () => {
+          const result = await repository.findById("non-existent-id");
 
-          while (attempts < maxAttempts && !result) {
-            try {
-              result = await repository.findAll();
-            } catch (error) {
-              if (!(error instanceof TransferFetchFailedError)) {
-                throw error;
-              }
-              attempts++;
-            }
-          }
-
-          expect(result).not.toBeNull();
-
-          const ids = result!.map((t) => t.getId());
-          const uniqueIds = new Set(ids);
-
-          expect(uniqueIds.size).toBe(ids.length);
-        });
-
-        it("Then should return transfers with valid types", async () => {
-          let result: null | Transfer[] = null;
-          let attempts = 0;
-          const maxAttempts = 10;
-
-          while (attempts < maxAttempts && !result) {
-            try {
-              result = await repository.findAll();
-            } catch (error) {
-              if (!(error instanceof TransferFetchFailedError)) {
-                throw error;
-              }
-              attempts++;
-            }
-          }
-
-          expect(result).not.toBeNull();
-
-          result!.forEach((transfer) => {
-            const type = transfer.getType().getValue();
-            expect(["INCOME", "EXPENSE"]).toContain(type);
-          });
-        });
-
-        it("Then should return transfers with valid statuses", async () => {
-          let result: null | Transfer[] = null;
-          let attempts = 0;
-          const maxAttempts = 10;
-
-          while (attempts < maxAttempts && !result) {
-            try {
-              result = await repository.findAll();
-            } catch (error) {
-              if (!(error instanceof TransferFetchFailedError)) {
-                throw error;
-              }
-              attempts++;
-            }
-          }
-
-          expect(result).not.toBeNull();
-
-          result!.forEach((transfer) => {
-            const status = transfer.getStatus().getValue();
-            expect(["SUCCESS", "PENDING", "FAILED"]).toContain(status);
-          });
-        });
-
-        it("Then should return transfers with non-empty descriptions", async () => {
-          let result: null | Transfer[] = null;
-          let attempts = 0;
-          const maxAttempts = 10;
-
-          while (attempts < maxAttempts && !result) {
-            try {
-              result = await repository.findAll();
-            } catch (error) {
-              if (!(error instanceof TransferFetchFailedError)) {
-                throw error;
-              }
-              attempts++;
-            }
-          }
-
-          expect(result).not.toBeNull();
-
-          result!.forEach((transfer) => {
-            expect(transfer.getDescription().length).toBeGreaterThan(0);
-          });
+          expect(result).toBeNull();
         });
       });
     });

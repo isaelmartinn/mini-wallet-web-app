@@ -12,7 +12,7 @@ describe("ContactRepository", () => {
   beforeEach(() => {
     localStorageMock = {};
 
-    global.localStorage = {
+    vi.stubGlobal("localStorage", {
       clear: vi.fn(() => {
         localStorageMock = {};
       }),
@@ -25,13 +25,14 @@ describe("ContactRepository", () => {
       setItem: vi.fn((key: string, value: string) => {
         localStorageMock[key] = value;
       }),
-    } as Storage;
+    } as Storage);
 
     repository = new ContactRepository();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllGlobals();
   });
 
   describe("Given an empty localStorage", () => {
@@ -216,7 +217,7 @@ describe("ContactRepository", () => {
         const found = await repository.findByEmail(email);
 
         expect(found).not.toBeNull();
-        expect(found?.getEmail().getValue()).toBe("Test@Example.com");
+        expect(found?.getEmail().getValue()).toBe("test@example.com");
       });
     });
 
@@ -238,15 +239,15 @@ describe("ContactRepository", () => {
           id: "phone-test-id",
           isFavorite: false,
           name: "Phone Test",
-          phone: Phone.create("+525512345678"),
+          phone: Phone.create("+529876543210"),
         });
         await repository.add(contact);
 
-        const phone = Phone.create("+525512345678");
+        const phone = Phone.create("+529876543210");
         const found = await repository.findByPhone(phone);
 
         expect(found).not.toBeNull();
-        expect(found?.getPhone().getValue()).toBe("+525512345678");
+        expect(found?.getPhone().getValue()).toBe("+529876543210");
         expect(found?.getId()).toBe("phone-test-id");
       });
     });
