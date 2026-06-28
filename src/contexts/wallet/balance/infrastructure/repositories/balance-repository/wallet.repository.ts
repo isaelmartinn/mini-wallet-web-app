@@ -1,18 +1,28 @@
-import { MOCK_CONFIG } from "#shared/infrastructure/config/mock.config";
+import { HttpClient } from "#shared/infrastructure";
 import { LocalStorageService } from "#shared/infrastructure/storage";
 import { Balance } from "#wallet/balance/domain/entities";
 import { WalletRepository as WalletRepositoryInterface } from "#wallet/balance/domain/repositories";
+import { BalanceAmount } from "#wallet/balance/domain/value-objects";
 import { WalletPersistenceService } from "#wallet/balance/infrastructure/persistence";
 import { UserProfile } from "#wallet/user-profile/domain/entities";
 
-import { createMockBalance, createMockUserProfile } from "./wallet.fixtures";
+interface BalanceResponse {
+  amount: number;
+  currency: string;
+}
+
+interface ProfileResponse {
+  fullName: string;
+}
 
 export class WalletRepository implements WalletRepositoryInterface {
   private static instance: WalletRepository;
   private balances: Map<string, Balance> = new Map();
+  private readonly httpClient: HttpClient;
   private persistenceService: WalletPersistenceService;
 
   private constructor() {
+    this.httpClient = new HttpClient();
     const storageService = new LocalStorageService();
     this.persistenceService = new WalletPersistenceService(storageService);
   }
@@ -29,8 +39,6 @@ export class WalletRepository implements WalletRepositoryInterface {
   }
 
   async getBalance(userId: string): Promise<Balance> {
-    await this.simulateDelay();
-
     const cachedBalance = this.balances.get(userId);
     if (cachedBalance) {
       return cachedBalance;
@@ -42,28 +50,34 @@ export class WalletRepository implements WalletRepositoryInterface {
       return persistedBalance;
     }
 
-    const newBalance = createMockBalance(userId);
-    this.balances.set(userId, newBalance);
-    this.persistenceService.saveBalance(userId, newBalance);
-    return newBalance;
+    const response = await this.httpClient.get<BalanceResponse>(
+      `/api/wallet/balance?userId=${userId}`
+    );
+
+    const balance = Balance.create({
+      amount: BalanceAmount.create(response.amount),
+      currency: response.currency,
+      userId,
+    });
+
+    this.balances.set(userId, balance);
+    this.persistenceService.saveBalance(userId, balance);
+    return balance;
   }
 
   async getUserProfile(userId: string): Promise<UserProfile> {
-    await this.simulateDelay();
-    return createMockUserProfile(userId);
+    const response = await this.httpClient.get<ProfileResponse>(
+      `/api/wallet/profile?userId=${userId}`
+    );
+
+    return UserProfile.create({
+      fullName: response.fullName,
+      userId,
+    });
   }
 
   async updateBalance(userId: string, newBalance: Balance): Promise<void> {
-    await this.simulateDelay();
     this.balances.set(userId, newBalance);
     this.persistenceService.saveBalance(userId, newBalance);
-  }
-
-  private simulateDelay(): Promise<void> {
-    const delay =
-      Math.random() * (MOCK_CONFIG.delays.max - MOCK_CONFIG.delays.min) +
-      MOCK_CONFIG.delays.min;
-
-    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 }

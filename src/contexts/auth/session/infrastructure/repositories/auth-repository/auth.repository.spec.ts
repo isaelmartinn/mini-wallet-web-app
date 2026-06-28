@@ -11,6 +11,61 @@ describe("AuthRepository", () => {
     authRepository = new AuthRepository();
     localStorage.clear();
     vi.clearAllMocks();
+
+    global.fetch = vi.fn(async (url, options) => {
+      const urlStr = url.toString();
+
+      if (urlStr.includes("/api/auth/login")) {
+        const body = JSON.parse(
+          ((options as RequestInit)?.body as string) || "{}"
+        );
+        const credential = body.credential?.toLowerCase() || "";
+
+        if (
+          credential.includes("juan.perez") ||
+          credential === "+525512345678"
+        ) {
+          return Promise.resolve({
+            json: async () => ({
+              email: "juan.perez@example.com",
+              id: "user-1",
+              name: "Juan Pérez",
+              phone: "+525512345678",
+            }),
+            ok: true,
+            status: 200,
+          } as Response);
+        }
+
+        if (
+          credential.includes("maria.garcia") ||
+          credential === "+525587654321"
+        ) {
+          return Promise.resolve({
+            json: async () => ({
+              email: "maria.garcia@example.com",
+              id: "user-2",
+              name: "María García",
+              phone: "+525587654321",
+            }),
+            ok: true,
+            status: 200,
+          } as Response);
+        }
+
+        return Promise.resolve({
+          json: async () => ({ error: "INVALID_CREDENTIALS" }),
+          ok: false,
+          status: 401,
+        } as Response);
+      }
+
+      return Promise.resolve({
+        json: async () => ({ error: "NOT_FOUND" }),
+        ok: false,
+        status: 404,
+      } as Response);
+    }) as unknown as typeof fetch;
   });
 
   describe("findByCredential", () => {
@@ -112,21 +167,6 @@ describe("AuthRepository", () => {
           const storedUser = localStorage.getItem("auth_user");
           expect(storedUser).toBeNull();
         });
-      });
-    });
-
-    describe("Given execution time", () => {
-      it("Then should simulate async delay", async () => {
-        const email = Email.create("john.doe@example.com");
-        const startTime = Date.now();
-
-        await authRepository.findByCredential(email);
-
-        const endTime = Date.now();
-        const duration = endTime - startTime;
-
-        expect(duration).toBeGreaterThanOrEqual(500);
-        expect(duration).toBeLessThan(2000);
       });
     });
   });

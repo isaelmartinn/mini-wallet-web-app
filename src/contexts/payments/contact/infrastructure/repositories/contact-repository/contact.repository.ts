@@ -2,8 +2,15 @@ import { useAuthStore } from "#auth/session/infrastructure/store/auth-store/auth
 import { Contact } from "#payments/contact/domain/entities";
 import { ContactRepository as ContactRepositoryInterface } from "#payments/contact/domain/repositories";
 import { Email, Phone } from "#shared/domain/value-objects";
+import { HttpClient, HttpError } from "#shared/infrastructure";
 
-import { createMockContacts } from "./contact.fixtures";
+interface ContactResponse {
+  email: string;
+  id: string;
+  isFavorite: boolean;
+  name: string;
+  phone: string;
+}
 
 interface StoredContact {
   email: string;
@@ -14,26 +21,69 @@ interface StoredContact {
 }
 
 export class ContactRepository implements ContactRepositoryInterface {
+  private contactsCache: Map<string, Contact[]> = new Map();
+  private readonly httpClient: HttpClient;
   private readonly STORAGE_KEY_PREFIX = "mini-wallet:contacts";
 
+  constructor() {
+    this.httpClient = new HttpClient();
+  }
+
   async add(contact: Contact): Promise<void> {
+    const userId = this.getUserId();
+
+    const response = await this.httpClient.post<ContactResponse>(
+      "/api/contacts",
+      {
+        email: contact.getEmail().getValue(),
+        isFavorite: contact.isFavorite(),
+        name: contact.getName(),
+        phone: contact.getPhone().getValue(),
+        userId,
+      }
+    );
+
+    this.contactsCache.delete(userId);
+
     const stored = this.getFromStorage();
-
     stored.push({
-      email: contact.getEmail().getValue(),
-      id: contact.getId(),
-      isFavorite: contact.isFavorite(),
-      name: contact.getName(),
-      phone: contact.getPhone().getValue(),
+      email: response.email,
+      id: response.id,
+      isFavorite: response.isFavorite,
+      name: response.name,
+      phone: response.phone,
     });
-
     this.saveToStorage(stored);
   }
 
   async findAll(): Promise<Contact[]> {
-    const stored = this.getFromStorage();
+    const userId = this.getUserId();
 
-    return stored.map((item) =>
+    const cached = this.contactsCache.get(userId);
+    if (cached) {
+      return cached;
+    }
+
+    const stored = this.getFromStorage();
+    if (stored.length > 0) {
+      const contacts = stored.map((item) =>
+        Contact.create({
+          email: Email.rehydrate(item.email),
+          id: item.id,
+          isFavorite: item.isFavorite,
+          name: item.name,
+          phone: Phone.rehydrate(item.phone),
+        })
+      );
+      this.contactsCache.set(userId, contacts);
+      return contacts;
+    }
+
+    const response = await this.httpClient.get<ContactResponse[]>(
+      `/api/contacts?userId=${userId}`
+    );
+
+    const contacts = response.map((item) =>
       Contact.create({
         email: Email.rehydrate(item.email),
         id: item.id,
@@ -42,6 +92,19 @@ export class ContactRepository implements ContactRepositoryInterface {
         phone: Phone.rehydrate(item.phone),
       })
     );
+
+    this.contactsCache.set(userId, contacts);
+
+    const storedContacts = response.map((item) => ({
+      email: item.email,
+      id: item.id,
+      isFavorite: item.isFavorite,
+      name: item.name,
+      phone: item.phone,
+    }));
+    this.saveToStorage(storedContacts);
+
+    return contacts;
   }
 
   async findByEmail(email: Email): Promise<Contact | null> {
@@ -62,18 +125,32 @@ export class ContactRepository implements ContactRepositoryInterface {
   }
 
   async findById(id: string): Promise<Contact | null> {
-    const stored = this.getFromStorage();
-    const item = stored.find((c) => c.id === id);
+    const userId = this.getUserId();
+    const cached = this.contactsCache.get(userId);
 
-    if (!item) return null;
+    if (cached) {
+      const found = cached.find((c) => c.getId() === id);
+      if (found) return found;
+    }
 
-    return Contact.create({
-      email: Email.rehydrate(item.email),
-      id: item.id,
-      isFavorite: item.isFavorite,
-      name: item.name,
-      phone: Phone.rehydrate(item.phone),
-    });
+    try {
+      const response = await this.httpClient.get<ContactResponse>(
+        `/api/contacts/${id}`
+      );
+
+      return Contact.create({
+        email: Email.rehydrate(response.email),
+        id: response.id,
+        isFavorite: response.isFavorite,
+        name: response.name,
+        phone: Phone.rehydrate(response.phone),
+      });
+    } catch (error) {
+      if (error instanceof HttpError && error.status === 404) {
+        return null;
+      }
+      throw error;
+    }
   }
 
   async findByName(name: string): Promise<Contact | null> {
@@ -137,15 +214,8 @@ export class ContactRepository implements ContactRepositoryInterface {
     }
   }
 
-  private getInitialContacts(userId: string): StoredContact[] {
-    const userContacts = createMockContacts(userId);
-    return userContacts.map((contact) => ({
-      email: contact.getEmail().getValue(),
-      id: contact.getId(),
-      isFavorite: contact.isFavorite(),
-      name: contact.getName(),
-      phone: contact.getPhone().getValue(),
-    }));
+  private getInitialContacts(_userId: string): StoredContact[] {
+    return [];
   }
 
   private getStorageKey(userId: string): string {

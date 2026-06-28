@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mini Wallet Web App
 
-## Getting Started
+Digital wallet web application built with Next.js that allows managing contacts, making transfers, and viewing transaction history.
 
-First, run the development server:
+## How to run the project
+
+### Prerequisites
+
+- Node.js (version specified in `.nvmrc`)
+- npm or yarn
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Run development server
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+### Testing
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Unit tests
+npm test
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# E2E tests
+npm run test:e2e
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Libraries used
 
-## Deploy on Vercel
+### Framework and UI
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Next.js 16** - React framework for web applications
+- **React 19** - UI library
+- **Chakra UI** - Component system
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **Lucide React** - Icons
+- **Sileo** - Physics-based toast notification component
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### State management and forms
+
+- **Zustand** - Global state management
+- **React Hook Form** - Form handling
+- **Zod** - Schema validation
+
+### Testing
+
+- **Vitest** - Unit testing framework
+- **Playwright** - E2E testing
+- **Testing Library** - Testing utilities
+
+### Code quality
+
+- **ESLint** - Linter
+- **Prettier** - Code formatter
+- **Husky** - Git hooks
+- **TypeScript** - Static typing
+
+## Architecture
+
+The project follows a **hexagonal architecture** (also known as ports and adapters architecture) combined with **Domain-Driven Design (DDD)** and **Screaming Architecture** principles. The UI layer implements **Atomic Design** methodology for component organization.
+
+### Architectural approaches
+
+- **Hexagonal Architecture**: Separates business logic from implementation details through ports and adapters
+- **Domain-Driven Design (DDD)**: Focuses on modeling the business domain with entities, value objects, and use cases
+- **Screaming Architecture**: The folder structure clearly communicates the business purpose and domain concepts
+- **Atomic Design**: UI components are organized hierarchically (atoms, molecules, organisms, templates, pages)
+
+### Architectural principles
+
+- **Separation of concerns**: Domain logic is isolated from infrastructure and presentation
+- **Dependency inversion**: Outer layers depend on inner layers, never the other way around
+- **Framework independence**: Business logic does not depend on Next.js, React, or any specific framework
+- **Testability**: The architecture facilitates testing by allowing dependency injection and adapter mocking
+
+### Main layers
+
+- **Domain**: Contains entities, value objects, use cases, and business rules
+- **Infrastructure**: Concrete implementations of repositories, external services, and APIs
+- **Presentation**: React components organized using Atomic Design, pages, and UI contexts
+
+### Applied patterns
+
+- **Repository Pattern**: Data access abstraction
+- **Context API**: Shared state management in the presentation layer
+- **Dependency Injection**: Dependency injection to decouple components
+- **Atomic Design**: Component hierarchy for scalable UI architecture
