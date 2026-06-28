@@ -9,16 +9,16 @@ import { ConfirmTransferUseCase } from "#payments/transfer/application/use-cases
 import { Transfer } from "#payments/transfer/domain/entities";
 import { TransferRepositoryImpl } from "#payments/transfer/infrastructure/repositories";
 import {
-  ConfirmationErrorState,
   ConfirmationLoadingState,
   ConfirmationSuccessState,
 } from "#payments/transfer/infrastructure/ui/components";
 import { TransferConfirmErrorMapper } from "#payments/transfer/infrastructure/ui/error-mapper/transferConfirmErrorMapper";
+import { mapDomainErrorToType } from "#payments/transfer/infrastructure/ui/utils/errorTypeMapper";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
 import { WalletRepository } from "#wallet/infrastructure/repositories";
 import { useWalletStore } from "#wallet/infrastructure/store";
 
-type ConfirmationState = "error" | "loading" | "success";
+type ConfirmationState = "loading" | "success";
 
 export function ConfirmationPage() {
   const router = useRouter();
@@ -85,7 +85,8 @@ export function ConfirmationPage() {
       setState("success");
     } catch (error) {
       handleError(error);
-      setState("error");
+      const errorType = mapDomainErrorToType(error);
+      router.push(`/transactions/error?type=${errorType}`);
     } finally {
       isConfirmingRef.current = false;
     }
@@ -98,23 +99,12 @@ export function ConfirmationPage() {
     confirmTransferFlow();
   }, [confirmTransferFlow]);
 
-  const handleRetry = () => {
-    hasConfirmedRef.current = false;
-    confirmTransferFlow();
-  };
-
   const handleGoHome = () => {
     router.push("/home");
   };
 
   if (state === "loading") {
     return <ConfirmationLoadingState />;
-  }
-
-  if (state === "error") {
-    return (
-      <ConfirmationErrorState onGoHome={handleGoHome} onRetry={handleRetry} />
-    );
   }
 
   if (state === "success" && transfer) {

@@ -2,7 +2,6 @@ export { ContactItem } from "#payments/contact/infrastructure/ui/components";
 export { ContactSelector } from "#payments/contact/infrastructure/ui/components";
 export { MovementItem } from "./molecules/movement-item/movementItem";
 export { ReceiptCard } from "./molecules/receipt-card";
-export { ConfirmationErrorState } from "./organisms/confirmation-error-state";
 export { ConfirmationLoadingState } from "./organisms/confirmation-loading-state";
 export { ConfirmationSuccessState } from "./organisms/confirmation-success-state";
 export { MovementsList } from "./organisms/movements-list/movementsList";

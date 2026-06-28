@@ -1,5 +1,5 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -32,18 +32,6 @@ vi.mock("#payments/transfer/infrastructure/repositories", () => ({
 }));
 
 vi.mock("#payments/transfer/infrastructure/ui/components", () => ({
-  ConfirmationErrorState: ({
-    onGoHome,
-    onRetry,
-  }: {
-    onGoHome: () => void;
-    onRetry: () => void;
-  }) => (
-    <div data-testid="error-state">
-      <button onClick={onRetry}>Retry</button>
-      <button onClick={onGoHome}>Go Home</button>
-    </div>
-  ),
   ConfirmationLoadingState: () => (
     <div data-testid="loading-state">Loading</div>
   ),
@@ -130,7 +118,7 @@ describe("ConfirmationPage", () => {
 
   describe("Given a valid transferId and authenticated user", () => {
     describe("When transfer confirmation fails", () => {
-      it("Then should display error state", async () => {
+      it("Then should navigate to error page", async () => {
         mockSearchParams.get.mockReturnValue("TRX-123");
 
         const mockTransferRepo = {
@@ -144,7 +132,9 @@ describe("ConfirmationPage", () => {
         renderWithChakra(<ConfirmationPage />);
 
         await waitFor(() => {
-          expect(screen.getByTestId("error-state")).toBeInTheDocument();
+          expect(mockRouter.push).toHaveBeenCalledWith(
+            expect.stringContaining("/transactions/error?type=")
+          );
         });
 
         expect(mockHandleError).toHaveBeenCalled();
