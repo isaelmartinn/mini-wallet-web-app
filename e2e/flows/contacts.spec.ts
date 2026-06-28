@@ -48,7 +48,7 @@ test.describe("Contacts Management", () => {
         const newContactPage = new NewContactPage(page);
 
         await page.goto("/home");
-        await page.goto("/transactions/contacts/new");
+        await page.goto("/contacts/new");
 
         await newContactPage.fillContactFormWithPhone(
           newContactData.validPhone.name,

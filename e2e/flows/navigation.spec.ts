@@ -134,12 +134,12 @@ test.describe("Navigation Flow", () => {
         await loginPage.expectToBeOnLoginPage();
       });
 
-      test("Then should redirect to /login from /transactions/contacts/new", async ({
+      test("Then should redirect to /login from /contacts/new", async ({
         page,
       }) => {
         const loginPage = new LoginPage(page);
 
-        await page.goto("/transactions/contacts/new");
+        await page.goto("/contacts/new");
 
         await loginPage.expectToBeOnLoginPage();
       });

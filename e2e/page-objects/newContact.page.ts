@@ -58,7 +58,7 @@ export class NewContactPage {
   }
 
   async expectToBeOnNewContactPage(): Promise<void> {
-    await expect(this.page).toHaveURL("/transactions/contacts/new");
+    await expect(this.page).toHaveURL("/contacts/new");
   }
 
   async expectValidationError(error: string): Promise<void> {
@@ -88,7 +88,7 @@ export class NewContactPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto("/transactions/contacts/new");
+    await this.page.goto("/contacts/new");
   }
 
   async toggleFavorite(): Promise<void> {
