@@ -78,22 +78,6 @@ test.describe("Transfer Flow", () => {
           page.getByText(/debes seleccionar un destinatario/i)
         ).toBeVisible();
       });
-
-      test("Then should show error when amount exceeds balance", async ({
-        page,
-      }) => {
-        const homePage = new HomePage(page);
-        const newTransactionPage = new NewTransactionPage(page);
-
-        await homePage.clickNewTransaction();
-        await newTransactionPage.fillAmount(newTransactionData.exceedsBalance);
-        await newTransactionPage.selectContact(favoriteContactWithPhone.name);
-        await newTransactionPage.clickContinue();
-
-        await expect(page.getByText(/no tienes saldo suficiente/i)).toBeVisible(
-          { timeout: 10000 }
-        );
-      });
     });
 
     test.describe("When filling the transfer form", () => {

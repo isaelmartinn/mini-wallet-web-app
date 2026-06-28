@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { MOCK_CONFIG } from "#shared/infrastructure/config/mock.config";
 import { MOCK_USERS_DATA } from "#shared/infrastructure/mocks";
+import { transfersStorage } from "@/app/api/transfers/storage";
 
 interface RouteParams {
   params: Promise<{
@@ -21,6 +22,13 @@ export async function GET(
       MOCK_CONFIG.delays.min;
     await new Promise((resolve) => setTimeout(resolve, delay));
 
+    // First, try to find in dynamic storage (newly created transfers)
+    const dynamicTransfer = transfersStorage.get(id);
+    if (dynamicTransfer) {
+      return NextResponse.json(dynamicTransfer, { status: 200 });
+    }
+
+    // If not found, search in static mock data
     for (const user of MOCK_USERS_DATA) {
       const transfer = user.transactions.find((t) => t.id === id);
       if (transfer) {

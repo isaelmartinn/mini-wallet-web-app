@@ -5,6 +5,7 @@ import {
   MOCK_USERS_DATA,
   MockTransactionData,
 } from "#shared/infrastructure/mocks";
+import { transfersStorage } from "@/app/api/transfers/storage";
 
 interface ConfirmTransferResponse {
   success: boolean;
@@ -29,13 +30,17 @@ export async function POST(
       MOCK_CONFIG.delays.min;
     await new Promise((resolve) => setTimeout(resolve, delay));
 
-    let transfer: MockTransactionData | undefined;
+    // First, try to find in dynamic storage (newly created transfers)
+    let transfer: MockTransactionData | undefined = transfersStorage.get(id);
 
-    for (const user of MOCK_USERS_DATA) {
-      const found = user.transactions.find((t) => t.id === id);
-      if (found) {
-        transfer = found;
-        break;
+    // If not found, search in static mock data
+    if (!transfer) {
+      for (const user of MOCK_USERS_DATA) {
+        const found = user.transactions.find((t) => t.id === id);
+        if (found) {
+          transfer = found;
+          break;
+        }
       }
     }
 
@@ -68,6 +73,11 @@ export async function POST(
         ...transfer,
         status: "success",
       };
+
+      // Update in storage if it exists there
+      if (transfersStorage.get(id)) {
+        transfersStorage.update(id, confirmedTransfer);
+      }
 
       const response: ConfirmTransferResponse = {
         success: true,

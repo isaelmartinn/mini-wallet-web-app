@@ -6,6 +6,8 @@ import {
   MockTransactionData,
 } from "#shared/infrastructure/mocks";
 
+import { transfersStorage } from "./storage";
+
 interface CreateTransferRequest {
   amount: number;
   description: string;
@@ -75,6 +77,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    if (!description || description.trim() === "") {
+      return NextResponse.json(
+        {
+          error: "BAD_REQUEST",
+          message: "description is required and cannot be empty",
+        },
+        { status: 400 }
+      );
+    }
+
     const delay =
       Math.random() * (MOCK_CONFIG.delays.max - MOCK_CONFIG.delays.min) +
       MOCK_CONFIG.delays.min;
@@ -85,13 +97,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const newTransfer: MockTransactionData = {
       amount,
       date: new Date().toISOString(),
-      description: description || "",
+      description,
       id: transferId,
       recipientId,
       status: "pending",
       type: "expense",
       userId,
     };
+
+    // Store the transfer in memory for later retrieval
+    transfersStorage.set(transferId, newTransfer);
 
     return NextResponse.json(newTransfer, { status: 201 });
   } catch {
