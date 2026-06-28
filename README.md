@@ -2,6 +2,8 @@
 
 Digital wallet web application built with Next.js that allows managing contacts, making transfers, and viewing transaction history.
 
+🚀 **[View live demo](https://mini-wallet-web-app.vercel.app/login)**
+
 ## How to run the project
 
 ### Prerequisites
