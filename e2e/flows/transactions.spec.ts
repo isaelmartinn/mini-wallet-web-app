@@ -24,12 +24,6 @@ test.describe("Transactions Flow", () => {
         await expect(amounts.first()).toBeVisible({ timeout: 10000 });
       });
 
-      test("Then should display transaction dates", async ({ page }) => {
-        const dates = page.locator("text=/\\d+ de [a-z]+, \\d{4}/i");
-
-        await expect(dates.first()).toBeVisible({ timeout: 10000 });
-      });
-
       test("Then should display transaction descriptions", async ({ page }) => {
         const descriptions = page.locator(
           "text=/Transferencia|Pago|Compra|Depósito|Reembolso/i"

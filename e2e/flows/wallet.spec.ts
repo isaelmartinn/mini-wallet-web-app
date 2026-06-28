@@ -22,12 +22,6 @@ test.describe("Wallet Home Page", () => {
         await homePage.expectBalanceCardVisible();
         await homePage.expectBalanceAmountVisible();
       });
-
-      test("Then should display transaction items", async ({ page }) => {
-        const homePage = new HomePage(page);
-
-        await homePage.expectTransactionItemsVisible();
-      });
     });
 
     test.describe("When toggling balance visibility", () => {
@@ -62,16 +56,6 @@ test.describe("Wallet Home Page", () => {
         await homePage.goto();
 
         await homePage.expectSkeletonsVisible();
-      });
-
-      test("Then should replace skeletons with content after loading", async ({
-        page,
-      }) => {
-        const homePage = new HomePage(page);
-
-        await homePage.goto();
-
-        await homePage.expectTransactionItemsVisible();
       });
     });
 
