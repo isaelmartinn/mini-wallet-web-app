@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-import { useAuthStore } from "#auth/infrastructure";
+import { useAuthStore } from "#auth/session/infrastructure";
 
 export default function RootPage() {
   const router = useRouter();

@@ -3,7 +3,7 @@ import { render, waitFor } from "@testing-library/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useAuthStore } from "#auth/infrastructure/store";
+import { useAuthStore } from "#auth/session/infrastructure/store";
 import { TransferRepositoryImpl } from "#payments/transfer/infrastructure/repositories";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
 import { useWalletStore } from "#wallet/infrastructure/store";
@@ -15,7 +15,7 @@ vi.mock("next/navigation", () => ({
   useSearchParams: vi.fn(),
 }));
 
-vi.mock("#auth/infrastructure/store", () => ({
+vi.mock("#auth/session/infrastructure/store", () => ({
   useAuthStore: vi.fn(),
 }));
 

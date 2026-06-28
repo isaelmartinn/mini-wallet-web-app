@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "#auth/infrastructure/store";
+import { useAuthStore } from "#auth/session/infrastructure/store";
 import { HomePage } from "#wallet/infrastructure/ui/pages";
 
 export default function HomeRoute() {

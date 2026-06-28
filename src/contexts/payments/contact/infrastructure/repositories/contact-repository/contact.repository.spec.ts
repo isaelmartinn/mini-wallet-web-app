@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { User } from "#auth/domain/entities";
+import { User } from "#auth/session/domain/entities";
 import { Contact } from "#payments/contact/domain/entities";
 import { Email, Phone } from "#shared/domain/value-objects";
 
 import { ContactRepository } from "./contact.repository";
 
-vi.mock("#auth/infrastructure/store/auth-store/auth.store", () => ({
+vi.mock("#auth/session/infrastructure/store/auth-store/auth.store", () => ({
   useAuthStore: {
     getState: vi.fn(() => ({
       user: User.create({

@@ -4,7 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sileo";
 
-import { AuthProvider } from "#auth/infrastructure/ui/components";
+import { AuthProvider } from "#auth/session/infrastructure/ui/components";
 import { chakraSystem } from "#shared/design-tokens/theme/chakra-theme";
 
 import "./globals.css";

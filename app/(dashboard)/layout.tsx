@@ -4,8 +4,8 @@ import { Box, Button, HStack } from "@chakra-ui/react";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import { useAuthStore } from "#auth/infrastructure/store";
-import { useLogout } from "#auth/infrastructure/ui";
+import { useAuthStore } from "#auth/session/infrastructure/store";
+import { useLogout } from "#auth/session/infrastructure/ui";
 import { UserHeaderCompact } from "#shared/infrastructure/ui/components";
 import { useThemeToken } from "#shared/infrastructure/ui/hooks";
 import { useWalletStore } from "#wallet/infrastructure/store";
