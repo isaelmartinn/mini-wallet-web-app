@@ -35,6 +35,118 @@ describe("TransferRepositoryImpl", () => {
 
   beforeEach(() => {
     repository = new TransferRepositoryImpl();
+    localStorage.clear();
+    vi.clearAllMocks();
+
+    global.fetch = vi.fn((url) => {
+      const urlStr = url.toString();
+
+      if (urlStr.includes("/api/transfers") && !urlStr.includes("/confirm")) {
+        if (urlStr.includes("userId=user-1")) {
+          return Promise.resolve({
+            json: async () => [
+              {
+                amount: 1500,
+                date: "2024-06-24T10:30:00",
+                description: "Transferencia a María García",
+                id: "txn-001",
+                recipientId: "contact-1",
+                status: "success",
+                type: "expense",
+                userId: "user-1",
+              },
+              {
+                amount: 2000,
+                date: "2024-06-23T15:45:00",
+                description: "Pago de servicios",
+                id: "txn-002",
+                recipientId: "contact-2",
+                status: "success",
+                type: "expense",
+                userId: "user-1",
+              },
+              {
+                amount: 500,
+                date: "2024-06-22T09:15:00",
+                description: "Compra en tienda",
+                id: "txn-003",
+                recipientId: "contact-3",
+                status: "pending",
+                type: "expense",
+                userId: "user-1",
+              },
+            ],
+            ok: true,
+            status: 200,
+          } as Response);
+        }
+
+        if (urlStr.includes("userId=")) {
+          return Promise.resolve({
+            json: async () => [],
+            ok: true,
+            status: 200,
+          } as Response);
+        }
+
+        if (urlStr.match(/\/api\/transfers\/[^/]+$/)) {
+          return Promise.resolve({
+            json: async () => ({ error: "NOT_FOUND" }),
+            ok: false,
+            status: 404,
+          } as Response);
+        }
+
+        return Promise.resolve({
+          json: async () => ({
+            amount: 500,
+            date: new Date().toISOString(),
+            description: "Nueva transferencia",
+            id: "transfer-new-123",
+            recipientId: "contact-1",
+            status: "pending",
+            type: "expense",
+            userId: "user-1",
+          }),
+          ok: true,
+          status: 201,
+        } as Response);
+      }
+
+      if (urlStr.includes("/confirm")) {
+        if (urlStr.includes("non-existent")) {
+          return Promise.resolve({
+            json: async () => ({ error: "NOT_FOUND" }),
+            ok: false,
+            status: 404,
+          } as Response);
+        }
+
+        return Promise.resolve({
+          json: async () => ({
+            success: true,
+            transfer: {
+              amount: 500,
+              date: new Date().toISOString(),
+              description: "Transferencia confirmada",
+              id: "transfer-123",
+              recipientId: "contact-1",
+              status: "success",
+              type: "expense",
+              userId: "user-1",
+            },
+          }),
+          ok: true,
+          status: 200,
+        } as Response);
+      }
+
+      return Promise.resolve({
+        json: async () => ({ error: "NOT_FOUND" }),
+        ok: false,
+        status: 404,
+      } as Response);
+    }) as unknown as typeof fetch;
   });
 
   describe("findByUserId", () => {

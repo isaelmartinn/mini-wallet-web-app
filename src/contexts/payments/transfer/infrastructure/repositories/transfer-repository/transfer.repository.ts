@@ -77,6 +77,9 @@ export class TransferRepositoryImpl implements TransferRepository {
       return { success: true, transfer: confirmedTransfer };
     } catch (error) {
       if (error instanceof HttpError) {
+        if (error.status === 404) {
+          throw new TransferFetchFailedError();
+        }
         if (error.status === 400) {
           const body = error.body as { error?: string };
           if (body?.error === "INSUFFICIENT_FUNDS") {

@@ -1,6 +1,14 @@
 "use client";
 
-import { Badge, Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  HStack,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { User } from "lucide-react";
 
 import { Contact } from "#payments/contact/domain/entities";
@@ -38,18 +46,28 @@ export function ContactItem({
       >
         <User color={isSelected ? "white" : iconColor} size={20} />
       </Box>
-      <VStack align="flex-start" flex={1} gap={1.5}>
+      <VStack align="flex-start" flex={1} gap={1.5} minWidth={0}>
         <Text fontSize="md" fontWeight="medium">
           {contact.getName()}
         </Text>
-        <HStack gap={2}>
+        <Stack
+          alignItems={{ base: "flex-start", sm: "center" }}
+          direction={{ base: "column", sm: "row" }}
+          flexWrap="wrap"
+          gap={2}
+          width="full"
+        >
           {contact.getEmail() && (
             <Badge
               colorPalette="gray"
               fontSize="xs"
+              maxWidth={{ base: "calc(100% - 16px)", sm: "200px" }}
+              overflow="hidden"
               px={2}
               py={0.5}
+              textOverflow="ellipsis"
               variant="subtle"
+              whiteSpace="nowrap"
             >
               {contact.getEmail().getValue()}
             </Badge>
@@ -57,6 +75,7 @@ export function ContactItem({
           {contact.getPhone() && (
             <Badge
               colorPalette="gray"
+              flexShrink={0}
               fontSize="xs"
               px={2}
               py={0.5}
@@ -65,7 +84,7 @@ export function ContactItem({
               {contact.getPhone().getValue()}
             </Badge>
           )}
-        </HStack>
+        </Stack>
       </VStack>
     </HStack>
   );

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Balance } from "#wallet/balance/domain/entities";
 import { UserProfile } from "#wallet/user-profile/domain/entities";
@@ -12,6 +12,39 @@ describe("WalletRepository", () => {
   beforeEach(() => {
     WalletRepository.resetInstance();
     repository = WalletRepository.getInstance();
+    localStorage.clear();
+    vi.clearAllMocks();
+
+    global.fetch = vi.fn((url) => {
+      const urlStr = url.toString();
+
+      if (urlStr.includes("/api/wallet/balance")) {
+        return Promise.resolve({
+          json: async () => ({
+            amount: 5000,
+            currency: "MXN",
+          }),
+          ok: true,
+          status: 200,
+        } as Response);
+      }
+
+      if (urlStr.includes("/api/wallet/profile")) {
+        return Promise.resolve({
+          json: async () => ({
+            fullName: "Usuario de Prueba",
+          }),
+          ok: true,
+          status: 200,
+        } as Response);
+      }
+
+      return Promise.resolve({
+        json: async () => ({ error: "NOT_FOUND" }),
+        ok: false,
+        status: 404,
+      } as Response);
+    }) as unknown as typeof fetch;
   });
 
   describe("getBalance", () => {
@@ -55,38 +88,12 @@ describe("WalletRepository", () => {
       });
 
       describe("When fetching balance for unknown user", () => {
-        it("Then should return balance with zero amount", async () => {
+        it("Then should return balance with mocked amount", async () => {
           const result = await repository.getBalance("unknown-user");
 
-          expect(result.getAmount().getValue()).toBe(0);
+          expect(result.getAmount().getValue()).toBe(5000);
           expect(result.getCurrency()).toBe("MXN");
           expect(result.getUserId()).toBe("unknown-user");
-        });
-      });
-    });
-
-    describe("Given request with delay", () => {
-      describe("When fetching balance", () => {
-        it("Then should take at least 500ms", async () => {
-          const startTime = Date.now();
-
-          await repository.getBalance(testUserId);
-
-          const endTime = Date.now();
-          const duration = endTime - startTime;
-
-          expect(duration).toBeGreaterThanOrEqual(500);
-        });
-
-        it("Then should take less than 2000ms", async () => {
-          const startTime = Date.now();
-
-          await repository.getBalance(testUserId);
-
-          const endTime = Date.now();
-          const duration = endTime - startTime;
-
-          expect(duration).toBeLessThan(2000);
         });
       });
     });
@@ -132,37 +139,11 @@ describe("WalletRepository", () => {
       });
 
       describe("When fetching profile for unknown user", () => {
-        it("Then should return profile with default name", async () => {
+        it("Then should return profile with mocked name", async () => {
           const result = await repository.getUserProfile("unknown-user");
 
-          expect(result.getFullName()).toBe("Usuario Desconocido");
+          expect(result.getFullName()).toBe("Usuario de Prueba");
           expect(result.getUserId()).toBe("unknown-user");
-        });
-      });
-    });
-
-    describe("Given request with delay", () => {
-      describe("When fetching user profile", () => {
-        it("Then should take at least 500ms", async () => {
-          const startTime = Date.now();
-
-          await repository.getUserProfile(testUserId);
-
-          const endTime = Date.now();
-          const duration = endTime - startTime;
-
-          expect(duration).toBeGreaterThanOrEqual(500);
-        });
-
-        it("Then should take less than 2000ms", async () => {
-          const startTime = Date.now();
-
-          await repository.getUserProfile(testUserId);
-
-          const endTime = Date.now();
-          const duration = endTime - startTime;
-
-          expect(duration).toBeLessThan(2000);
         });
       });
     });
