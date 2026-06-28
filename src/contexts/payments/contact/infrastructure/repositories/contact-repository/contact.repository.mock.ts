@@ -1,11 +1,12 @@
 import { Contact } from "#payments/contact/domain/entities";
 import { ContactRepository } from "#payments/contact/domain/repositories";
+import { Email, Phone } from "#shared/domain/value-objects";
 import { MOCK_CONFIG } from "#shared/infrastructure/config/mock.config";
 
-import { MOCK_CONTACTS } from "./contact.fixtures";
+import { ALL_CONTACTS_BY_USER } from "./contact.fixtures";
 
 export class ContactRepositoryMock implements ContactRepository {
-  private contacts: Contact[] = [...MOCK_CONTACTS];
+  private contacts: Contact[] = [...ALL_CONTACTS_BY_USER];
 
   async add(contact: Contact): Promise<void> {
     await this.simulateDelay();
@@ -17,9 +18,34 @@ export class ContactRepositoryMock implements ContactRepository {
     return [...this.contacts];
   }
 
+  async findByEmail(email: Email): Promise<Contact | null> {
+    await this.simulateDelay();
+    const contact = this.contacts.find(
+      (c) =>
+        c.getEmail().getValue().toLowerCase() === email.getValue().toLowerCase()
+    );
+    return contact ?? null;
+  }
+
   async findById(id: string): Promise<Contact | null> {
     await this.simulateDelay();
     const contact = this.contacts.find((c) => c.getId() === id);
+    return contact ?? null;
+  }
+
+  async findByName(name: string): Promise<Contact | null> {
+    await this.simulateDelay();
+    const contact = this.contacts.find(
+      (c) => c.getName().toLowerCase() === name.toLowerCase()
+    );
+    return contact ?? null;
+  }
+
+  async findByPhone(phone: Phone): Promise<Contact | null> {
+    await this.simulateDelay();
+    const contact = this.contacts.find(
+      (c) => c.getPhone().getValue() === phone.getValue()
+    );
     return contact ?? null;
   }
 
