@@ -42,9 +42,6 @@ export function LoginPage() {
     }
   }, [authLoading, isAuthenticated, router]);
 
-  const exampleEmail = mockUsers[2]?.getEmail()?.getValue();
-  const examplePhone = mockUsers[0]?.getPhone()?.getValue();
-
   const form = useForm<LoginFormData>({
     defaultValues: {
       credential: "",
@@ -161,9 +158,44 @@ export function LoginPage() {
                   {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
                 </Button>
 
-                <Text color="gray.500" fontSize="sm" textAlign="center">
-                  Usuarios de prueba: {exampleEmail}, {examplePhone}
-                </Text>
+                <VStack gap={3} w="full">
+                  <Text
+                    color="gray.700"
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    textAlign="center"
+                  >
+                    Usuarios de prueba
+                  </Text>
+
+                  <VStack bg="gray.50" borderRadius="md" gap={2} p={3} w="full">
+                    {mockUsers.map((user, index) => (
+                      <Box
+                        borderBottom={
+                          index < mockUsers.length - 1 ? "1px solid" : undefined
+                        }
+                        borderColor="gray.200"
+                        key={index}
+                        pb={index < mockUsers.length - 1 ? 2 : 0}
+                        w="full"
+                      >
+                        <Text
+                          color="gray.800"
+                          fontSize="xs"
+                          fontWeight="medium"
+                        >
+                          {user.getName()}
+                        </Text>
+                        <Text color="gray.600" fontSize="xs">
+                          {user.getEmail()?.getValue()}
+                        </Text>
+                        <Text color="gray.600" fontSize="xs">
+                          {user.getPhone()?.getValue()}
+                        </Text>
+                      </Box>
+                    ))}
+                  </VStack>
+                </VStack>
               </VStack>
             </VStack>
           </form>

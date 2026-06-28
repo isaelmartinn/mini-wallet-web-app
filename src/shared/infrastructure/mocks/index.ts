@@ -1,4 +1,3 @@
-import contactsData from "./contacts.mock.json";
 import mockData from "./users.mock.json";
 
 export type MockContactData = {
@@ -36,14 +35,16 @@ export type MockUserData = {
   };
 };
 
-export const MOCK_CONTACTS_DATA: MockContactData[] = contactsData.contacts;
-
 export const MOCK_USERS_DATA: MockUserData[] = mockData.users as MockUserData[];
 
 export function findMockContactById(
   contactId: string
 ): MockContactData | undefined {
-  return MOCK_CONTACTS_DATA.find((c) => c.id === contactId);
+  for (const user of MOCK_USERS_DATA) {
+    const contact = user.contacts.find((c) => c.id === contactId);
+    if (contact) return contact;
+  }
+  return undefined;
 }
 
 export function findMockContactsByUserId(userId: string): MockContactData[] {
