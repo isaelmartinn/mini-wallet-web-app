@@ -14,9 +14,9 @@ import {
 } from "#payments/transfer/infrastructure/ui/components";
 import { TransferConfirmErrorMapper } from "#payments/transfer/infrastructure/ui/error-mapper/transferConfirmErrorMapper";
 import { mapDomainErrorToType } from "#payments/transfer/infrastructure/ui/utils/errorTypeMapper";
+import { BalanceProvider } from "#shared/domain/interfaces";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-import { WalletRepository } from "#wallet/balance/infrastructure/repositories";
-import { useWalletStore } from "#wallet/balance/infrastructure/store";
+import { BalanceProviderAdapter, WalletRepository } from "#wallet/balance";
 
 type ConfirmationState = "loading" | "success";
 
@@ -25,7 +25,6 @@ export function ConfirmationPage() {
   const searchParams = useSearchParams();
   const { handleError } = useErrorHandler([new TransferConfirmErrorMapper()]);
   const user = useAuthStore((state) => state.user);
-  const { setBalance } = useWalletStore();
 
   const [state, setState] = useState<ConfirmationState>("loading");
   const [transfer, setTransfer] = useState<null | Transfer>(null);
@@ -51,6 +50,9 @@ export function ConfirmationPage() {
     try {
       const transferRepository = new TransferRepositoryImpl();
       const walletRepository = WalletRepository.getInstance();
+      const balanceProvider: BalanceProvider = new BalanceProviderAdapter(
+        walletRepository
+      );
       const contactRepository = new ContactRepository();
 
       const foundTransfer = await transferRepository.findById(transferId);
@@ -69,7 +71,7 @@ export function ConfirmationPage() {
 
       const confirmUseCase = new ConfirmTransferUseCase(
         transferRepository,
-        walletRepository
+        balanceProvider
       );
 
       const confirmedTransfer = await confirmUseCase.execute({
@@ -77,9 +79,6 @@ export function ConfirmationPage() {
         transferId,
         userId: user.getId(),
       });
-
-      const updatedBalance = await walletRepository.getBalance(user.getId());
-      setBalance(updatedBalance);
 
       setTransfer(confirmedTransfer);
       setState("success");
@@ -90,7 +89,7 @@ export function ConfirmationPage() {
     } finally {
       isConfirmingRef.current = false;
     }
-  }, [transferId, user, router, handleError, setBalance]);
+  }, [transferId, user, router, handleError]);
 
   useEffect(() => {
     if (hasConfirmedRef.current) return;

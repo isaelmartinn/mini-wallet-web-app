@@ -13,10 +13,8 @@ import {
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
+import { BalanceProvider } from "#shared/domain/interfaces";
 import { Email, Phone } from "#shared/domain/value-objects";
-import { Balance } from "#wallet/balance/domain/entities";
-import { WalletRepository } from "#wallet/balance/domain/repositories";
-import { BalanceAmount } from "#wallet/balance/domain/value-objects";
 
 import { PrepareTransferUseCase } from "./prepareTransfer.useCase";
 
@@ -24,9 +22,8 @@ describe("PrepareTransferUseCase", () => {
   describe("Given amount is zero", () => {
     describe("When preparing a transfer", () => {
       it("Then should throw TransferAmountMustBeGreaterThanZeroError", async () => {
-        const mockWalletRepository: WalletRepository = {
-          getBalance: vi.fn(),
-          getUserProfile: vi.fn(),
+        const mockBalanceProvider: BalanceProvider = {
+          getAvailableBalance: vi.fn(),
           updateBalance: vi.fn(),
         };
 
@@ -49,7 +46,7 @@ describe("PrepareTransferUseCase", () => {
 
         const useCase = new PrepareTransferUseCase(
           mockTransferRepository,
-          mockWalletRepository,
+          mockBalanceProvider,
           mockContactRepository
         );
 
@@ -67,15 +64,8 @@ describe("PrepareTransferUseCase", () => {
   describe("Given insufficient balance", () => {
     describe("When preparing a transfer", () => {
       it("Then should throw InsufficientBalanceError", async () => {
-        const mockBalance = Balance.create({
-          amount: BalanceAmount.create(50),
-          currency: "MXN",
-          userId: "user-1",
-        });
-
-        const mockWalletRepository: WalletRepository = {
-          getBalance: vi.fn().mockResolvedValue(mockBalance),
-          getUserProfile: vi.fn(),
+        const mockBalanceProvider: BalanceProvider = {
+          getAvailableBalance: vi.fn().mockResolvedValue(50),
           updateBalance: vi.fn(),
         };
 
@@ -98,7 +88,7 @@ describe("PrepareTransferUseCase", () => {
 
         const useCase = new PrepareTransferUseCase(
           mockTransferRepository,
-          mockWalletRepository,
+          mockBalanceProvider,
           mockContactRepository
         );
 
@@ -116,15 +106,8 @@ describe("PrepareTransferUseCase", () => {
   describe("Given valid transfer data", () => {
     describe("When preparing a transfer", () => {
       it("Then should return transfer draft with transferId", async () => {
-        const mockBalance = Balance.create({
-          amount: BalanceAmount.create(1000),
-          currency: "MXN",
-          userId: "user-1",
-        });
-
-        const mockWalletRepository: WalletRepository = {
-          getBalance: vi.fn().mockResolvedValue(mockBalance),
-          getUserProfile: vi.fn(),
+        const mockBalanceProvider: BalanceProvider = {
+          getAvailableBalance: vi.fn().mockResolvedValue(1000),
           updateBalance: vi.fn(),
         };
 
@@ -166,7 +149,7 @@ describe("PrepareTransferUseCase", () => {
 
         const useCase = new PrepareTransferUseCase(
           mockTransferRepository,
-          mockWalletRepository,
+          mockBalanceProvider,
           mockContactRepository
         );
 

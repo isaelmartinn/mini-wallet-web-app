@@ -16,6 +16,7 @@ const mockAuthStore = vi.fn() as unknown as AuthStore<{
 
 const mockBalanceProvider: BalanceProvider = {
   getAvailableBalance: vi.fn().mockResolvedValue(5000),
+  updateBalance: vi.fn().mockResolvedValue(undefined),
 };
 
 vi.mock("#shared/infrastructure/hooks", () => ({

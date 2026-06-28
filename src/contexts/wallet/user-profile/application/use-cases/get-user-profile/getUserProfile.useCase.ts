@@ -1,5 +1,5 @@
+import { WalletRepository } from "#wallet/balance/domain/repositories";
 import { UserProfile } from "#wallet/user-profile/domain/entities";
-import { WalletRepository } from "#wallet/user-profile/domain/repositories";
 
 import {
   GetUserProfileParams,

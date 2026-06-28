@@ -7,15 +7,13 @@ import {
   TransferRepository,
 } from "#payments/transfer/domain/repositories";
 import { TransferDate } from "#payments/transfer/domain/value-objects";
-import { Balance } from "#wallet/balance/domain/entities";
-import { WalletRepository } from "#wallet/balance/domain/repositories";
-import { BalanceAmount } from "#wallet/balance/domain/value-objects";
+import { BalanceProvider } from "#shared/domain/interfaces";
 
 import { ConfirmTransferUseCase } from "./confirmTransfer.useCase";
 
 describe("ConfirmTransferUseCase", () => {
   let transferRepository: TransferRepository;
-  let walletRepository: WalletRepository;
+  let balanceProvider: BalanceProvider;
   let useCase: ConfirmTransferUseCase;
 
   beforeEach(() => {
@@ -26,23 +24,18 @@ describe("ConfirmTransferUseCase", () => {
       findByUserId: vi.fn(),
     };
 
-    walletRepository = {
-      getBalance: vi.fn(),
-      getUserProfile: vi.fn(),
+    balanceProvider = {
+      getAvailableBalance: vi.fn(),
       updateBalance: vi.fn(),
     };
 
-    useCase = new ConfirmTransferUseCase(transferRepository, walletRepository);
+    useCase = new ConfirmTransferUseCase(transferRepository, balanceProvider);
   });
 
   describe("Given a user with sufficient balance", () => {
     describe("When confirming a transfer", () => {
       it("Then should confirm transfer successfully and update balance", async () => {
-        const currentBalance = Balance.create({
-          amount: BalanceAmount.create(1000),
-          currency: "MXN",
-          userId: "user-1",
-        });
+        const currentBalance = 1000;
 
         const mockTransfer = {
           getAmount: () => 100,
@@ -58,11 +51,11 @@ describe("ConfirmTransferUseCase", () => {
           transfer: mockTransfer,
         };
 
-        vi.mocked(walletRepository.getBalance).mockResolvedValue(
+        vi.mocked(balanceProvider.getAvailableBalance).mockResolvedValue(
           currentBalance
         );
         vi.mocked(transferRepository.confirm).mockResolvedValue(confirmResult);
-        vi.mocked(walletRepository.updateBalance).mockResolvedValue();
+        vi.mocked(balanceProvider.updateBalance).mockResolvedValue();
 
         const result = await useCase.execute({
           amount: 100,
@@ -71,9 +64,14 @@ describe("ConfirmTransferUseCase", () => {
         });
 
         expect(result).toBe(mockTransfer);
-        expect(walletRepository.getBalance).toHaveBeenCalledWith("user-1");
+        expect(balanceProvider.getAvailableBalance).toHaveBeenCalledWith(
+          "user-1"
+        );
         expect(transferRepository.confirm).toHaveBeenCalledWith("transfer-1");
-        expect(walletRepository.updateBalance).toHaveBeenCalled();
+        expect(balanceProvider.updateBalance).toHaveBeenCalledWith(
+          "user-1",
+          900
+        );
       });
     });
   });
@@ -81,13 +79,9 @@ describe("ConfirmTransferUseCase", () => {
   describe("Given a user with insufficient balance", () => {
     describe("When confirming a transfer", () => {
       it("Then should throw InsufficientBalanceError", async () => {
-        const currentBalance = Balance.create({
-          amount: BalanceAmount.create(50),
-          currency: "MXN",
-          userId: "user-1",
-        });
+        const currentBalance = 50;
 
-        vi.mocked(walletRepository.getBalance).mockResolvedValue(
+        vi.mocked(balanceProvider.getAvailableBalance).mockResolvedValue(
           currentBalance
         );
 
@@ -100,7 +94,7 @@ describe("ConfirmTransferUseCase", () => {
         ).rejects.toThrow(InsufficientBalanceError);
 
         expect(transferRepository.confirm).not.toHaveBeenCalled();
-        expect(walletRepository.updateBalance).not.toHaveBeenCalled();
+        expect(balanceProvider.updateBalance).not.toHaveBeenCalled();
       });
     });
   });
@@ -111,12 +105,6 @@ describe("ConfirmTransferUseCase", () => {
         const initialAmount = 1000;
         const transferAmount = 250;
         const expectedNewAmount = initialAmount - transferAmount;
-
-        const currentBalance = Balance.create({
-          amount: BalanceAmount.create(initialAmount),
-          currency: "MXN",
-          userId: "user-1",
-        });
 
         const mockTransfer = {
           getAmount: () => transferAmount,
@@ -132,11 +120,11 @@ describe("ConfirmTransferUseCase", () => {
           transfer: mockTransfer,
         };
 
-        vi.mocked(walletRepository.getBalance).mockResolvedValue(
-          currentBalance
+        vi.mocked(balanceProvider.getAvailableBalance).mockResolvedValue(
+          initialAmount
         );
         vi.mocked(transferRepository.confirm).mockResolvedValue(confirmResult);
-        vi.mocked(walletRepository.updateBalance).mockResolvedValue();
+        vi.mocked(balanceProvider.updateBalance).mockResolvedValue();
 
         await useCase.execute({
           amount: transferAmount,
@@ -144,22 +132,10 @@ describe("ConfirmTransferUseCase", () => {
           userId: "user-1",
         });
 
-        expect(walletRepository.updateBalance).toHaveBeenCalledWith(
+        expect(balanceProvider.updateBalance).toHaveBeenCalledWith(
           "user-1",
-          expect.objectContaining({
-            getAmount: expect.any(Function),
-            getCurrency: expect.any(Function),
-            getUserId: expect.any(Function),
-          })
+          expectedNewAmount
         );
-
-        const updateCall = vi.mocked(walletRepository.updateBalance).mock
-          .calls[0];
-        const updatedBalance = updateCall?.[1];
-
-        if (updatedBalance) {
-          expect(updatedBalance.getAmount().getValue()).toBe(expectedNewAmount);
-        }
       });
     });
   });

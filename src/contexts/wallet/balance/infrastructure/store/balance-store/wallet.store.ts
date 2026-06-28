@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
-import { Balance, UserProfile } from "#wallet/balance/domain/entities";
+import { Balance } from "#wallet/balance/domain/entities";
+import { UserProfile } from "#wallet/user-profile/domain/entities";
 
 interface WalletActions {
   clearWallet: () => void;

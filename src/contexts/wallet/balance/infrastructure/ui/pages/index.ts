@@ -1,1 +1,1 @@
-export { HomePage } from "./home-page/homePage";
+export { BalanceSection } from "./balance-section/balanceSection";
