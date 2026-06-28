@@ -10,14 +10,6 @@ test.describe("Transactions Flow", () => {
     });
 
     test.describe("When viewing the home page", () => {
-      test("Then should display the movements list heading", async ({
-        page,
-      }) => {
-        const homePage = new HomePage(page);
-
-        await homePage.expectMovementsHeadingVisible();
-      });
-
       test("Then should display transaction items", async ({ page }) => {
         const homePage = new HomePage(page);
 

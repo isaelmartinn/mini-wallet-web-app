@@ -21,6 +21,7 @@ export type MockTransactionData = {
 };
 
 export type MockUserData = {
+  contacts: MockContactData[];
   email: string;
   id: string;
   name: string;
@@ -43,6 +44,11 @@ export function findMockContactById(
   contactId: string
 ): MockContactData | undefined {
   return MOCK_CONTACTS_DATA.find((c) => c.id === contactId);
+}
+
+export function findMockContactsByUserId(userId: string): MockContactData[] {
+  const user = findMockUserById(userId);
+  return user?.contacts || [];
 }
 
 export function findMockTransactionsByUserId(
