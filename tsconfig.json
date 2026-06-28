@@ -28,6 +28,8 @@
       "@/*": ["./*"],
       "#auth/*": ["src/contexts/auth/*"],
       "#wallet/*": ["src/contexts/wallet/*"],
+      "#wallet/balance/*": ["src/contexts/wallet/balance/*"],
+      "#wallet/user-profile/*": ["src/contexts/wallet/user-profile/*"],
       "#payments/*": ["src/contexts/payments/*"],
       "#payments/transfer/*": ["src/contexts/payments/transfer/*"],
       "#payments/contact/*": ["src/contexts/payments/contact/*"],

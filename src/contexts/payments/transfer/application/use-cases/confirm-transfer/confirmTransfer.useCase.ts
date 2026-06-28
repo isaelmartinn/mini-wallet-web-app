@@ -2,9 +2,9 @@ import { Transfer } from "#payments/transfer/domain/entities";
 import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
 import { TransferRepository } from "#payments/transfer/domain/repositories";
 import { TransferAmount } from "#payments/transfer/domain/value-objects";
-import { Balance } from "#wallet/domain/entities";
-import { WalletRepository } from "#wallet/domain/repositories";
-import { BalanceAmount } from "#wallet/domain/value-objects";
+import { Balance } from "#wallet/balance/domain/entities";
+import { WalletRepository } from "#wallet/balance/domain/repositories";
+import { BalanceAmount } from "#wallet/balance/domain/value-objects";
 
 import {
   ConfirmTransferParams,
