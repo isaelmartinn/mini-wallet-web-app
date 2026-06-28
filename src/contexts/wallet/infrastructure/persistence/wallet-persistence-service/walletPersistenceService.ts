@@ -1,6 +1,6 @@
-import { Amount } from "#shared/domain/value-objects";
 import { LocalStorageService } from "#shared/infrastructure/storage";
 import { Balance } from "#wallet/domain/entities";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { WalletPersistenceService as WalletPersistenceServiceInterface } from "./walletPersistenceService.interface";
 
@@ -30,7 +30,7 @@ export class WalletPersistenceService implements WalletPersistenceServiceInterfa
 
     try {
       return Balance.create({
-        amount: Amount.create(data.amount),
+        amount: BalanceAmount.create(data.amount),
         currency: data.currency,
         userId: data.userId,
       });

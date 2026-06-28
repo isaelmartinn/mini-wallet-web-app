@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Amount } from "#shared/domain/value-objects";
 import { LocalStorageService } from "#shared/infrastructure/storage";
 import { Balance } from "#wallet/domain/entities";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { WalletPersistenceService } from "./walletPersistenceService";
 
@@ -25,7 +25,7 @@ describe("WalletPersistenceService", () => {
       it("Then should store serialized balance data", () => {
         const userId = "user-123";
         const balance = Balance.create({
-          amount: Amount.create(1000),
+          amount: BalanceAmount.create(1000),
           currency: "MXN",
           userId,
         });
@@ -118,12 +118,12 @@ describe("WalletPersistenceService", () => {
     describe("When saving balances for different users", () => {
       it("Then should use different storage keys", () => {
         const balance1 = Balance.create({
-          amount: Amount.create(1000),
+          amount: BalanceAmount.create(1000),
           currency: "MXN",
           userId: "user-1",
         });
         const balance2 = Balance.create({
-          amount: Amount.create(2000),
+          amount: BalanceAmount.create(2000),
           currency: "MXN",
           userId: "user-2",
         });

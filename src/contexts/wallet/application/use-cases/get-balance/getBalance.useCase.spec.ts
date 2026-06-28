@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { Amount } from "#shared/domain/value-objects";
 import { Balance } from "#wallet/domain/entities";
 import { WalletRepository } from "#wallet/domain/repositories";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { GetBalanceUseCase } from "./getBalance.useCase";
 
@@ -11,7 +11,7 @@ describe("GetBalanceUseCase", () => {
     describe("When executing the use case", () => {
       it("Then should return the user balance", async () => {
         const mockBalance = Balance.create({
-          amount: Amount.create(1000),
+          amount: BalanceAmount.create(1000),
           currency: "MXN",
           userId: "user-1",
         });
@@ -19,6 +19,12 @@ describe("GetBalanceUseCase", () => {
         const mockRepository: WalletRepository = {
           getBalance: vi.fn().mockResolvedValue(mockBalance),
           getUserProfile: vi.fn(),
+          updateBalance: function (
+            _userId: string,
+            _newBalance: Balance
+          ): Promise<void> {
+            throw new Error("Function not implemented.");
+          },
         };
 
         const useCase = new GetBalanceUseCase(mockRepository);
@@ -36,6 +42,12 @@ describe("GetBalanceUseCase", () => {
         const mockRepository: WalletRepository = {
           getBalance: vi.fn().mockRejectedValue(new Error("Database error")),
           getUserProfile: vi.fn(),
+          updateBalance: function (
+            _userId: string,
+            _newBalance: Balance
+          ): Promise<void> {
+            throw new Error("Function not implemented.");
+          },
         };
 
         const useCase = new GetBalanceUseCase(mockRepository);

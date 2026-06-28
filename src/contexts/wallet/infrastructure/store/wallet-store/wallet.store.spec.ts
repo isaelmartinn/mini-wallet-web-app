@@ -1,8 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Amount } from "#shared/domain/value-objects";
 import { Balance, UserProfile } from "#wallet/domain/entities";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { useWalletStore } from "./wallet.store";
 
@@ -23,7 +23,7 @@ describe("useWalletStore", () => {
     describe("When setBalance is called", () => {
       it("Then should update the balance", () => {
         const { result } = renderHook(() => useWalletStore());
-        const amount = Amount.create(1000);
+        const amount = BalanceAmount.create(1000);
         const mockBalance = Balance.create({
           amount,
           currency: "MXN",
@@ -91,7 +91,7 @@ describe("useWalletStore", () => {
     describe("When clearWallet is called", () => {
       it("Then should reset all wallet data", () => {
         const { result } = renderHook(() => useWalletStore());
-        const amount = Amount.create(1000);
+        const amount = BalanceAmount.create(1000);
         const mockBalance = Balance.create({
           amount,
           currency: "MXN",
