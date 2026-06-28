@@ -4,6 +4,7 @@ export { InvalidAmountError } from "./invalidAmount.error";
 export { InvalidDescriptionError } from "./invalidDescription.error";
 export { InvalidStateTransitionError } from "./invalidStateTransition.error";
 export { RecipientRequiredError } from "./recipientRequired.error";
+export { TransferAmountMustBeGreaterThanZeroError } from "./transfer-amount-must-be-greater-than-zero/transferAmountMustBeGreaterThanZero.error";
 export { TransferDateInvalidError } from "./transferDateInvalid.error";
 export { TransferFetchFailedError } from "./transferFetchFailed.error";
 export { TransferNetworkError } from "./transferNetworkError.error";

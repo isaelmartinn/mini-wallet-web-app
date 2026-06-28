@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useAuthStore } from "#auth/infrastructure/store";
 import { ContactRepository } from "#payments/contact/infrastructure/repositories";
@@ -31,114 +31,76 @@ export function ConfirmationPage() {
   const [transfer, setTransfer] = useState<null | Transfer>(null);
   const [recipientName, setRecipientName] = useState<string>("Destinatario");
   const hasConfirmedRef = useRef(false);
+  const isConfirmingRef = useRef(false);
 
   const transferId = searchParams.get("transferId");
 
-  useEffect(() => {
+  const confirmTransferFlow = useCallback(async () => {
     if (!transferId || !user) {
       router.push("/home");
       return;
     }
 
+    if (isConfirmingRef.current) {
+      return;
+    }
+
+    isConfirmingRef.current = true;
+    setState("loading");
+
+    try {
+      const transferRepository = new TransferRepositoryImpl();
+      const walletRepository = WalletRepository.getInstance();
+      const contactRepository = new ContactRepository();
+
+      const foundTransfer = await transferRepository.findById(transferId);
+
+      if (!foundTransfer) {
+        router.push("/home");
+        return;
+      }
+
+      const contact = await contactRepository.findById(
+        foundTransfer.getRecipientId()
+      );
+      if (contact) {
+        setRecipientName(contact.getName());
+      }
+
+      const confirmUseCase = new ConfirmTransferUseCase(
+        transferRepository,
+        walletRepository
+      );
+
+      const confirmedTransfer = await confirmUseCase.execute({
+        amount: foundTransfer.getAmount().getValue(),
+        transferId,
+        userId: user.getId(),
+      });
+
+      const updatedBalance = await walletRepository.getBalance(user.getId());
+      setBalance(updatedBalance);
+
+      setTransfer(confirmedTransfer);
+      setState("success");
+    } catch (error) {
+      handleError(error);
+      setState("error");
+    } finally {
+      isConfirmingRef.current = false;
+    }
+  }, [transferId, user, router, handleError, setBalance]);
+
+  useEffect(() => {
     if (hasConfirmedRef.current) return;
     hasConfirmedRef.current = true;
 
-    const confirmTransfer = async () => {
-      setState("loading");
-
-      try {
-        const transferRepository = new TransferRepositoryImpl();
-        const walletRepository = WalletRepository.getInstance();
-        const contactRepository = new ContactRepository();
-
-        const foundTransfer = await transferRepository.findById(transferId);
-
-        if (!foundTransfer) {
-          router.push("/home");
-          return;
-        }
-
-        const contact = await contactRepository.findById(
-          foundTransfer.getRecipientId()
-        );
-        if (contact) {
-          setRecipientName(contact.getName());
-        }
-
-        const confirmUseCase = new ConfirmTransferUseCase(
-          transferRepository,
-          walletRepository
-        );
-
-        const confirmedTransfer = await confirmUseCase.execute({
-          amount: foundTransfer.getAmount().getValue(),
-          transferId,
-          userId: user.getId(),
-        });
-
-        const updatedBalance = await walletRepository.getBalance(user.getId());
-        setBalance(updatedBalance);
-
-        setTransfer(confirmedTransfer);
-        setState("success");
-      } catch (error) {
-        handleError(error);
-        setState("error");
-      }
-    };
-
-    confirmTransfer();
-  }, [transferId, user, router, handleError, setBalance]);
+    confirmTransferFlow();
+  }, [confirmTransferFlow]);
 
   const handleRetry = () => {
     hasConfirmedRef.current = false;
-    setState("loading");
-
-    const confirmTransfer = async () => {
-      if (!transferId || !user) return;
-
-      try {
-        const transferRepository = new TransferRepositoryImpl();
-        const walletRepository = WalletRepository.getInstance();
-        const contactRepository = new ContactRepository();
-
-        const foundTransfer = await transferRepository.findById(transferId);
-
-        if (!foundTransfer) {
-          router.push("/home");
-          return;
-        }
-
-        const contact = await contactRepository.findById(
-          foundTransfer.getRecipientId()
-        );
-        if (contact) {
-          setRecipientName(contact.getName());
-        }
-
-        const confirmUseCase = new ConfirmTransferUseCase(
-          transferRepository,
-          walletRepository
-        );
-
-        const confirmedTransfer = await confirmUseCase.execute({
-          amount: foundTransfer.getAmount().getValue(),
-          transferId,
-          userId: user.getId(),
-        });
-
-        const updatedBalance = await walletRepository.getBalance(user.getId());
-        setBalance(updatedBalance);
-
-        setTransfer(confirmedTransfer);
-        setState("success");
-      } catch (error) {
-        handleError(error);
-        setState("error");
-      }
-    };
-
-    confirmTransfer();
+    confirmTransferFlow();
   };
 
   const handleGoHome = () => {

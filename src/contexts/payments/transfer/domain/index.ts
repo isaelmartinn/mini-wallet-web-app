@@ -2,6 +2,7 @@ export { Transfer } from "./entities";
 export type { CreateTransferParams, ITransfer } from "./entities";
 export type { TransferRepository } from "./repositories";
 export {
+  TransferAmount,
   TransferDate,
   TransferStatus,
   TransferStatusEnum,

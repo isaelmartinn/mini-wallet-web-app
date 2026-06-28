@@ -51,6 +51,10 @@ export class TransferRepositoryImpl implements TransferRepository {
       throw new TransferFetchFailedError();
     }
 
+    if (transfer.getStatus().isSuccess()) {
+      return { success: true, transfer };
+    }
+
     const random = Math.random();
     const scenarios = errorRates.transfers.confirmTransfer;
 

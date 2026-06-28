@@ -1,3 +1,4 @@
+export { TransferAmount } from "./transfer-amount/transferAmount.vo";
 export { TransferDate } from "./transfer-date/transferDate.vo";
 export {
   TransferStatus,

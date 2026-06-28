@@ -1,5 +1,5 @@
 import { Transfer } from "#payments/transfer/domain/entities";
-import { Amount } from "#shared/domain/value-objects";
+import { TransferAmount } from "#payments/transfer/domain/value-objects";
 
 export interface ConfirmTransferResult {
   success: boolean;
@@ -7,7 +7,7 @@ export interface ConfirmTransferResult {
 }
 
 export interface CreateTransferParams {
-  amount: Amount;
+  amount: TransferAmount;
   description: string;
   recipientId: string;
   userId: string;

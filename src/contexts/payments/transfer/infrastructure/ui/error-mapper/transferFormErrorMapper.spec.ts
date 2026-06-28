@@ -1,17 +1,19 @@
 import { describe, expect, it } from "vitest";
 
-import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
-import { AmountMustBeGreaterThanZeroError } from "#shared/domain/errors";
+import {
+  InsufficientBalanceError,
+  TransferAmountMustBeGreaterThanZeroError,
+} from "#payments/transfer/domain/errors";
 
 import { TransferFormErrorMapper } from "./transferFormErrorMapper";
 
 describe("TransferFormErrorMapper", () => {
   const mapper = new TransferFormErrorMapper();
 
-  describe("Given an AmountMustBeGreaterThanZeroError", () => {
+  describe("Given a TransferAmountMustBeGreaterThanZeroError", () => {
     describe("When mapping to presentation", () => {
       it("Then should return correct error presentation", () => {
-        const error = new AmountMustBeGreaterThanZeroError();
+        const error = new TransferAmountMustBeGreaterThanZeroError();
         const result = mapper.toPresentation(error);
 
         expect(result).toEqual({
@@ -23,7 +25,7 @@ describe("TransferFormErrorMapper", () => {
 
     describe("When mapping to form error", () => {
       it("Then should return correct field mapping", () => {
-        const error = new AmountMustBeGreaterThanZeroError();
+        const error = new TransferAmountMustBeGreaterThanZeroError();
         const result = mapper.toFormError(error);
 
         expect(result).toEqual({

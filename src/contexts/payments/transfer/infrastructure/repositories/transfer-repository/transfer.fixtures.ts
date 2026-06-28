@@ -1,13 +1,13 @@
 import {
   Transfer,
+  TransferAmount,
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain";
-import { Amount } from "#shared/domain/value-objects";
 
 export const TRANSACTION_FIXTURES = [
   Transfer.create({
-    amount: Amount.create(1500.0),
+    amount: TransferAmount.create(1500.0),
     date: new Date("2024-06-24T10:30:00"),
     description: "Transferencia a María García",
     id: "txn-001",
@@ -17,7 +17,7 @@ export const TRANSACTION_FIXTURES = [
     userId: "user-1",
   }),
   Transfer.create({
-    amount: Amount.create(3200.5),
+    amount: TransferAmount.create(3200.5),
     date: new Date("2024-06-23T15:45:00"),
     description: "Pago recibido de Juan Pérez",
     id: "txn-002",
@@ -27,7 +27,7 @@ export const TRANSACTION_FIXTURES = [
     userId: "user-1",
   }),
   Transfer.create({
-    amount: Amount.create(850.0),
+    amount: TransferAmount.create(850.0),
     date: new Date("2024-06-22T09:15:00"),
     description: "Compra en Amazon",
     id: "txn-003",
@@ -37,7 +37,7 @@ export const TRANSACTION_FIXTURES = [
     userId: "user-1",
   }),
   Transfer.create({
-    amount: Amount.create(500.0),
+    amount: TransferAmount.create(500.0),
     date: new Date("2024-06-21T18:20:00"),
     description: "Transferencia a Carlos López",
     id: "txn-004",
@@ -47,7 +47,7 @@ export const TRANSACTION_FIXTURES = [
     userId: "user-2",
   }),
   Transfer.create({
-    amount: Amount.create(2100.0),
+    amount: TransferAmount.create(2100.0),
     date: new Date("2024-06-20T12:00:00"),
     description: "Pago de nómina",
     id: "txn-005",
@@ -57,7 +57,7 @@ export const TRANSACTION_FIXTURES = [
     userId: "user-2",
   }),
   Transfer.create({
-    amount: Amount.create(450.75),
+    amount: TransferAmount.create(450.75),
     date: new Date("2024-06-19T14:30:00"),
     description: "Pago de servicios",
     id: "txn-006",
@@ -67,7 +67,7 @@ export const TRANSACTION_FIXTURES = [
     userId: "user-2",
   }),
   Transfer.create({
-    amount: Amount.create(1200.0),
+    amount: TransferAmount.create(1200.0),
     date: new Date("2024-06-18T11:00:00"),
     description: "Transferencia recibida",
     id: "txn-007",
@@ -77,7 +77,7 @@ export const TRANSACTION_FIXTURES = [
     userId: "user-3",
   }),
   Transfer.create({
-    amount: Amount.create(680.0),
+    amount: TransferAmount.create(680.0),
     date: new Date("2024-06-17T16:45:00"),
     description: "Compra en supermercado",
     id: "txn-008",

@@ -1,12 +1,12 @@
 import {
+  TransferAmount,
   TransferDate,
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
-import { Amount } from "#shared/domain/value-objects";
 
 export interface CreateTransferParams {
-  amount: Amount;
+  amount: TransferAmount;
   date: Date;
   description: string;
   id: string;
@@ -17,7 +17,7 @@ export interface CreateTransferParams {
 }
 
 export interface RehydrateTransferParams {
-  amount: Amount;
+  amount: TransferAmount;
   date: Date;
   description: string;
   id: string;
@@ -31,7 +31,7 @@ export interface Transfer {
   cancel(): Transfer;
   confirm(): Transfer;
   fail(): Transfer;
-  getAmount(): Amount;
+  getAmount(): TransferAmount;
   getDate(): TransferDate;
   getDescription(): string;
   getId(): string;

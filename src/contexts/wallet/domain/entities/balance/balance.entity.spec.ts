@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { Amount } from "#shared/domain/value-objects";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { Balance } from "./balance.entity";
 
@@ -8,7 +8,7 @@ describe("Balance", () => {
   describe("Given valid balance data", () => {
     describe("When creating a Balance", () => {
       it("Then should create successfully", () => {
-        const amount = Amount.create(1000);
+        const amount = BalanceAmount.create(1000);
         const balance = Balance.create({
           amount,
           currency: "MXN",
@@ -25,7 +25,7 @@ describe("Balance", () => {
   describe("Given zero amount", () => {
     describe("When creating a Balance", () => {
       it("Then should create successfully", () => {
-        const amount = Amount.create(0);
+        const amount = BalanceAmount.create(0);
         const balance = Balance.create({
           amount,
           currency: "MXN",
@@ -40,7 +40,7 @@ describe("Balance", () => {
   describe("Given different currencies", () => {
     describe("When creating Balances", () => {
       it("Then should support different currency codes", () => {
-        const amount = Amount.create(100);
+        const amount = BalanceAmount.create(100);
 
         const balanceMXN = Balance.create({
           amount,
