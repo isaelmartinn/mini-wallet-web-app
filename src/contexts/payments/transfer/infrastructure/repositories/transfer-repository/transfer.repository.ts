@@ -173,6 +173,18 @@ export class TransferRepositoryImpl implements TransferRepository {
       return [...persistedTransfers];
     }
 
+    const userFixtures = TRANSACTION_FIXTURES.filter(
+      (t) => t.getUserId() === userId
+    );
+    if (userFixtures.length > 0) {
+      TransferRepositoryImpl.transfersByUser.set(userId, userFixtures);
+      TransferRepositoryImpl.persistenceService.saveTransfers(
+        userId,
+        userFixtures
+      );
+      return [...userFixtures];
+    }
+
     return [];
   }
 

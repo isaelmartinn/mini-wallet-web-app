@@ -11,7 +11,39 @@
           "amount": 5000,
           "currency": "MXN"
         }
-      }
+      },
+      "transactions": [
+        {
+          "id": "txn-001",
+          "userId": "user-1",
+          "recipientId": "contact-1",
+          "amount": 1500.0,
+          "description": "Transferencia a María García",
+          "date": "2024-06-24T10:30:00",
+          "status": "success",
+          "type": "expense"
+        },
+        {
+          "id": "txn-002",
+          "userId": "user-1",
+          "recipientId": "contact-2",
+          "amount": 3200.5,
+          "description": "Pago recibido de Juan Pérez",
+          "date": "2024-06-23T15:45:00",
+          "status": "success",
+          "type": "income"
+        },
+        {
+          "id": "txn-003",
+          "userId": "user-1",
+          "recipientId": "contact-3",
+          "amount": 850.0,
+          "description": "Compra en Amazon",
+          "date": "2024-06-22T09:15:00",
+          "status": "success",
+          "type": "expense"
+        }
+      ]
     },
     {
       "id": "user-2",
@@ -24,7 +56,39 @@
           "amount": 50,
           "currency": "MXN"
         }
-      }
+      },
+      "transactions": [
+        {
+          "id": "txn-004",
+          "userId": "user-2",
+          "recipientId": "contact-4",
+          "amount": 500.0,
+          "description": "Transferencia a Carlos López",
+          "date": "2024-06-21T18:20:00",
+          "status": "pending",
+          "type": "expense"
+        },
+        {
+          "id": "txn-005",
+          "userId": "user-2",
+          "recipientId": "contact-5",
+          "amount": 2100.0,
+          "description": "Pago de nómina",
+          "date": "2024-06-20T12:00:00",
+          "status": "success",
+          "type": "income"
+        },
+        {
+          "id": "txn-006",
+          "userId": "user-2",
+          "recipientId": "contact-6",
+          "amount": 450.75,
+          "description": "Pago de servicios",
+          "date": "2024-06-19T14:30:00",
+          "status": "failed",
+          "type": "expense"
+        }
+      ]
     },
     {
       "id": "user-3",
@@ -37,7 +101,29 @@
           "amount": 1000,
           "currency": "MXN"
         }
-      }
+      },
+      "transactions": [
+        {
+          "id": "txn-007",
+          "userId": "user-3",
+          "recipientId": "contact-7",
+          "amount": 1200.0,
+          "description": "Transferencia recibida",
+          "date": "2024-06-18T11:00:00",
+          "status": "success",
+          "type": "income"
+        },
+        {
+          "id": "txn-008",
+          "userId": "user-3",
+          "recipientId": "contact-8",
+          "amount": 680.0,
+          "description": "Compra en supermercado",
+          "date": "2024-06-17T16:45:00",
+          "status": "success",
+          "type": "expense"
+        }
+      ]
     },
     {
       "id": "user-4",
@@ -50,7 +136,8 @@
           "amount": 50000,
           "currency": "MXN"
         }
-      }
+      },
+      "transactions": []
     }
   ]
 }
