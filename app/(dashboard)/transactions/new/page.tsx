@@ -8,6 +8,8 @@ import { WalletRepository } from "#wallet/balance/infrastructure/repositories";
 const walletRepository = WalletRepository.getInstance();
 const balanceProvider = new BalanceProviderAdapter(walletRepository);
 
+export const dynamic = "force-dynamic";
+
 export default function NewTransactionRoute() {
   return (
     <NewTransferPage
