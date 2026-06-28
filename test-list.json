@@ -1,0 +1,2528 @@
+{
+  "config": {
+    "argv": [
+      "/Users/brandon.bautista/.nvm/versions/node/v24.18.0/bin/node",
+      "/Users/brandon.bautista/Documents/personal/mini-wallet-web-app/node_modules/.bin/playwright",
+      "test",
+      "--list",
+      "--reporter=json"
+    ],
+    "configFile": "/Users/brandon.bautista/Documents/personal/mini-wallet-web-app/playwright.config.ts",
+    "rootDir": "/Users/brandon.bautista/Documents/personal/mini-wallet-web-app/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/Users/brandon.bautista/Documents/personal/mini-wallet-web-app/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/brandon.bautista/Documents/personal/mini-wallet-web-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/brandon.bautista/Documents/personal/mini-wallet-web-app/e2e",
+        "testIgnore": [],
+        "testMatch": ["**/*.@(spec|test).?(c|m)[jt]s?(x)"],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [["json"]],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 5,
+    "webServer": {
+      "command": "yarn dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "flows/auth.spec.ts",
+      "file": "flows/auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Authentication Flow",
+          "file": "flows/auth.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Given a user on the login page",
+              "file": "flows/auth.spec.ts",
+              "line": 5,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When the login form is displayed",
+                  "file": "flows/auth.spec.ts",
+                  "line": 11,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should show all required elements",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-31371709f1b27bcab3e0",
+                      "file": "flows/auth.spec.ts",
+                      "line": 12,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should have empty credential input",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-940bab7ae305c5878119",
+                      "file": "flows/auth.spec.ts",
+                      "line": 18,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When entering valid email credentials",
+                  "file": "flows/auth.spec.ts",
+                  "line": 25,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to home page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-5cbabfec69449e900195",
+                      "file": "flows/auth.spec.ts",
+                      "line": 26,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When entering valid phone credentials",
+                  "file": "flows/auth.spec.ts",
+                  "line": 36,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to home page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-68cbc06a18a20603a66c",
+                      "file": "flows/auth.spec.ts",
+                      "line": 37,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given an authenticated user",
+              "file": "flows/auth.spec.ts",
+              "line": 48,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When logging out",
+                  "file": "flows/auth.spec.ts",
+                  "line": 55,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to login page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-0d827147ae5ca76221a5",
+                      "file": "flows/auth.spec.ts",
+                      "line": 56,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should clear session and require login again",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-8804bcc83fe3c2f00db9",
+                      "file": "flows/auth.spec.ts",
+                      "line": 65,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given a non-authenticated user",
+              "file": "flows/auth.spec.ts",
+              "line": 81,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When trying to access protected routes",
+                  "file": "flows/auth.spec.ts",
+                  "line": 82,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to login from /home",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-9db4acca587ce0335667",
+                      "file": "flows/auth.spec.ts",
+                      "line": 83,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to login from /transactions/new",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-f3463221ec0086eeeb03",
+                      "file": "flows/auth.spec.ts",
+                      "line": 92,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to login from /transactions/confirm",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-4502ad6dcf93eed8df80",
+                      "file": "flows/auth.spec.ts",
+                      "line": 102,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given a user with an active session",
+              "file": "flows/auth.spec.ts",
+              "line": 114,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When navigating directly to /login",
+                  "file": "flows/auth.spec.ts",
+                  "line": 115,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to home if already authenticated",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "4104d3f02111767719d7-060486aee22dbe8ac283",
+                      "file": "flows/auth.spec.ts",
+                      "line": 116,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "flows/contacts.spec.ts",
+      "file": "flows/contacts.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Contacts Management",
+          "file": "flows/contacts.spec.ts",
+          "line": 15,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Given an authenticated user",
+              "file": "flows/contacts.spec.ts",
+              "line": 16,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When creating a new contact with phone",
+                  "file": "flows/contacts.spec.ts",
+                  "line": 23,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should navigate to new contact page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-61bc8f81a53c642a5947",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 24,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should have save button disabled initially",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-f65dd6d8823881ea6035",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 36,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should enable save button with valid data",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-43c437bf419eace0444b",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 46,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should create contact successfully",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-967d8ae88f3bc087ac8d",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 61,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should create favorite contact",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-6076f2891d9f3da25d10",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 74,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When creating a new contact with email",
+                  "file": "flows/contacts.spec.ts",
+                  "line": 89,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should enable save button with valid email",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-5e11a07f89d7a21331e6",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 90,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should create contact successfully",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-8035f467a93f9912c58f",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 105,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When creating contact with invalid data",
+                  "file": "flows/contacts.spec.ts",
+                  "line": 119,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should show error for invalid phone format",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-76194a7ad98e09e397f5",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 120,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should show error for invalid email format",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-3b2941cec1e90f11bbb4",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 138,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should show error for empty name",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-34421cba198bcfaf8d22",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 156,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When selecting a contact for transfer",
+                  "file": "flows/contacts.spec.ts",
+                  "line": 173,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display favorite contacts",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-5b94764fa7d40646063a",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 174,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should search contacts by name",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-e580a46373ade108353c",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 188,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should select contact and populate recipient field",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-0cdb22ecaa13a9e35b24",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 201,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When canceling contact creation",
+                  "file": "flows/contacts.spec.ts",
+                  "line": 217,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should return to previous page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-ed41318609377f055926",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 218,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should not save contact data",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-b0d26984b098d1e2a6b8",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 233,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given a non-authenticated user",
+              "file": "flows/contacts.spec.ts",
+              "line": 261,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When trying to access contacts page",
+                  "file": "flows/contacts.spec.ts",
+                  "line": 262,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to login",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "0020c3b7e05a979c5b57-270dfd4ede2daeb422be",
+                      "file": "flows/contacts.spec.ts",
+                      "line": 263,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "flows/navigation.spec.ts",
+      "file": "flows/navigation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Navigation Flow",
+          "file": "flows/navigation.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Given an authenticated user",
+              "file": "flows/navigation.spec.ts",
+              "line": 5,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When navigating through the application",
+                  "file": "flows/navigation.spec.ts",
+                  "line": 12,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should navigate from home to new transaction",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-e6ca6240bb10fdc804fc",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 13,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should navigate back to home from new transaction",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-aa1b4a596072433eaa9c",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 23,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should maintain session across page navigation",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-d4847beadecf3125a66d",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 34,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When using browser navigation",
+                  "file": "flows/navigation.spec.ts",
+                  "line": 47,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should handle back button correctly",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-3ced0ab87a4d9f9ecb12",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 48,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should handle forward button correctly",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-afdb4e9030b3de2a28c3",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 59,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should handle page refresh",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-6692f62b0909fafa629d",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 69,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When accessing direct URLs",
+                  "file": "flows/navigation.spec.ts",
+                  "line": 79,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should allow direct access to /home",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-0ba1d889d7e87e83f6dc",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 80,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should allow direct access to /transactions/new",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-8032cff1607446635e35",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 88,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect from /login to /home when authenticated",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-16444b78383e0a1b135e",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 96,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given a non-authenticated user",
+              "file": "flows/navigation.spec.ts",
+              "line": 109,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When accessing protected routes",
+                  "file": "flows/navigation.spec.ts",
+                  "line": 110,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to /login from root",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-3921ade9fb4c1e04bb28",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 111,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to /login from /home",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-256247ffa916d080e291",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 119,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to /login from /transactions/new",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-90286b4cccef6c5facd2",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 127,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to /login from /transactions/confirm",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-2821e2f6d745f6e16597",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 137,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to /login from /transactions/contacts/new",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-f79eb62f52d3f41979a4",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 147,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When navigating after redirect",
+                  "file": "flows/navigation.spec.ts",
+                  "line": 158,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should preserve intended destination after login",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-9b0cc9470c0eea17ffae",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 159,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given any user",
+              "file": "flows/navigation.spec.ts",
+              "line": 174,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When encountering errors",
+                  "file": "flows/navigation.spec.ts",
+                  "line": 175,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should handle 404 pages gracefully",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "3ad150ef656659d5e34a-db7ba35531b8a6cd34aa",
+                      "file": "flows/navigation.spec.ts",
+                      "line": 176,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "flows/smoke.spec.ts",
+      "file": "flows/smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Smoke Test",
+          "file": "flows/smoke.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Given the application is running",
+              "file": "flows/smoke.spec.ts",
+              "line": 5,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When visiting the root page",
+                  "file": "flows/smoke.spec.ts",
+                  "line": 6,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should load without errors",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-f704a3780323a57fff04",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 7,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to login or home",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-964b1a207d460c94a69b",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 13,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When checking critical pages",
+                  "file": "flows/smoke.spec.ts",
+                  "line": 22,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then login page should load",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-e3cc0980bc3c6c1ac05a",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 23,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then home page should load after authentication",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-60fa50455690aef8b88c",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 31,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then new transaction page should load after authentication",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-89781f2b110cbc7c7e3e",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 44,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When checking application health",
+                  "file": "flows/smoke.spec.ts",
+                  "line": 60,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should have valid HTML structure",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-f3d55c492097c02fad02",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 61,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should load without console errors",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-045a14f483439e808a00",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 68,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should not have broken images",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "e1b9b334dd2391b7e790-46e5ebdecedb2e50c1fc",
+                      "file": "flows/smoke.spec.ts",
+                      "line": 82,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "flows/transactions.spec.ts",
+      "file": "flows/transactions.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Transactions Flow",
+          "file": "flows/transactions.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Given an authenticated user",
+              "file": "flows/transactions.spec.ts",
+              "line": 5,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When viewing the home page",
+                  "file": "flows/transactions.spec.ts",
+                  "line": 12,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display the movements list heading",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-3c2ee0c3bfab291607b8",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 13,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display transaction items",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-c88f534426580a2d7f01",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 21,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display transaction amounts with correct formatting",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-7edd9722c3f0b96a01b7",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 27,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display transaction dates",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-0c288b091442ba7effaf",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 35,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display transaction descriptions",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-cbf678cd971f46cdfb44",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 41,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When transactions fail to load",
+                  "file": "flows/transactions.spec.ts",
+                  "line": 50,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display error state",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-dfb49020125db638c47c",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 51,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should allow retry after error",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-003de5c09769e22e138b",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 63,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When there are different transaction types",
+                  "file": "flows/transactions.spec.ts",
+                  "line": 86,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display credit transactions with positive amounts",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-df4586a4cab56ce2bfe3",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 87,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display debit transactions with negative amounts",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-308ae720418e6766710b",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 96,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should visually distinguish credit from debit transactions",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-4fa2768d17eda51e3b1b",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 105,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When there are transactions with different statuses",
+                  "file": "flows/transactions.spec.ts",
+                  "line": 127,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display success status for completed transactions",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-debc52e620730d9d317c",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 128,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display pending status when applicable",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-6526d11336d0bd694848",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 140,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display failed status when applicable",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-0e087eed1de7ecf6f2c4",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 150,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When viewing transaction list",
+                  "file": "flows/transactions.spec.ts",
+                  "line": 161,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display transactions ordered by date (most recent first)",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-6b5cc26734cc8b884c6d",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 162,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display at least 5 historical transactions",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-1ebdfc3f5b7208b82610",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 172,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given a non-authenticated user",
+              "file": "flows/transactions.spec.ts",
+              "line": 184,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When trying to access the home page",
+                  "file": "flows/transactions.spec.ts",
+                  "line": 185,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to login",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "2cced3575a04cc1dbd3e-8cce0601047780699287",
+                      "file": "flows/transactions.spec.ts",
+                      "line": 186,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "flows/transferFlow.spec.ts",
+      "file": "flows/transferFlow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Transfer Flow",
+          "file": "flows/transferFlow.spec.ts",
+          "line": 15,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Given an authenticated user with sufficient balance",
+              "file": "flows/transferFlow.spec.ts",
+              "line": 16,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When creating a new transfer",
+                  "file": "flows/transferFlow.spec.ts",
+                  "line": 23,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should navigate to new transaction page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-e8b611db95f6fa9b95da",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 24,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should have continue button disabled initially",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-91ca4853fec29abfa881",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 34,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When filling transaction form with valid data",
+                  "file": "flows/transferFlow.spec.ts",
+                  "line": 46,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should enable continue button",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-e2fc4258bd80c2de040a",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 47,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should proceed to confirmation page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-e986dc07ac880823f6dc",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 59,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display transaction summary correctly",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-ffeabebdce766145bfc9",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 74,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When filling transaction form with invalid amount",
+                  "file": "flows/transferFlow.spec.ts",
+                  "line": 96,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should show error for zero amount",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-baf11152ea47a8f5ad26",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 97,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should show error for negative amount",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-63bf916352a7831b5adf",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 111,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should show error for amount exceeding balance",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-1bf10a9caf29d35a5f16",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 123,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When confirming a valid transfer",
+                  "file": "flows/transferFlow.spec.ts",
+                  "line": 140,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should show loading state",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-381a7f6bece8d5f6d801",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 141,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display success state on successful transfer",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-3e2d40be4825a84165be",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 157,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should update balance after successful transfer",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-a1e5c19eaebc52d3404f",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 187,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When transfer fails",
+                  "file": "flows/transferFlow.spec.ts",
+                  "line": 221,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display error message",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-07d92e9baa0ef1e09774",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 222,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should allow retry on error",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-4a5e681a9763b7e0caf5",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 246,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When canceling a transfer",
+                  "file": "flows/transferFlow.spec.ts",
+                  "line": 273,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should return to home page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-006c5c4db901d614bcdb",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 274,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should not update balance",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-4b28066b476e5308c8c8",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 290,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given a non-authenticated user",
+              "file": "flows/transferFlow.spec.ts",
+              "line": 313,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When trying to access transfer pages",
+                  "file": "flows/transferFlow.spec.ts",
+                  "line": 314,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to login from new transaction page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-36ff949ca280c79778f0",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 315,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should redirect to login from confirm page",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "5f106fc9edc1a43017a9-b3a3a7989e842c2bcfba",
+                      "file": "flows/transferFlow.spec.ts",
+                      "line": 326,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "flows/wallet.spec.ts",
+      "file": "flows/wallet.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Wallet Home Page",
+          "file": "flows/wallet.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Given an authenticated user",
+              "file": "flows/wallet.spec.ts",
+              "line": 5,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When viewing the home page",
+                  "file": "flows/wallet.spec.ts",
+                  "line": 12,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display user greeting",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-9142f7c47067662f8052",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 13,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display balance card",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-a9f1a1d32a4b33c8dcd9",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 19,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display movements heading",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-5004371e727edc453cd6",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 26,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should display transaction items",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-8a9476416b786027db85",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 32,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When toggling balance visibility",
+                  "file": "flows/wallet.spec.ts",
+                  "line": 39,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should hide balance when clicking hide button",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-cd1d6385d939a8042fe1",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 40,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should show balance when clicking show button",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-49f4a8346b1a2b756729",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 50,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should persist balance visibility preference",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-a64b6eecfd53dfe71a5e",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 63,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When the page loads",
+                  "file": "flows/wallet.spec.ts",
+                  "line": 77,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should show loading skeletons initially",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-dafc46b4d5abeeb7523e",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 78,
+                      "column": 7
+                    },
+                    {
+                      "title": "Then should replace skeletons with content after loading",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-f53878fa3739f1ee6402",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 86,
+                      "column": 7
+                    }
+                  ]
+                },
+                {
+                  "title": "When balance data loads successfully",
+                  "file": "flows/wallet.spec.ts",
+                  "line": 97,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should display formatted balance amount",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-38ccf851edc3050355e7",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 98,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Given an unauthenticated user",
+              "file": "flows/wallet.spec.ts",
+              "line": 108,
+              "column": 8,
+              "specs": [],
+              "suites": [
+                {
+                  "title": "When trying to access home page",
+                  "file": "flows/wallet.spec.ts",
+                  "line": 109,
+                  "column": 10,
+                  "specs": [
+                    {
+                      "title": "Then should redirect to login",
+                      "ok": true,
+                      "tags": [],
+                      "tests": [
+                        {
+                          "timeout": 30000,
+                          "annotations": [],
+                          "expectedStatus": "passed",
+                          "projectId": "chromium",
+                          "projectName": "chromium",
+                          "results": [],
+                          "status": "skipped"
+                        }
+                      ],
+                      "id": "08c4dcd0795e7a35f71c-cf276848a0b660b4eb99",
+                      "file": "flows/wallet.spec.ts",
+                      "line": 110,
+                      "column": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-06-27T07:17:28.143Z",
+    "duration": 128.796,
+    "expected": 0,
+    "skipped": 94,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

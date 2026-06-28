@@ -38,7 +38,7 @@ export function BalanceCard({
 
   if (isLoading || !balance) {
     return (
-      <Card.Root bg="brand.50" p={6}>
+      <Card.Root bg="brand.50" data-loading="true" p={6}>
         <Card.Body>
           <Skeleton height="20px" mb={2} width="150px" />
           <Skeleton height="40px" width="200px" />
@@ -62,11 +62,21 @@ export function BalanceCard({
             <HStack justify="space-between">
               <Box>
                 {isBalanceVisible ? (
-                  <Text color="gray.900" fontSize="3xl" fontWeight="bold">
+                  <Text
+                    color="gray.900"
+                    data-testid="balance-amount"
+                    fontSize="3xl"
+                    fontWeight="bold"
+                  >
                     {formattedBalance}
                   </Text>
                 ) : (
-                  <Text color="gray.900" fontSize="3xl" fontWeight="bold">
+                  <Text
+                    color="gray.900"
+                    data-testid="balance-hidden"
+                    fontSize="3xl"
+                    fontWeight="bold"
+                  >
                     ••••••
                   </Text>
                 )}
@@ -74,6 +84,11 @@ export function BalanceCard({
               <IconButton
                 aria-label={
                   isBalanceVisible ? "Ocultar saldo" : "Mostrar saldo"
+                }
+                data-testid={
+                  isBalanceVisible
+                    ? "hide-balance-button"
+                    : "show-balance-button"
                 }
                 onClick={toggleBalanceVisibility}
                 size="sm"
@@ -91,6 +106,7 @@ export function BalanceCard({
           {onSendMoney && (
             <Button
               colorScheme="blue"
+              data-testid="new-transaction-button"
               onClick={onSendMoney}
               size="lg"
               width="full"

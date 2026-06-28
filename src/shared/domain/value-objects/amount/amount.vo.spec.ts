@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { AmountInvalidError, AmountNegativeError } from "#shared/domain/errors";
+import {
+  AmountInvalidError,
+  AmountMustBeGreaterThanZeroError,
+} from "#shared/domain/errors";
 
 import { Amount } from "./amount.vo";
 
@@ -23,18 +26,30 @@ describe("Amount", () => {
 
   describe("Given zero", () => {
     describe("When creating an Amount", () => {
-      it("Then should create successfully", () => {
-        const amount = Amount.create(0);
+      it("Then should throw AmountMustBeGreaterThanZeroError", () => {
+        expect(() => Amount.create(0)).toThrow(
+          AmountMustBeGreaterThanZeroError
+        );
+      });
+    });
+  });
 
-        expect(amount.getValue()).toBe(0);
+  describe("Given a very small positive number", () => {
+    describe("When creating an Amount", () => {
+      it("Then should create successfully", () => {
+        const amount = Amount.create(0.01);
+
+        expect(amount.getValue()).toBe(0.01);
       });
     });
   });
 
   describe("Given a negative number", () => {
     describe("When creating an Amount", () => {
-      it("Then should throw AmountNegativeError", () => {
-        expect(() => Amount.create(-10)).toThrow(AmountNegativeError);
+      it("Then should throw AmountMustBeGreaterThanZeroError", () => {
+        expect(() => Amount.create(-10)).toThrow(
+          AmountMustBeGreaterThanZeroError
+        );
       });
     });
   });
@@ -75,11 +90,13 @@ describe("Amount", () => {
         expect(result.getValue()).toBe(70);
       });
 
-      it("Then should throw AmountNegativeError if result is negative", () => {
+      it("Then should throw AmountMustBeGreaterThanZeroError if result is negative or zero", () => {
         const amount1 = Amount.create(50);
         const amount2 = Amount.create(100);
 
-        expect(() => amount1.subtract(amount2)).toThrow(AmountNegativeError);
+        expect(() => amount1.subtract(amount2)).toThrow(
+          AmountMustBeGreaterThanZeroError
+        );
       });
     });
 

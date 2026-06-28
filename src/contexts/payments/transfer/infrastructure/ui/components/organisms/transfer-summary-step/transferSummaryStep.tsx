@@ -1,4 +1,12 @@
-import { Button, Card, Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { Send } from "lucide-react";
 import { useMemo } from "react";
 
@@ -31,7 +39,7 @@ export function TransferSummaryStep({
             >
               Resumen del envío
             </Text>
-            <Heading color="gray.900" size="3xl">
+            <Heading color="gray.900" data-testid="summary-amount" size="3xl">
               {currencyFormatter.format(transferDraft.amount, "MXN")}
             </Heading>
             <Text color="gray.600" fontSize="sm">
@@ -40,12 +48,14 @@ export function TransferSummaryStep({
             </Text>
           </VStack>
 
-          <ContactItem
-            contact={contact}
-            isSelected={false}
-            onSelect={() => {}}
-            readonly
-          />
+          <Box data-testid="summary-recipient">
+            <ContactItem
+              contact={contact}
+              isSelected={false}
+              onSelect={() => {}}
+              readonly
+            />
+          </Box>
 
           <VStack align="stretch" gap={3}>
             <HStack justify="space-between">
@@ -77,7 +87,13 @@ export function TransferSummaryStep({
             </Text>
           </HStack>
 
-          <Button colorScheme="blue" onClick={onConfirm} size="lg" width="full">
+          <Button
+            colorScheme="blue"
+            data-testid="confirm-button"
+            onClick={onConfirm}
+            size="lg"
+            width="full"
+          >
             <Send size={20} />
             Confirmar Transferencia
           </Button>

@@ -91,6 +91,7 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
           <HStack>
             <Button
               colorScheme="gray"
+              data-testid="back-button"
               onClick={handleBack}
               size="sm"
               variant="ghost"
@@ -108,6 +109,7 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
                     <Field.Label>Nombre</Field.Label>
                     <Input
                       {...form.register("name")}
+                      data-testid="contact-name-input"
                       disabled={isSubmitting}
                       placeholder="Nombre completo"
                     />
@@ -122,6 +124,7 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
                     <Field.Label>Email</Field.Label>
                     <Input
                       {...form.register("email")}
+                      data-testid="contact-email-input"
                       disabled={isSubmitting}
                       placeholder="correo@ejemplo.com"
                       type="email"
@@ -137,6 +140,7 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
                     <Field.Label>Teléfono</Field.Label>
                     <Input
                       {...form.register("phone")}
+                      data-testid="contact-phone-input"
                       disabled={isSubmitting}
                       placeholder="+52 55 1234 5678"
                     />
@@ -157,6 +161,7 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
                           <Switch.Root
                             {...field}
                             checked={value}
+                            data-testid="contact-favorite-switch"
                             disabled={isSubmitting}
                             onCheckedChange={(details) =>
                               onChange(details.checked)
@@ -174,6 +179,8 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
 
                   <Button
                     colorScheme="blue"
+                    data-testid="save-contact-button"
+                    disabled={isSubmitting}
                     loading={isSubmitting}
                     mt={2}
                     size="lg"

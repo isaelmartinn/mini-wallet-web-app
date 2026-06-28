@@ -77,6 +77,7 @@ export function ContactItem({
         border="1px solid"
         borderColor="gray.200"
         borderRadius="md"
+        data-testid="contact-item"
         px={4}
         py={3}
         width="full"
@@ -91,6 +92,7 @@ export function ContactItem({
       bg={isSelected ? "blue.50" : "white"}
       border="1px solid"
       borderColor={isSelected ? "blue.500" : "gray.200"}
+      data-testid="contact-item"
       disabled={disabled}
       height="auto"
       justifyContent="flex-start"

@@ -14,7 +14,12 @@ export function ConfirmationLoadingState({
   message = "Por favor espera mientras confirmamos tu transferencia...",
 }: ConfirmationLoadingStateProps) {
   return (
-    <Box bg="gray.50" minH="calc(100vh - 57px)" py={8}>
+    <Box
+      bg="gray.50"
+      data-testid="loading-state"
+      minH="calc(100vh - 57px)"
+      py={8}
+    >
       <Container maxW="600px" mx="auto" px={{ base: 4, md: 6 }}>
         <VStack align="stretch" gap={8} width="full">
           <Box display="flex" justifyContent="center" width="full">

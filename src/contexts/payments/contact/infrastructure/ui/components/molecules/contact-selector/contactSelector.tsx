@@ -54,9 +54,10 @@ export function ContactSelector({
   }
 
   return (
-    <VStack align="stretch" gap={4}>
+    <VStack align="stretch" data-testid="contact-selector" gap={4}>
       <Button
         colorScheme="blue"
+        data-testid="new-contact-button"
         disabled={disabled}
         onClick={handleAddContact}
         variant="outline"

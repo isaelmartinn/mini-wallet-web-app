@@ -172,6 +172,7 @@ export function NewTransferPage<TUser extends UserWithId>({
           <HStack>
             <Button
               colorScheme="gray"
+              data-testid="back-button"
               onClick={handleBack}
               size="sm"
               variant="ghost"

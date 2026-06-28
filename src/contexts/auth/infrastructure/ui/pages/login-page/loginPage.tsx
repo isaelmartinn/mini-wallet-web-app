@@ -13,7 +13,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { sileo } from "sileo";
 
@@ -31,9 +31,16 @@ import {
 
 export function LoginPage() {
   const router = useRouter();
+  const { isAuthenticated, isLoading: authLoading } = useAuthStore();
   const setUser = useAuthStore((state) => state.setUser);
   const [isLoading, setIsLoading] = useState(false);
   const iconColor = useThemeToken("colors", "icon.primary");
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.push("/home");
+    }
+  }, [authLoading, isAuthenticated, router]);
 
   const exampleEmail = mockUsers[2]?.getEmail()?.getValue();
   const examplePhone = mockUsers[0]?.getPhone()?.getValue();

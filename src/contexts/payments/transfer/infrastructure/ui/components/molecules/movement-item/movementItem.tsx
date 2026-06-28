@@ -60,6 +60,7 @@ export function MovementItem({ transaction }: MovementItemProps) {
       borderBottom="1px"
       borderColor="gray.200"
       cursor="pointer"
+      data-testid="transaction-item"
       p={{ base: 3, md: 4 }}
       transition="background-color 0.2s"
       width="full"
