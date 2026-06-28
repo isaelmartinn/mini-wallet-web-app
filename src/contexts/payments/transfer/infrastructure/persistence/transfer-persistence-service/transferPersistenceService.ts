@@ -1,9 +1,9 @@
 import { Transfer } from "#payments/transfer/domain/entities";
 import {
+  TransferAmount,
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
-import { Amount } from "#shared/domain/value-objects";
 import { LocalStorageService } from "#shared/infrastructure/storage";
 
 import { TransferPersistenceService as TransferPersistenceServiceInterface } from "./transferPersistenceService.interface";
@@ -40,7 +40,7 @@ export class TransferPersistenceService implements TransferPersistenceServiceInt
     try {
       return data.map((transferData) =>
         Transfer.rehydrate({
-          amount: Amount.create(transferData.amount),
+          amount: TransferAmount.create(transferData.amount),
           date: new Date(transferData.date),
           description: transferData.description,
           id: transferData.id,

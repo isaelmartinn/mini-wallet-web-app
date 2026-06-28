@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { User } from "#auth/session/domain/entities";
 import { InvalidCredentialsError } from "#auth/session/domain/errors";
@@ -7,7 +7,24 @@ import { Email, Phone } from "#shared/domain/value-objects";
 
 import { LoginUseCase } from "./login.useCase";
 
+const createMockAuthRepository = (
+  overrides?: Partial<AuthRepository>
+): AuthRepository => ({
+  clearSession: vi.fn(),
+  findByCredential: vi.fn(),
+  getStoredSession: vi.fn(),
+  ...overrides,
+});
+
 describe("LoginUseCase", () => {
+  let mockAuthRepository: AuthRepository;
+  let loginUseCase: LoginUseCase;
+
+  beforeEach(() => {
+    mockAuthRepository = createMockAuthRepository();
+    loginUseCase = new LoginUseCase(mockAuthRepository);
+  });
+
   describe("Given valid email credential", () => {
     describe("When executing login", () => {
       it("Then should return user successfully", async () => {
@@ -18,12 +35,9 @@ describe("LoginUseCase", () => {
           name: "John Doe",
         });
 
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn().mockResolvedValue(mockUser),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
+        mockAuthRepository.findByCredential = vi
+          .fn()
+          .mockResolvedValue(mockUser);
 
         const result = await loginUseCase.execute({
           credential: "test@example.com",
@@ -48,12 +62,9 @@ describe("LoginUseCase", () => {
           phone,
         });
 
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn().mockResolvedValue(mockUser),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
+        mockAuthRepository.findByCredential = vi
+          .fn()
+          .mockResolvedValue(mockUser);
 
         const result = await loginUseCase.execute({
           credential: "+525512345678",
@@ -71,52 +82,24 @@ describe("LoginUseCase", () => {
   describe("Given invalid credential format", () => {
     describe("When executing login", () => {
       it("Then should throw InvalidCredentialsError for invalid email", async () => {
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn(),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
-
         await expect(
           loginUseCase.execute({ credential: "invalid-email" })
         ).rejects.toThrow();
       });
 
       it("Then should throw InvalidCredentialsError for invalid phone", async () => {
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn(),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
-
         await expect(
           loginUseCase.execute({ credential: "123456" })
         ).rejects.toThrow();
       });
 
       it("Then should throw InvalidCredentialsError for empty credential", async () => {
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn(),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
-
         await expect(
           loginUseCase.execute({ credential: "" })
         ).rejects.toThrow();
       });
 
       it("Then should not call repository when credential is invalid", async () => {
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn(),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
-
         await expect(
           loginUseCase.execute({ credential: "invalid" })
         ).rejects.toThrow();
@@ -129,12 +112,7 @@ describe("LoginUseCase", () => {
   describe("Given valid credential but user not found", () => {
     describe("When executing login", () => {
       it("Then should throw InvalidCredentialsError", async () => {
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn().mockResolvedValue(null),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
+        mockAuthRepository.findByCredential = vi.fn().mockResolvedValue(null);
 
         await expect(
           loginUseCase.execute({ credential: "test@example.com" })
@@ -145,12 +123,7 @@ describe("LoginUseCase", () => {
       });
 
       it("Then should call repository with correct credential", async () => {
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn().mockResolvedValue(null),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
+        mockAuthRepository.findByCredential = vi.fn().mockResolvedValue(null);
 
         await expect(
           loginUseCase.execute({ credential: "test@example.com" })
@@ -168,12 +141,9 @@ describe("LoginUseCase", () => {
     describe("When executing login", () => {
       it("Then should propagate the error", async () => {
         const repositoryError = new Error("Database connection failed");
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn().mockRejectedValue(repositoryError),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
+        mockAuthRepository.findByCredential = vi
+          .fn()
+          .mockRejectedValue(repositoryError);
 
         await expect(
           loginUseCase.execute({ credential: "test@example.com" })
@@ -192,12 +162,9 @@ describe("LoginUseCase", () => {
           name: "Test User",
         });
 
-        const mockAuthRepository: AuthRepository = {
-          findByCredential: vi.fn().mockResolvedValue(mockUser),
-          getStoredSession: vi.fn(),
-        };
-
-        const loginUseCase = new LoginUseCase(mockAuthRepository);
+        mockAuthRepository.findByCredential = vi
+          .fn()
+          .mockResolvedValue(mockUser);
 
         const result = await loginUseCase.execute({
           credential: "Test@Example.COM",

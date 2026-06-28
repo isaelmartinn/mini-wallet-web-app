@@ -7,9 +7,9 @@ import {
   TransferRepository,
 } from "#payments/transfer/domain/repositories";
 import { TransferDate } from "#payments/transfer/domain/value-objects";
-import { TransferAmount } from "#payments/transfer/domain/value-objects";
 import { Balance } from "#wallet/domain/entities";
 import { WalletRepository } from "#wallet/domain/repositories";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { ConfirmTransferUseCase } from "./confirmTransfer.useCase";
 
@@ -39,7 +39,7 @@ describe("ConfirmTransferUseCase", () => {
     describe("When confirming a transfer", () => {
       it("Then should confirm transfer successfully and update balance", async () => {
         const currentBalance = Balance.create({
-          amount: TransferAmount.create(1000),
+          amount: BalanceAmount.create(1000),
           currency: "MXN",
           userId: "user-1",
         });
@@ -82,7 +82,7 @@ describe("ConfirmTransferUseCase", () => {
     describe("When confirming a transfer", () => {
       it("Then should throw InsufficientBalanceError", async () => {
         const currentBalance = Balance.create({
-          amount: TransferAmount.create(50),
+          amount: BalanceAmount.create(50),
           currency: "MXN",
           userId: "user-1",
         });
@@ -113,7 +113,7 @@ describe("ConfirmTransferUseCase", () => {
         const expectedNewAmount = initialAmount - transferAmount;
 
         const currentBalance = Balance.create({
-          amount: TransferAmount.create(initialAmount),
+          amount: BalanceAmount.create(initialAmount),
           currency: "MXN",
           userId: "user-1",
         });

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Balance } from "#wallet/domain/entities";
 import { WalletRepository } from "#wallet/domain/repositories";
@@ -6,7 +6,24 @@ import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { GetBalanceUseCase } from "./getBalance.useCase";
 
+const createMockWalletRepository = (
+  overrides?: Partial<WalletRepository>
+): WalletRepository => ({
+  getBalance: vi.fn(),
+  getUserProfile: vi.fn(),
+  updateBalance: vi.fn(),
+  ...overrides,
+});
+
 describe("GetBalanceUseCase", () => {
+  let mockRepository: WalletRepository;
+  let useCase: GetBalanceUseCase;
+
+  beforeEach(() => {
+    mockRepository = createMockWalletRepository();
+    useCase = new GetBalanceUseCase(mockRepository);
+  });
+
   describe("Given a valid user ID", () => {
     describe("When executing the use case", () => {
       it("Then should return the user balance", async () => {
@@ -16,18 +33,8 @@ describe("GetBalanceUseCase", () => {
           userId: "user-1",
         });
 
-        const mockRepository: WalletRepository = {
-          getBalance: vi.fn().mockResolvedValue(mockBalance),
-          getUserProfile: vi.fn(),
-          updateBalance: function (
-            _userId: string,
-            _newBalance: Balance
-          ): Promise<void> {
-            throw new Error("Function not implemented.");
-          },
-        };
+        mockRepository.getBalance = vi.fn().mockResolvedValue(mockBalance);
 
-        const useCase = new GetBalanceUseCase(mockRepository);
         const result = await useCase.execute({ userId: "user-1" });
 
         expect(result).toBe(mockBalance);
@@ -39,18 +46,9 @@ describe("GetBalanceUseCase", () => {
   describe("Given repository throws an error", () => {
     describe("When executing the use case", () => {
       it("Then should propagate the error", async () => {
-        const mockRepository: WalletRepository = {
-          getBalance: vi.fn().mockRejectedValue(new Error("Database error")),
-          getUserProfile: vi.fn(),
-          updateBalance: function (
-            _userId: string,
-            _newBalance: Balance
-          ): Promise<void> {
-            throw new Error("Function not implemented.");
-          },
-        };
-
-        const useCase = new GetBalanceUseCase(mockRepository);
+        mockRepository.getBalance = vi
+          .fn()
+          .mockRejectedValue(new Error("Database error"));
 
         await expect(useCase.execute({ userId: "user-1" })).rejects.toThrow(
           "Database error"
