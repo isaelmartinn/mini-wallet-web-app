@@ -17,17 +17,17 @@ describe("AuthRepository", () => {
     describe("Given valid email credential", () => {
       describe("When user exists with that email", () => {
         it("Then should return the user", async () => {
-          const email = Email.create("juan@example.com");
+          const email = Email.create("juan.perez@example.com");
 
           const result = await authRepository.findByCredential(email);
 
           expect(result).not.toBeNull();
-          expect(result?.getEmail()?.getValue()).toBe("juan@example.com");
+          expect(result?.getEmail()?.getValue()).toBe("juan.perez@example.com");
           expect(result?.getName()).toBe("Juan Pérez");
         });
 
         it("Then should persist session in localStorage", async () => {
-          const email = Email.create("juan@example.com");
+          const email = Email.create("juan.perez@example.com");
 
           await authRepository.findByCredential(email);
 
@@ -35,12 +35,12 @@ describe("AuthRepository", () => {
           expect(storedUser).not.toBeNull();
 
           const userData = JSON.parse(storedUser!);
-          expect(userData.email).toBe("juan@example.com");
+          expect(userData.email).toBe("juan.perez@example.com");
           expect(userData.name).toBe("Juan Pérez");
         });
 
         it("Then should handle case-insensitive email matching", async () => {
-          const email = Email.create("JUAN@EXAMPLE.COM");
+          const email = Email.create("JUAN.PEREZ@EXAMPLE.COM");
 
           const result = await authRepository.findByCredential(email);
 
@@ -72,17 +72,17 @@ describe("AuthRepository", () => {
     describe("Given valid phone credential", () => {
       describe("When user exists with that phone", () => {
         it("Then should return the user", async () => {
-          const phone = Phone.create("+521234567890");
+          const phone = Phone.create("+525512345678");
 
           const result = await authRepository.findByCredential(phone);
 
           expect(result).not.toBeNull();
-          expect(result?.getPhone()?.getValue()).toBe("+521234567890");
+          expect(result?.getPhone()?.getValue()).toBe("+525512345678");
           expect(result?.getName()).toBe("Juan Pérez");
         });
 
         it("Then should persist session in localStorage", async () => {
-          const phone = Phone.create("+521234567890");
+          const phone = Phone.create("+525512345678");
 
           await authRepository.findByCredential(phone);
 
@@ -90,7 +90,7 @@ describe("AuthRepository", () => {
           expect(storedUser).not.toBeNull();
 
           const userData = JSON.parse(storedUser!);
-          expect(userData.phone).toBe("+521234567890");
+          expect(userData.phone).toBe("+525512345678");
           expect(userData.name).toBe("Juan Pérez");
         });
       });
@@ -156,7 +156,7 @@ describe("AuthRepository", () => {
       describe("When session has only email", () => {
         it("Then should return user with email only", async () => {
           const userData = {
-            email: "juan@example.com",
+            email: "juan.perez@example.com",
             id: "user-123",
             name: "Juan Pérez",
           };
@@ -167,7 +167,7 @@ describe("AuthRepository", () => {
           expect(result).not.toBeNull();
           expect(result?.getId()).toBe("user-123");
           expect(result?.getName()).toBe("Juan Pérez");
-          expect(result?.getEmail()?.getValue()).toBe("juan@example.com");
+          expect(result?.getEmail()?.getValue()).toBe("juan.perez@example.com");
           expect(result?.getPhone()).toBeNull();
         });
       });
@@ -230,7 +230,7 @@ describe("AuthRepository", () => {
   describe("persistSession", () => {
     describe("Given user with email and phone", () => {
       it("Then should store complete user data", async () => {
-        const email = Email.create("juan@example.com");
+        const email = Email.create("juan.perez@example.com");
 
         await authRepository.findByCredential(email);
 
@@ -262,10 +262,52 @@ describe("AuthRepository", () => {
     });
   });
 
+  describe("clearSession", () => {
+    describe("Given an existing stored session", () => {
+      describe("When clearSession is called", () => {
+        it("Then should remove session from localStorage", async () => {
+          const userData = {
+            email: "juan.perez@example.com",
+            id: "user-123",
+            name: "Juan Pérez",
+            phone: "+521234567890",
+          };
+          localStorage.setItem("auth_user", JSON.stringify(userData));
+
+          await authRepository.clearSession();
+
+          const storedUser = localStorage.getItem("auth_user");
+          expect(storedUser).toBeNull();
+        });
+
+        it("Then should allow getStoredSession to return null", async () => {
+          const email = Email.create("juan.perez@example.com");
+          await authRepository.findByCredential(email);
+
+          const sessionBefore = await authRepository.getStoredSession();
+          expect(sessionBefore).not.toBeNull();
+
+          await authRepository.clearSession();
+
+          const sessionAfter = await authRepository.getStoredSession();
+          expect(sessionAfter).toBeNull();
+        });
+      });
+    });
+
+    describe("Given no stored session", () => {
+      describe("When clearSession is called", () => {
+        it("Then should not throw error", async () => {
+          await expect(authRepository.clearSession()).resolves.not.toThrow();
+        });
+      });
+    });
+  });
+
   describe("Integration scenarios", () => {
     describe("Given multiple sequential operations", () => {
       it("Then should handle login and session retrieval", async () => {
-        const email = Email.create("juan@example.com");
+        const email = Email.create("juan.perez@example.com");
 
         const loginResult = await authRepository.findByCredential(email);
         expect(loginResult).not.toBeNull();
@@ -277,18 +319,30 @@ describe("AuthRepository", () => {
       });
 
       it("Then should overwrite previous session", async () => {
-        const firstEmail = Email.create("juan@example.com");
+        const firstEmail = Email.create("juan.perez@example.com");
         await authRepository.findByCredential(firstEmail);
 
         const firstSession = await authRepository.getStoredSession();
         expect(firstSession?.getName()).toBe("Juan Pérez");
 
-        const secondEmail = Email.create("maria@example.com");
+        const secondEmail = Email.create("maria.garcia@example.com");
         await authRepository.findByCredential(secondEmail);
 
         const secondSession = await authRepository.getStoredSession();
         expect(secondSession?.getName()).toBe("María García");
         expect(secondSession?.getId()).not.toBe(firstSession?.getId());
+      });
+
+      it("Then should handle login, logout, and session retrieval", async () => {
+        const email = Email.create("juan.perez@example.com");
+
+        await authRepository.findByCredential(email);
+        const sessionBefore = await authRepository.getStoredSession();
+        expect(sessionBefore).not.toBeNull();
+
+        await authRepository.clearSession();
+        const sessionAfter = await authRepository.getStoredSession();
+        expect(sessionAfter).toBeNull();
       });
     });
   });
