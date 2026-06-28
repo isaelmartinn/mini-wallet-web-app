@@ -12,10 +12,8 @@ import { TransferListErrorMapper } from "#payments/transfer/infrastructure/ui/er
 import { AuthStore, UserWithId } from "#shared/domain/interfaces";
 import { useAuthContext } from "#shared/infrastructure/hooks";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-import { GetBalanceUseCase, GetUserProfileUseCase } from "#wallet/application";
-import { WalletRepository } from "#wallet/infrastructure/repositories";
-import { useWalletStore } from "#wallet/infrastructure/store";
 import { BalanceCard } from "#wallet/infrastructure/ui/components";
+import { useWalletData } from "#wallet/infrastructure/ui/hooks";
 
 interface HomePageProps<TUser extends UserWithId> {
   authStore: AuthStore<TUser>;
@@ -26,8 +24,7 @@ export function HomePage<TUser extends UserWithId>({
 }: HomePageProps<TUser>) {
   const router = useRouter();
   const { user } = useAuthContext(authStore);
-  const { balance, isLoading, setBalance, setLoading, setUserProfile } =
-    useWalletStore();
+  const { balance, isLoading } = useWalletData({ authStore });
 
   const [transactions, setTransactions] = useState<Transfer[]>([]);
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
@@ -40,36 +37,6 @@ export function HomePage<TUser extends UserWithId>({
   const handleSendMoney = () => {
     router.push("/transactions/new");
   };
-
-  useEffect(() => {
-    const loadWalletData = async () => {
-      if (!user) return;
-
-      setLoading(true);
-
-      try {
-        const walletRepository = WalletRepository.getInstance();
-        const getBalanceUseCase = new GetBalanceUseCase(walletRepository);
-        const getUserProfileUseCase = new GetUserProfileUseCase(
-          walletRepository
-        );
-
-        const [balanceData, profileData] = await Promise.all([
-          getBalanceUseCase.execute({ userId: user.getId() }),
-          getUserProfileUseCase.execute({ userId: user.getId() }),
-        ]);
-
-        setBalance(balanceData);
-        setUserProfile(profileData);
-      } catch (error) {
-        console.error("Error loading wallet data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadWalletData();
-  }, [user, setBalance, setUserProfile, setLoading]);
 
   useEffect(() => {
     const loadTransactions = async () => {

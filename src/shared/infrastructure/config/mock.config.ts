@@ -28,11 +28,11 @@ export const MOCK_CONFIG: MockConfig = {
   errorRates: {
     transfers: {
       confirmTransfer: {
-        INSUFFICIENT_FUNDS: 0.0,
-        NETWORK_ERROR: 0.0,
-        SUCCESS: 0.0,
-        TIMEOUT: 0.0,
-        UNKNOWN_ERROR: 0.9,
+        INSUFFICIENT_FUNDS: 0.1,
+        NETWORK_ERROR: 0.15,
+        SUCCESS: 0.6,
+        TIMEOUT: 0.1,
+        UNKNOWN_ERROR: 0.05,
       },
       getTransfers: {
         ERROR: 0.15,

@@ -32,21 +32,6 @@ vi.mock("#shared/infrastructure/ui/hooks", () => ({
   }),
 }));
 
-vi.mock("#wallet/infrastructure/repositories", () => ({
-  WalletRepository: vi.fn().mockImplementation(() => ({
-    getBalance: vi.fn().mockResolvedValue({
-      getAmount: () => Amount.create(5000),
-      getCurrency: () => "MXN",
-    }),
-    getUserProfile: vi.fn().mockResolvedValue({
-      getEmail: () => "test@example.com",
-      getId: () => "test-user-id",
-      getName: () => "Test User",
-      getPhone: () => "+521234567890",
-    }),
-  })),
-}));
-
 vi.mock("#payments/transfer/infrastructure/ui/components", () => ({
   GetTransactionsUseCase: vi.fn().mockImplementation(() => ({
     execute: vi.fn().mockResolvedValue([
@@ -80,21 +65,21 @@ vi.mock("#payments/transfer/infrastructure/ui/components", () => ({
   })),
 }));
 
-vi.mock("#wallet/application", () => ({
-  GetBalanceUseCase: vi.fn().mockImplementation(() => ({
-    execute: vi.fn().mockResolvedValue({
+vi.mock("#wallet/infrastructure/ui/hooks", () => ({
+  useWalletData: () => ({
+    balance: {
       getAmount: () => Amount.create(5000),
       getCurrency: () => "MXN",
-    }),
-  })),
-  GetUserProfileUseCase: vi.fn().mockImplementation(() => ({
-    execute: vi.fn().mockResolvedValue({
+    },
+    isLoading: false,
+    userProfile: {
       getEmail: () => "test@example.com",
+      getFullName: () => "Test User",
       getId: () => "test-user-id",
-      getName: () => "Test User",
+      getInitials: () => "TU",
       getPhone: () => "+521234567890",
-    }),
-  })),
+    },
+  }),
 }));
 
 vi.mock("#wallet/infrastructure/ui/components", () => ({

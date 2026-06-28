@@ -4,11 +4,13 @@ import { Box, Button, HStack } from "@chakra-ui/react";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { useAuthStore } from "#auth/infrastructure/store";
 import { useLogout } from "#auth/infrastructure/ui";
 import { ProtectedRoute } from "#auth/infrastructure/ui/components";
 import { UserHeaderCompact } from "#shared/infrastructure/ui/components";
 import { useThemeToken } from "#shared/infrastructure/ui/hooks";
 import { useWalletStore } from "#wallet/infrastructure/store";
+import { useWalletData } from "#wallet/infrastructure/ui/hooks";
 
 export default function DashboardLayout({
   children,
@@ -18,7 +20,7 @@ export default function DashboardLayout({
   const router = useRouter();
   const { logout } = useLogout();
   const clearWallet = useWalletStore((state) => state.clearWallet);
-  const { isLoading, userProfile } = useWalletStore();
+  const { isLoading, userProfile } = useWalletData({ authStore: useAuthStore });
   const iconColor = useThemeToken("colors", "icon.primary");
 
   const handleLogout = async () => {

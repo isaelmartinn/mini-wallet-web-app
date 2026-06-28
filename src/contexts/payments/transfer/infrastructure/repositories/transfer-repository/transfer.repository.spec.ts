@@ -1,10 +1,34 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Transfer } from "#payments/transfer/domain";
 import { TransferFetchFailedError } from "#payments/transfer/domain/errors";
 import { TransferAmount } from "#payments/transfer/domain/value-objects";
 
 import { TransferRepositoryImpl } from "./transfer.repository";
+
+vi.mock("#shared/infrastructure/config/mock.config", () => ({
+  MOCK_CONFIG: {
+    delays: {
+      max: 10,
+      min: 5,
+    },
+    errorRates: {
+      transfers: {
+        confirmTransfer: {
+          INSUFFICIENT_FUNDS: 0.0,
+          NETWORK_ERROR: 0.0,
+          SUCCESS: 1.0,
+          TIMEOUT: 0.0,
+          UNKNOWN_ERROR: 0.0,
+        },
+        getTransfers: {
+          ERROR: 0.0,
+          SUCCESS: 1.0,
+        },
+      },
+    },
+  },
+}));
 
 describe("TransferRepositoryImpl", () => {
   let repository: TransferRepositoryImpl;
@@ -296,21 +320,11 @@ describe("TransferRepositoryImpl", () => {
             userId: "user-1",
           });
 
-          let result = null;
-          let attempts = 0;
-          const maxAttempts = 20;
-
-          while (attempts < maxAttempts && !result) {
-            try {
-              result = await repository.confirm(newTransfer.getId());
-            } catch {
-              attempts++;
-            }
-          }
+          const result = await repository.confirm(newTransfer.getId());
 
           expect(result).not.toBeNull();
-          expect(result!.success).toBe(true);
-          expect(result!.transfer.getStatus().isSuccess()).toBe(true);
+          expect(result.success).toBe(true);
+          expect(result.transfer.getStatus().isSuccess()).toBe(true);
         });
       });
     });
@@ -325,20 +339,12 @@ describe("TransferRepositoryImpl", () => {
             userId: "user-1",
           });
 
-          let firstConfirmation = null;
-          let attempts = 0;
-          const maxAttempts = 20;
-
-          while (attempts < maxAttempts && !firstConfirmation) {
-            try {
-              firstConfirmation = await repository.confirm(newTransfer.getId());
-            } catch {
-              attempts++;
-            }
-          }
+          const firstConfirmation = await repository.confirm(
+            newTransfer.getId()
+          );
 
           expect(firstConfirmation).not.toBeNull();
-          expect(firstConfirmation!.success).toBe(true);
+          expect(firstConfirmation.success).toBe(true);
 
           const secondConfirmation = await repository.confirm(
             newTransfer.getId()
@@ -349,9 +355,9 @@ describe("TransferRepositoryImpl", () => {
             true
           );
           expect(secondConfirmation.transfer.getId()).toBe(
-            firstConfirmation!.transfer.getId()
+            firstConfirmation.transfer.getId()
           );
-        }, 10000);
+        });
       });
 
       describe("When retrying after successful confirmation", () => {
@@ -363,24 +369,16 @@ describe("TransferRepositoryImpl", () => {
             userId: "user-1",
           });
 
-          let firstConfirmation = null;
-          let attempts = 0;
-          const maxAttempts = 20;
-
-          while (attempts < maxAttempts && !firstConfirmation) {
-            try {
-              firstConfirmation = await repository.confirm(newTransfer.getId());
-            } catch {
-              attempts++;
-            }
-          }
+          const firstConfirmation = await repository.confirm(
+            newTransfer.getId()
+          );
 
           expect(firstConfirmation).not.toBeNull();
 
           await expect(
             repository.confirm(newTransfer.getId())
           ).resolves.not.toThrow();
-        }, 10000);
+        });
       });
     });
 
