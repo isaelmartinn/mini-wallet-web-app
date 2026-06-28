@@ -1,7 +1,3 @@
-/**
- * @vitest-environment jsdom
- */
-
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -33,35 +29,25 @@ vi.mock("#shared/infrastructure/ui/hooks", () => ({
 }));
 
 vi.mock("#payments/transfer/infrastructure/ui/components", () => ({
-  GetTransactionsUseCase: vi.fn().mockImplementation(() => ({
-    execute: vi.fn().mockResolvedValue([
-      {
-        amount: { value: 100 },
-        createdAt: new Date("2024-01-01"),
-        description: "Test transaction",
-        id: "tx-1",
-        type: "income",
-      },
-    ]),
-  })),
-  MovementsList: ({
-    error,
-    isLoading,
-    transactions,
-  }: {
-    error: null | string;
-    isLoading: boolean;
-    transactions: Array<{ id: string }>;
-  }) => (
-    <div data-testid="movements-list">
-      {isLoading && <div>Loading transactions...</div>}
-      {error && <div>{error}</div>}
-      {transactions && <div>Transactions: {transactions.length}</div>}
-    </div>
-  ),
-  TransactionListErrorMapper: vi.fn(),
+  MovementsHistory: () => <div data-testid="movements-list" />,
+}));
+
+vi.mock(
+  "#payments/transfer/infrastructure/ui/error-mapper/transferListErrorMapper",
+  () => ({
+    TransferListErrorMapper: vi.fn(),
+  })
+);
+
+vi.mock("#payments/transfer/infrastructure/repositories", () => ({
   TransferRepositoryImpl: vi.fn().mockImplementation(() => ({
     getTransactions: vi.fn().mockResolvedValue([]),
+  })),
+}));
+
+vi.mock("#payments/transfer/application/use-cases", () => ({
+  GetTransfersUseCase: vi.fn().mockImplementation(() => ({
+    execute: vi.fn().mockResolvedValue([]),
   })),
 }));
 
@@ -83,18 +69,7 @@ vi.mock("#wallet/infrastructure/ui/hooks", () => ({
 }));
 
 vi.mock("#wallet/infrastructure/ui/components", () => ({
-  BalanceCard: ({
-    balance,
-    isLoading,
-  }: {
-    balance: null | { getAmount: () => { getValue: () => number } };
-    isLoading?: boolean;
-  }) => (
-    <div data-testid="balance-card">
-      {isLoading && <div>Loading balance...</div>}
-      {balance && <div>Balance: {balance.getAmount().getValue()}</div>}
-    </div>
-  ),
+  BalanceCard: () => <div data-testid="balance-card" />,
 }));
 
 function renderWithChakra(ui: React.ReactElement) {

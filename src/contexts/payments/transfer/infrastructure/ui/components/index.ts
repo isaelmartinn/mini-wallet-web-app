@@ -4,6 +4,6 @@ export { MovementItem } from "./molecules/movement-item/movementItem";
 export { ReceiptCard } from "./molecules/receipt-card";
 export { ConfirmationLoadingState } from "./organisms/confirmation-loading-state";
 export { ConfirmationSuccessState } from "./organisms/confirmation-success-state";
-export { MovementsList } from "./organisms/movements-list/movementsList";
+export { MovementsHistory } from "./organisms/movements-history";
 export { TransferFormStep } from "./organisms/transfer-form-step";
 export { TransferSummaryStep } from "./organisms/transfer-summary-step";
