@@ -7,15 +7,13 @@ import { useEffect, useMemo, useState } from "react";
 import { GetTransfersUseCase } from "#payments/transfer/application/use-cases";
 import { Transfer } from "#payments/transfer/domain/entities";
 import { TransferRepositoryImpl } from "#payments/transfer/infrastructure/repositories";
-import { MovementsList } from "#payments/transfer/infrastructure/ui/components";
+import { MovementsHistory } from "#payments/transfer/infrastructure/ui/components";
 import { TransferListErrorMapper } from "#payments/transfer/infrastructure/ui/error-mapper/transferListErrorMapper";
 import { AuthStore, UserWithId } from "#shared/domain/interfaces";
 import { useAuthContext } from "#shared/infrastructure/hooks";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-import { GetBalanceUseCase, GetUserProfileUseCase } from "#wallet/application";
-import { WalletRepository } from "#wallet/infrastructure/repositories";
-import { useWalletStore } from "#wallet/infrastructure/store";
 import { BalanceCard } from "#wallet/infrastructure/ui/components";
+import { useWalletData } from "#wallet/infrastructure/ui/hooks";
 
 interface HomePageProps<TUser extends UserWithId> {
   authStore: AuthStore<TUser>;
@@ -26,8 +24,7 @@ export function HomePage<TUser extends UserWithId>({
 }: HomePageProps<TUser>) {
   const router = useRouter();
   const { user } = useAuthContext(authStore);
-  const { balance, isLoading, setBalance, setLoading, setUserProfile } =
-    useWalletStore();
+  const { balance, isLoading } = useWalletData({ authStore });
 
   const [transactions, setTransactions] = useState<Transfer[]>([]);
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(false);
@@ -41,40 +38,38 @@ export function HomePage<TUser extends UserWithId>({
     router.push("/transactions/new");
   };
 
-  useEffect(() => {
-    const loadWalletData = async () => {
-      if (!user) return;
+  const handleRetryLoadTransactions = () => {
+    if (!user) return;
 
-      setLoading(true);
+    const loadData = async () => {
+      setIsLoadingTransactions(true);
+      setTransactionsError(null);
 
       try {
-        const walletRepository = WalletRepository.getInstance();
-        const getBalanceUseCase = new GetBalanceUseCase(walletRepository);
-        const getUserProfileUseCase = new GetUserProfileUseCase(
-          walletRepository
-        );
+        const transferRepository = new TransferRepositoryImpl();
+        const getTransfersUseCase = new GetTransfersUseCase(transferRepository);
 
-        const [balanceData, profileData] = await Promise.all([
-          getBalanceUseCase.execute({ userId: user.getId() }),
-          getUserProfileUseCase.execute({ userId: user.getId() }),
-        ]);
-
-        setBalance(balanceData);
-        setUserProfile(profileData);
+        const transfersData = await getTransfersUseCase.execute({
+          userId: user.getId(),
+        });
+        setTransactions(transfersData);
       } catch (error) {
-        console.error("Error loading wallet data:", error);
+        handleError(error);
+        setTransactionsError(
+          "No se pudieron cargar las transacciones. Por favor, intenta nuevamente."
+        );
       } finally {
-        setLoading(false);
+        setIsLoadingTransactions(false);
       }
     };
 
-    loadWalletData();
-  }, [user, setBalance, setUserProfile, setLoading]);
+    loadData();
+  };
 
   useEffect(() => {
-    const loadTransactions = async () => {
-      if (!user) return;
+    if (!user) return;
 
+    const loadTransactions = async () => {
       setIsLoadingTransactions(true);
       setTransactionsError(null);
 
@@ -109,9 +104,10 @@ export function HomePage<TUser extends UserWithId>({
             onSendMoney={handleSendMoney}
           />
 
-          <MovementsList
+          <MovementsHistory
             error={transactionsError}
             isLoading={isLoadingTransactions}
+            onRetryLoadTransactions={handleRetryLoadTransactions}
             transactions={transactions}
           />
         </VStack>

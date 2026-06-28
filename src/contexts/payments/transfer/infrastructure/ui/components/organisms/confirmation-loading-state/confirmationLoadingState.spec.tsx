@@ -1,13 +1,18 @@
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { ConfirmationLoadingState } from "./confirmationLoadingState";
 
+function renderWithChakra(ui: React.ReactElement) {
+  return render(<ChakraProvider value={defaultSystem}>{ui}</ChakraProvider>);
+}
+
 describe("ConfirmationLoadingState", () => {
   describe("Given the component is rendered", () => {
     describe("When no custom message is provided", () => {
       it("Then should display default loading message", () => {
-        render(<ConfirmationLoadingState />);
+        renderWithChakra(<ConfirmationLoadingState />);
 
         expect(
           screen.getByText("Procesando transferencia")
@@ -20,7 +25,7 @@ describe("ConfirmationLoadingState", () => {
       });
 
       it("Then should display loading spinner", () => {
-        const { container } = render(<ConfirmationLoadingState />);
+        const { container } = renderWithChakra(<ConfirmationLoadingState />);
 
         const spinner = container.querySelector(".chakra-spinner");
         expect(spinner).toBeInTheDocument();
@@ -30,7 +35,7 @@ describe("ConfirmationLoadingState", () => {
     describe("When a custom message is provided", () => {
       it("Then should display the custom message", () => {
         const customMessage = "Procesando tu solicitud...";
-        render(<ConfirmationLoadingState message={customMessage} />);
+        renderWithChakra(<ConfirmationLoadingState message={customMessage} />);
 
         expect(screen.getByText(customMessage)).toBeInTheDocument();
       });

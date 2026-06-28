@@ -51,6 +51,10 @@ export class TransferRepositoryImpl implements TransferRepository {
       throw new TransferFetchFailedError();
     }
 
+    if (transfer.getStatus().isSuccess()) {
+      return { success: true, transfer };
+    }
+
     const random = Math.random();
     const scenarios = errorRates.transfers.confirmTransfer;
 
@@ -167,6 +171,18 @@ export class TransferRepositoryImpl implements TransferRepository {
     if (persistedTransfers && persistedTransfers.length > 0) {
       TransferRepositoryImpl.transfersByUser.set(userId, persistedTransfers);
       return [...persistedTransfers];
+    }
+
+    const userFixtures = TRANSACTION_FIXTURES.filter(
+      (t) => t.getUserId() === userId
+    );
+    if (userFixtures.length > 0) {
+      TransferRepositoryImpl.transfersByUser.set(userId, userFixtures);
+      TransferRepositoryImpl.persistenceService.saveTransfers(
+        userId,
+        userFixtures
+      );
+      return [...userFixtures];
     }
 
     return [];

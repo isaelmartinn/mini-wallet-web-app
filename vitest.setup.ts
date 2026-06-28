@@ -4,15 +4,21 @@ import { afterEach, beforeAll, vi } from "vitest";
 
 vi.mock("lucide-react", () => ({
   AlertCircle: () => null,
+  AlertTriangle: () => null,
   ArrowDownLeft: () => null,
   ArrowLeft: () => null,
   ArrowUpRight: () => null,
+  Check: () => null,
   Clock: () => null,
+  CloudOff: () => null,
   Eye: () => null,
   EyeOff: () => null,
+  Home: () => null,
+  RefreshCw: () => null,
   Send: () => null,
   User: () => null,
   UserPlus: () => null,
+  Wallet: () => null,
   XCircle: () => null,
 }));
 

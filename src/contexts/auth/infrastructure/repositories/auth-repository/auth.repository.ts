@@ -12,6 +12,10 @@ interface StoredUserData {
 }
 
 export class AuthRepository implements AuthRepositoryInterface {
+  async clearSession(): Promise<void> {
+    localStorage.removeItem("auth_user");
+  }
+
   async findByCredential(credential: Email | Phone): Promise<null | User> {
     await this.simulateDelay();
 

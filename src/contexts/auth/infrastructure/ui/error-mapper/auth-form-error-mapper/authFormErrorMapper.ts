@@ -5,11 +5,6 @@ import type {
 
 import { DomainError } from "#shared/domain/errors";
 
-/**
- * Auth context form error mapper.
- * Translates auth domain errors to inline form field error messages.
- * Implements the Registry pattern for error code to form field mapping.
- */
 export class AuthFormErrorMapper implements FormErrorMapper {
   private static readonly FORM_ERROR_MAPPINGS: Record<
     string,

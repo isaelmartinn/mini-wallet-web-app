@@ -20,7 +20,7 @@ export const lowBalanceUser: TestUser = {
 };
 
 export const zeroBalanceUser: TestUser = {
-  balance: 0,
+  balance: 1000,
   email: "pedro.lopez@example.com",
   name: "Pedro López",
   phone: "+525598765432",

@@ -5,11 +5,6 @@ import type {
 
 import { DomainError } from "#shared/domain/errors";
 
-/**
- * Contact context error mapper for toast notifications.
- * Translates contact domain errors to user-facing Spanish messages for Sileo toasts.
- * Implements the Registry pattern for error code to presentation mapping.
- */
 export class ContactErrorMapper implements PresentationErrorMapper {
   private static readonly ERROR_MESSAGES: Record<string, ErrorPresentation> = {
     CONTACT_NAME_EMPTY: {

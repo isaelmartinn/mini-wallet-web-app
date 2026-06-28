@@ -4,11 +4,11 @@ import {
   RecipientRequiredError,
 } from "#payments/transfer/domain/errors";
 import {
+  TransferAmount,
   TransferDate,
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
-import { Amount } from "#shared/domain/value-objects";
 
 import {
   CreateTransferParams,
@@ -18,7 +18,7 @@ import {
 
 export class Transfer implements TransferInterface {
   private constructor(
-    private readonly amount: Amount,
+    private readonly amount: TransferAmount,
     private readonly date: TransferDate,
     private readonly description: string,
     private readonly id: string,
@@ -120,7 +120,7 @@ export class Transfer implements TransferInterface {
     );
   }
 
-  getAmount(): Amount {
+  getAmount(): TransferAmount {
     return this.amount;
   }
 

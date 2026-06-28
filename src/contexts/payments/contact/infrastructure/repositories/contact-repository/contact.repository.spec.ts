@@ -1,9 +1,23 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { User } from "#auth/domain/entities";
 import { Contact } from "#payments/contact/domain/entities";
 import { Email, Phone } from "#shared/domain/value-objects";
 
 import { ContactRepository } from "./contact.repository";
+
+vi.mock("#auth/infrastructure/store/auth-store/auth.store", () => ({
+  useAuthStore: {
+    getState: vi.fn(() => ({
+      user: User.create({
+        email: Email.create("test@example.com"),
+        id: "user-1",
+        name: "Test User",
+        phone: Phone.create("+525512345678"),
+      }),
+    })),
+  },
+}));
 
 describe("ContactRepository", () => {
   let repository: ContactRepository;
@@ -42,7 +56,7 @@ describe("ContactRepository", () => {
 
         expect(contacts.length).toBeGreaterThan(0);
         expect(localStorage.setItem).toHaveBeenCalledWith(
-          "mini-wallet:contacts",
+          "mini-wallet:contacts:user-1",
           expect.any(String)
         );
       });
@@ -63,7 +77,9 @@ describe("ContactRepository", () => {
         await repository.add(contact);
 
         expect(localStorage.setItem).toHaveBeenCalled();
-        const stored = JSON.parse(localStorageMock["mini-wallet:contacts"]);
+        const stored = JSON.parse(
+          localStorageMock["mini-wallet:contacts:user-1"]
+        );
         const addedContact = stored.find(
           (c: { id: string }) => c.id === "new-contact"
         );

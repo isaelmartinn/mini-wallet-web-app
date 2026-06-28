@@ -4,10 +4,10 @@ import { describe, expect, it } from "vitest";
 
 import { Transfer } from "#payments/transfer/domain/entities";
 import {
+  TransferAmount,
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
-import { Amount } from "#shared/domain/value-objects";
 
 import { MovementItem } from "./movementItem";
 
@@ -20,7 +20,7 @@ describe("MovementItem", () => {
     describe("When rendering the component", () => {
       it("Then should display transaction details with negative amount", () => {
         const transaction = Transfer.create({
-          amount: Amount.create(1500.0),
+          amount: TransferAmount.create(1500.0),
           date: new Date("2024-06-25T10:30:00"),
           description: "Transferencia a María García",
           id: "txn-001",
@@ -42,7 +42,7 @@ describe("MovementItem", () => {
 
       it("Then should not display status text", () => {
         const transaction = Transfer.create({
-          amount: Amount.create(1500.0),
+          amount: TransferAmount.create(1500.0),
           date: new Date("2024-06-25T10:30:00"),
           description: "Test transaction",
           id: "txn-001",
@@ -64,7 +64,7 @@ describe("MovementItem", () => {
     describe("When rendering the component", () => {
       it("Then should display transaction details with positive amount", () => {
         const transaction = Transfer.create({
-          amount: Amount.create(3200.5),
+          amount: TransferAmount.create(3200.5),
           date: new Date("2024-06-23T15:45:00"),
           description: "Pago recibido de Juan Pérez",
           id: "txn-002",
@@ -90,7 +90,7 @@ describe("MovementItem", () => {
     describe("When rendering the component", () => {
       it("Then should display pending status", () => {
         const transaction = Transfer.create({
-          amount: Amount.create(500.0),
+          amount: TransferAmount.create(500.0),
           date: new Date("2024-06-21T18:20:00"),
           description: "Transferencia a Carlos López",
           id: "txn-004",
@@ -111,7 +111,7 @@ describe("MovementItem", () => {
     describe("When rendering the component", () => {
       it("Then should display failed status", () => {
         const transaction = Transfer.create({
-          amount: Amount.create(450.75),
+          amount: TransferAmount.create(450.75),
           date: new Date("2024-06-19T14:30:00"),
           description: "Pago de servicios",
           id: "txn-006",

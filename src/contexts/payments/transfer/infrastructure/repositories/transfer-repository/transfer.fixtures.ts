@@ -1,89 +1,45 @@
 import {
   Transfer,
+  TransferAmount,
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain";
-import { Amount } from "#shared/domain/value-objects";
+import {
+  findMockTransactionsByUserId,
+  MOCK_USERS_DATA,
+} from "#shared/infrastructure/mocks";
 
-export const TRANSACTION_FIXTURES = [
-  Transfer.create({
-    amount: Amount.create(1500.0),
-    date: new Date("2024-06-24T10:30:00"),
-    description: "Transferencia a María García",
-    id: "txn-001",
-    recipientId: "contact-1",
-    status: TransferStatus.success(),
-    type: TransferType.expense(),
-    userId: "user-1",
-  }),
-  Transfer.create({
-    amount: Amount.create(3200.5),
-    date: new Date("2024-06-23T15:45:00"),
-    description: "Pago recibido de Juan Pérez",
-    id: "txn-002",
-    recipientId: "contact-2",
-    status: TransferStatus.success(),
-    type: TransferType.income(),
-    userId: "user-1",
-  }),
-  Transfer.create({
-    amount: Amount.create(850.0),
-    date: new Date("2024-06-22T09:15:00"),
-    description: "Compra en Amazon",
-    id: "txn-003",
-    recipientId: "contact-3",
-    status: TransferStatus.success(),
-    type: TransferType.expense(),
-    userId: "user-1",
-  }),
-  Transfer.create({
-    amount: Amount.create(500.0),
-    date: new Date("2024-06-21T18:20:00"),
-    description: "Transferencia a Carlos López",
-    id: "txn-004",
-    recipientId: "contact-4",
-    status: TransferStatus.pending(),
-    type: TransferType.expense(),
-    userId: "user-2",
-  }),
-  Transfer.create({
-    amount: Amount.create(2100.0),
-    date: new Date("2024-06-20T12:00:00"),
-    description: "Pago de nómina",
-    id: "txn-005",
-    recipientId: "contact-5",
-    status: TransferStatus.success(),
-    type: TransferType.income(),
-    userId: "user-2",
-  }),
-  Transfer.create({
-    amount: Amount.create(450.75),
-    date: new Date("2024-06-19T14:30:00"),
-    description: "Pago de servicios",
-    id: "txn-006",
-    recipientId: "contact-6",
-    status: TransferStatus.failed(),
-    type: TransferType.expense(),
-    userId: "user-2",
-  }),
-  Transfer.create({
-    amount: Amount.create(1200.0),
-    date: new Date("2024-06-18T11:00:00"),
-    description: "Transferencia recibida",
-    id: "txn-007",
-    recipientId: "contact-7",
-    status: TransferStatus.success(),
-    type: TransferType.income(),
-    userId: "user-3",
-  }),
-  Transfer.create({
-    amount: Amount.create(680.0),
-    date: new Date("2024-06-17T16:45:00"),
-    description: "Compra en supermercado",
-    id: "txn-008",
-    recipientId: "contact-8",
-    status: TransferStatus.success(),
-    type: TransferType.expense(),
-    userId: "user-3",
-  }),
-];
+export function createMockTransfers(userId: string): Transfer[] {
+  const mockTransactions = findMockTransactionsByUserId(userId);
+  return mockTransactions.map(createTransferFromMockData);
+}
+
+export const TRANSACTION_FIXTURES: Transfer[] = MOCK_USERS_DATA.flatMap(
+  (user) => createMockTransfers(user.id)
+);
+
+function createTransferFromMockData(
+  mockTransaction: ReturnType<typeof findMockTransactionsByUserId>[0]
+): Transfer {
+  const statusMap = {
+    failed: TransferStatus.failed(),
+    pending: TransferStatus.pending(),
+    success: TransferStatus.success(),
+  };
+
+  const typeMap = {
+    expense: TransferType.expense(),
+    income: TransferType.income(),
+  };
+
+  return Transfer.create({
+    amount: TransferAmount.create(mockTransaction.amount),
+    date: new Date(mockTransaction.date),
+    description: mockTransaction.description,
+    id: mockTransaction.id,
+    recipientId: mockTransaction.recipientId,
+    status: statusMap[mockTransaction.status],
+    type: typeMap[mockTransaction.type],
+    userId: mockTransaction.userId,
+  });
+}

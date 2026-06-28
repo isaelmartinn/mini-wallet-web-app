@@ -1,9 +1,34 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Transfer } from "#payments/transfer/domain";
 import { TransferFetchFailedError } from "#payments/transfer/domain/errors";
+import { TransferAmount } from "#payments/transfer/domain/value-objects";
 
 import { TransferRepositoryImpl } from "./transfer.repository";
+
+vi.mock("#shared/infrastructure/config/mock.config", () => ({
+  MOCK_CONFIG: {
+    delays: {
+      max: 10,
+      min: 5,
+    },
+    errorRates: {
+      transfers: {
+        confirmTransfer: {
+          INSUFFICIENT_FUNDS: 0.0,
+          NETWORK_ERROR: 0.0,
+          SUCCESS: 1.0,
+          TIMEOUT: 0.0,
+          UNKNOWN_ERROR: 0.0,
+        },
+        getTransfers: {
+          ERROR: 0.0,
+          SUCCESS: 1.0,
+        },
+      },
+    },
+  },
+}));
 
 describe("TransferRepositoryImpl", () => {
   let repository: TransferRepositoryImpl;
@@ -279,6 +304,90 @@ describe("TransferRepositoryImpl", () => {
           const result = await repository.findById("non-existent-id");
 
           expect(result).toBeNull();
+        });
+      });
+    });
+  });
+
+  describe("confirm", () => {
+    describe("Given a pending transfer", () => {
+      describe("When confirming the transfer successfully", () => {
+        it("Then should return success with confirmed transfer", async () => {
+          const newTransfer = await repository.create({
+            amount: TransferAmount.create(500),
+            description: "Test transfer",
+            recipientId: "contact-1",
+            userId: "user-1",
+          });
+
+          const result = await repository.confirm(newTransfer.getId());
+
+          expect(result).not.toBeNull();
+          expect(result.success).toBe(true);
+          expect(result.transfer.getStatus().isSuccess()).toBe(true);
+        });
+      });
+    });
+
+    describe("Given an already confirmed transfer", () => {
+      describe("When attempting to confirm it again", () => {
+        it("Then should return success without throwing error (idempotent)", async () => {
+          const newTransfer = await repository.create({
+            amount: TransferAmount.create(500),
+            description: "Test transfer for idempotency",
+            recipientId: "contact-1",
+            userId: "user-1",
+          });
+
+          const firstConfirmation = await repository.confirm(
+            newTransfer.getId()
+          );
+
+          expect(firstConfirmation).not.toBeNull();
+          expect(firstConfirmation.success).toBe(true);
+
+          const secondConfirmation = await repository.confirm(
+            newTransfer.getId()
+          );
+
+          expect(secondConfirmation.success).toBe(true);
+          expect(secondConfirmation.transfer.getStatus().isSuccess()).toBe(
+            true
+          );
+          expect(secondConfirmation.transfer.getId()).toBe(
+            firstConfirmation.transfer.getId()
+          );
+        });
+      });
+
+      describe("When retrying after successful confirmation", () => {
+        it("Then should not throw InvalidStateTransitionError", async () => {
+          const newTransfer = await repository.create({
+            amount: TransferAmount.create(300),
+            description: "Test retry after success",
+            recipientId: "contact-2",
+            userId: "user-1",
+          });
+
+          const firstConfirmation = await repository.confirm(
+            newTransfer.getId()
+          );
+
+          expect(firstConfirmation).not.toBeNull();
+
+          await expect(
+            repository.confirm(newTransfer.getId())
+          ).resolves.not.toThrow();
+        });
+      });
+    });
+
+    describe("Given a non-existent transfer", () => {
+      describe("When attempting to confirm it", () => {
+        it("Then should throw TransferFetchFailedError", async () => {
+          await expect(
+            repository.confirm("non-existent-transfer-id")
+          ).rejects.toThrow(TransferFetchFailedError);
         });
       });
     });

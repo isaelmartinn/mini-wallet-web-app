@@ -1,3 +1,4 @@
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -32,6 +33,10 @@ vi.mock("#payments/transfer/infrastructure/ui/components", () => ({
   ),
 }));
 
+function renderWithChakra(ui: React.ReactElement) {
+  return render(<ChakraProvider value={defaultSystem}>{ui}</ChakraProvider>);
+}
+
 describe("ConfirmationSuccessState", () => {
   const defaultProps = {
     amount: 1000,
@@ -45,13 +50,13 @@ describe("ConfirmationSuccessState", () => {
   describe("Given the component is rendered", () => {
     describe("When the component loads", () => {
       it("Then should display success title", () => {
-        render(<ConfirmationSuccessState {...defaultProps} />);
+        renderWithChakra(<ConfirmationSuccessState {...defaultProps} />);
 
         expect(screen.getByText("Transferencia exitosa")).toBeInTheDocument();
       });
 
       it("Then should display receipt card with transfer details", () => {
-        render(<ConfirmationSuccessState {...defaultProps} />);
+        renderWithChakra(<ConfirmationSuccessState {...defaultProps} />);
 
         const receiptCard = screen.getByTestId("receipt-card");
         expect(receiptCard).toBeInTheDocument();
@@ -63,7 +68,7 @@ describe("ConfirmationSuccessState", () => {
       });
 
       it("Then should display go home button", () => {
-        render(<ConfirmationSuccessState {...defaultProps} />);
+        renderWithChakra(<ConfirmationSuccessState {...defaultProps} />);
 
         expect(
           screen.getByRole("button", { name: /volver al inicio/i })
@@ -76,7 +81,7 @@ describe("ConfirmationSuccessState", () => {
         const user = userEvent.setup();
         const mockOnGoHome = vi.fn();
 
-        render(
+        renderWithChakra(
           <ConfirmationSuccessState {...defaultProps} onGoHome={mockOnGoHome} />
         );
 

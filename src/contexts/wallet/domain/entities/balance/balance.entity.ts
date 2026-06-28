@@ -1,9 +1,9 @@
-import { Amount } from "#shared/domain/value-objects";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import { Balance as BalanceInterface } from "./balance.interface";
 
 export interface CreateBalanceParams {
-  amount: Amount;
+  amount: BalanceAmount;
   currency: string;
   userId: string;
 }
@@ -11,7 +11,7 @@ export interface CreateBalanceParams {
 export class Balance implements BalanceInterface {
   private constructor(
     private readonly userId: string,
-    private readonly amount: Amount,
+    private readonly amount: BalanceAmount,
     private readonly currency: string
   ) {}
 
@@ -19,7 +19,7 @@ export class Balance implements BalanceInterface {
     return new Balance(params.userId, params.amount, params.currency);
   }
 
-  getAmount(): Amount {
+  getAmount(): BalanceAmount {
     return this.amount;
   }
 

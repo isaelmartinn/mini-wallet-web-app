@@ -24,6 +24,7 @@ const mockContact = Contact.create({
 const mockTransferDraft: PrepareTransferResult = {
   amount: 500,
   recipientId: "1",
+  transferId: "transfer-1",
   userId: "user-1",
 };
 
@@ -163,6 +164,7 @@ describe("TransferSummaryStep", () => {
         const largeDraft: PrepareTransferResult = {
           amount: 10000,
           recipientId: "1",
+          transferId: "transfer-1",
           userId: "user-1",
         };
 
@@ -192,6 +194,7 @@ describe("TransferSummaryStep", () => {
         const decimalDraft: PrepareTransferResult = {
           amount: 123.45,
           recipientId: "1",
+          transferId: "transfer-1",
           userId: "user-1",
         };
 

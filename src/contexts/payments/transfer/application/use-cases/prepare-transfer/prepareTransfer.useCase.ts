@@ -1,7 +1,7 @@
 import { ContactRepository } from "#payments/contact/domain/repositories";
 import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
 import { TransferRepository } from "#payments/transfer/domain/repositories";
-import { Amount } from "#shared/domain/value-objects";
+import { TransferAmount } from "#payments/transfer/domain/value-objects";
 import { WalletRepository } from "#wallet/domain/repositories";
 
 import {
@@ -18,7 +18,7 @@ export class PrepareTransferUseCase implements PrepareTransferUseCaseInterface {
   ) {}
 
   async execute(params: PrepareTransferParams): Promise<PrepareTransferResult> {
-    const amount = Amount.create(params.amount);
+    const amount = TransferAmount.create(params.amount);
 
     const balance = await this.walletRepository.getBalance(params.userId);
 

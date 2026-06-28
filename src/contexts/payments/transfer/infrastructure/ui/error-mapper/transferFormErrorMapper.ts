@@ -10,10 +10,6 @@ export class TransferFormErrorMapper
   implements FormErrorMapper, PresentationErrorMapper
 {
   private static readonly ERROR_MESSAGES: Record<string, ErrorPresentation> = {
-    AMOUNT_MUST_BE_GREATER_THAN_ZERO: {
-      description: "El monto debe ser mayor a cero",
-      title: "Monto inválido",
-    },
     CONTACT_EMAIL_EMPTY: {
       description: "El email del contacto no puede estar vacío",
       title: "Email vacío",
@@ -34,16 +30,16 @@ export class TransferFormErrorMapper
       description: "Debes seleccionar un destinatario para la transacción",
       title: "Destinatario requerido",
     },
+    TRANSFER_AMOUNT_MUST_BE_GREATER_THAN_ZERO: {
+      description: "El monto debe ser mayor a cero",
+      title: "Monto inválido",
+    },
   };
 
   private static readonly FORM_ERROR_MAPPINGS: Record<
     string,
     FormErrorMapping
   > = {
-    AMOUNT_MUST_BE_GREATER_THAN_ZERO: {
-      fieldName: "amount",
-      message: "El monto debe ser mayor a cero",
-    },
     CONTACT_EMAIL_EMPTY: {
       fieldName: "email",
       message: "El email no puede estar vacío",
@@ -63,6 +59,10 @@ export class TransferFormErrorMapper
     RECIPIENT_REQUIRED: {
       fieldName: "recipientId",
       message: "Debes seleccionar un destinatario",
+    },
+    TRANSFER_AMOUNT_MUST_BE_GREATER_THAN_ZERO: {
+      fieldName: "amount",
+      message: "El monto debe ser mayor a cero",
     },
   };
 

@@ -1,9 +1,10 @@
 import { Transfer } from "#payments/transfer/domain/entities";
 import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
 import { TransferRepository } from "#payments/transfer/domain/repositories";
-import { Amount } from "#shared/domain/value-objects";
+import { TransferAmount } from "#payments/transfer/domain/value-objects";
 import { Balance } from "#wallet/domain/entities";
 import { WalletRepository } from "#wallet/domain/repositories";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 import {
   ConfirmTransferParams,
@@ -20,7 +21,7 @@ export class ConfirmTransferUseCase implements ConfirmTransferUseCaseInterface {
     const currentBalance = await this.walletRepository.getBalance(
       params.userId
     );
-    const transferAmount = Amount.create(params.amount);
+    const transferAmount = TransferAmount.create(params.amount);
 
     if (currentBalance.getAmount().isLessThan(transferAmount)) {
       throw new InsufficientBalanceError();
@@ -29,7 +30,9 @@ export class ConfirmTransferUseCase implements ConfirmTransferUseCaseInterface {
     const result = await this.transferRepository.confirm(params.transferId);
 
     if (result.success) {
-      const newAmount = currentBalance.getAmount().subtract(transferAmount);
+      const newAmountValue =
+        currentBalance.getAmount().getValue() - transferAmount.getValue();
+      const newAmount = BalanceAmount.create(newAmountValue);
       const newBalance = Balance.create({
         amount: newAmount,
         currency: currentBalance.getCurrency(),

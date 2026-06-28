@@ -1,20 +1,20 @@
-import { Amount } from "#shared/domain/value-objects";
 import { findMockUserById } from "#shared/infrastructure/mocks";
 import { Balance, UserProfile } from "#wallet/domain/entities";
+import { BalanceAmount } from "#wallet/domain/value-objects";
 
 export function createMockBalance(userId: string): Balance {
   const mockUser = findMockUserById(userId);
 
   if (!mockUser) {
     return Balance.create({
-      amount: Amount.create(0),
+      amount: BalanceAmount.create(0),
       currency: "MXN",
       userId,
     });
   }
 
   return Balance.create({
-    amount: Amount.create(mockUser.wallet.balance.amount),
+    amount: BalanceAmount.create(mockUser.wallet.balance.amount),
     currency: mockUser.wallet.balance.currency,
     userId: mockUser.id,
   });
