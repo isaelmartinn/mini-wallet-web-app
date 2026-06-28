@@ -26,7 +26,7 @@ export function ContactSelector({
   const regularContacts = contacts.filter((c) => !c.isFavorite());
 
   const handleAddContact = (): void => {
-    router.push("/transactions/contacts/new");
+    router.push("/contacts/new");
   };
 
   if (isLoading) {

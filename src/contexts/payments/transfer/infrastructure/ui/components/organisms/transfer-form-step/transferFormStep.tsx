@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
@@ -44,10 +44,6 @@ export function TransferFormStep({
   onSubmit,
   preselectedContact,
 }: TransferFormStepProps) {
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(
-    preselectedContact || null
-  );
-
   const currencyFormatter = useMemo(() => new IntlCurrencyFormatter(), []);
 
   const form = useForm<NewTransferFormData>({
@@ -59,13 +55,30 @@ export function TransferFormStep({
     resolver: zodResolver(newTransferSchema),
   });
 
+  const recipientId = useWatch({
+    control: form.control,
+    name: "recipientId",
+  });
+
+  const selectedContact = useMemo(() => {
+    if (!recipientId) return preselectedContact ?? null;
+    return contacts.find((c) => c.getId() === recipientId) ?? null;
+  }, [recipientId, contacts, preselectedContact]);
+
+  useEffect(() => {
+    if (preselectedContact && !recipientId) {
+      form.setValue("recipientId", preselectedContact.getId(), {
+        shouldValidate: false,
+      });
+    }
+  }, [preselectedContact, recipientId, form]);
+
   const amountValue = useWatch({
     control: form.control,
     name: "amount",
   });
 
   const handleContactSelect = (contact: Contact) => {
-    setSelectedContact(contact);
     form.setValue("recipientId", contact.getId());
     form.clearErrors("recipientId");
     onContactSelect?.(contact);

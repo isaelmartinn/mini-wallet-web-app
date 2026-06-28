@@ -44,10 +44,11 @@ export function NewTransferPage<TUser extends UserWithId>({
   const searchParams = useSearchParams();
   const { user } = useAuthContext(authStore);
 
+  const contactId = searchParams.get("contactId");
+
   const [step, setStep] = useState<"form" | "summary">("form");
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [isLoadingContacts, setIsLoadingContacts] = useState(false);
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [transferDraft, setTransferDraft] =
     useState<null | PrepareTransferResult>(null);
   const [balance, setBalance] = useState<null | number>(null);
@@ -56,6 +57,11 @@ export function NewTransferPage<TUser extends UserWithId>({
 
   const errorMappers = useMemo(() => [new TransferFormErrorMapper()], []);
   const { handleError } = useErrorHandler(errorMappers);
+
+  const selectedContact = useMemo(() => {
+    if (!contactId || contacts.length === 0) return null;
+    return contacts.find((c) => c.getId() === contactId) ?? null;
+  }, [contactId, contacts]);
 
   useEffect(() => {
     const loadBalance = async () => {
@@ -85,20 +91,6 @@ export function NewTransferPage<TUser extends UserWithId>({
         const getContactsUseCase = new GetContactsUseCase(contactRepository);
         const contactsList = await getContactsUseCase.execute();
         setContacts(contactsList);
-
-        const contactId = searchParams.get("contactId");
-        if (contactId) {
-          const preselectedContact = contactsList.find(
-            (c) => c.getId() === contactId
-          );
-          if (preselectedContact) {
-            setSelectedContact(preselectedContact);
-          }
-
-          const params = new URLSearchParams(searchParams.toString());
-          params.delete("contactId");
-          router.replace(`/transactions/new?${params.toString()}`);
-        }
       } catch (error) {
         handleError(error);
       } finally {
@@ -107,7 +99,7 @@ export function NewTransferPage<TUser extends UserWithId>({
     };
 
     loadContacts();
-  }, [handleError, searchParams, router]);
+  }, [handleError]);
 
   const onSubmit = async (data: NewTransferFormData) => {
     if (!user) return;
@@ -138,7 +130,9 @@ export function NewTransferPage<TUser extends UserWithId>({
   };
 
   const handleContactSelect = (contact: Contact) => {
-    setSelectedContact(contact);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("contactId", contact.getId());
+    router.replace(`/transactions/new?${params.toString()}`);
   };
 
   const handleBack = () => {

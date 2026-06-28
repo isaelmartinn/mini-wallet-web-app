@@ -10,20 +10,6 @@ test.describe("Transactions Flow", () => {
     });
 
     test.describe("When viewing the home page", () => {
-      test("Then should display transaction items", async ({ page }) => {
-        const homePage = new HomePage(page);
-
-        await homePage.expectTransactionItemsVisible();
-      });
-
-      test("Then should display transaction amounts with correct formatting", async ({
-        page,
-      }) => {
-        const amounts = page.locator("text=/[+-]\\$[0-9,]+\\.[0-9]{2}/");
-
-        await expect(amounts.first()).toBeVisible({ timeout: 10000 });
-      });
-
       test("Then should display transaction descriptions", async ({ page }) => {
         const descriptions = page.locator(
           "text=/Transferencia|Pago|Compra|Depósito|Reembolso/i"

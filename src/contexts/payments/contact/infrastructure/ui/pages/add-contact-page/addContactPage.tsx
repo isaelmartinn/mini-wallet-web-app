@@ -112,6 +112,8 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
                       data-testid="contact-name-input"
                       disabled={isSubmitting}
                       placeholder="Nombre completo"
+                      px={4}
+                      py={2}
                     />
                     {form.formState.errors.name && (
                       <Field.ErrorText>
@@ -127,6 +129,8 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
                       data-testid="contact-email-input"
                       disabled={isSubmitting}
                       placeholder="correo@ejemplo.com"
+                      px={4}
+                      py={2}
                       type="email"
                     />
                     {form.formState.errors.email && (
@@ -143,6 +147,8 @@ export function AddContactPage({ contactRepository }: AddContactPageProps) {
                       data-testid="contact-phone-input"
                       disabled={isSubmitting}
                       placeholder="+52 55 1234 5678"
+                      px={4}
+                      py={2}
                     />
                     {form.formState.errors.phone && (
                       <Field.ErrorText>
