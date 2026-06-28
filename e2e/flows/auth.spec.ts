@@ -1,48 +1,130 @@
-import { expect, test } from "@playwright/test";
+import { test, testUser } from "../fixtures";
+import { HomePage, LoginPage } from "../page-objects";
 
 test.describe("Authentication Flow", () => {
   test.describe("Given a user on the login page", () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto("/login");
-    });
-
-    test.describe("When entering valid credentials", () => {
-      test("Then should redirect to home page", async ({ page }) => {
-        await page.fill('[data-testid="credential-input"]', "test@example.com");
-        await page.click('[data-testid="login-button"]');
-
-        await expect(page).toHaveURL("/home");
-      });
+      const loginPage = new LoginPage(page);
+      await loginPage.goto();
     });
 
     test.describe("When the login form is displayed", () => {
       test("Then should show all required elements", async ({ page }) => {
-        await expect(
-          page.getByRole("heading", { name: /iniciar sesión/i })
-        ).toBeVisible();
-        await expect(
-          page.locator('[data-testid="credential-input"]')
-        ).toBeVisible();
-        await expect(
-          page.locator('[data-testid="login-button"]')
-        ).toBeVisible();
+        const loginPage = new LoginPage(page);
+
+        await loginPage.expectAllElementsVisible();
+      });
+
+      test("Then should have empty credential input", async ({ page }) => {
+        const loginPage = new LoginPage(page);
+
+        await loginPage.expectCredentialInputEmpty();
+      });
+    });
+
+    test.describe("When entering valid email credentials", () => {
+      test("Then should redirect to home page", async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const homePage = new HomePage(page);
+
+        await loginPage.login(testUser.email);
+
+        await homePage.expectToBeOnHomePage();
+      });
+    });
+
+    test.describe("When entering valid phone credentials", () => {
+      test("Then should redirect to home page", async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        const homePage = new HomePage(page);
+
+        await loginPage.login(testUser.phone);
+
+        await homePage.expectToBeOnHomePage();
       });
     });
   });
 
   test.describe("Given an authenticated user", () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto("/login");
-      await page.fill('[data-testid="credential-input"]', "test@example.com");
-      await page.click('[data-testid="login-button"]');
-      await page.waitForURL("/home");
+      const loginPage = new LoginPage(page);
+      await loginPage.goto();
+      await loginPage.loginAndWaitForHome(testUser.email);
     });
 
     test.describe("When logging out", () => {
       test("Then should redirect to login page", async ({ page }) => {
-        await page.click('[data-testid="logout-button"]');
+        const homePage = new HomePage(page);
+        const loginPage = new LoginPage(page);
 
-        await expect(page).toHaveURL("/login");
+        await homePage.clickLogout();
+
+        await loginPage.expectToBeOnLoginPage();
+      });
+
+      test("Then should clear session and require login again", async ({
+        page,
+      }) => {
+        const homePage = new HomePage(page);
+        const loginPage = new LoginPage(page);
+
+        await homePage.clickLogout();
+        await loginPage.expectToBeOnLoginPage();
+
+        await homePage.goto();
+
+        await loginPage.expectToBeOnLoginPage();
+      });
+    });
+  });
+
+  test.describe("Given a non-authenticated user", () => {
+    test.describe("When trying to access protected routes", () => {
+      test("Then should redirect to login from /home", async ({ page }) => {
+        const homePage = new HomePage(page);
+        const loginPage = new LoginPage(page);
+
+        await homePage.goto();
+
+        await loginPage.expectToBeOnLoginPage();
+      });
+
+      test("Then should redirect to login from /transactions/new", async ({
+        page,
+      }) => {
+        const loginPage = new LoginPage(page);
+
+        await page.goto("/transactions/new");
+
+        await loginPage.expectToBeOnLoginPage();
+      });
+
+      test("Then should redirect to login from /transactions/confirm", async ({
+        page,
+      }) => {
+        const loginPage = new LoginPage(page);
+
+        await page.goto("/transactions/confirm");
+
+        await loginPage.expectToBeOnLoginPage();
+      });
+    });
+  });
+
+  test.describe("Given a user with an active session", () => {
+    test.describe("When navigating directly to /login", () => {
+      test("Then should redirect to home if already authenticated", async ({
+        page,
+      }) => {
+        const loginPage = new LoginPage(page);
+        const homePage = new HomePage(page);
+
+        await loginPage.goto();
+        await loginPage.loginAndWaitForHome(testUser.email);
+
+        await loginPage.goto();
+
+        await homePage.expectToBeOnHomePage();
       });
     });
   });

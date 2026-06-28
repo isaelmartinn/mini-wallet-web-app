@@ -26,6 +26,7 @@ export function ConfirmationErrorState({
             alignItems="center"
             bg="red.50"
             borderRadius="full"
+            data-testid="error-icon"
             display="flex"
             h={20}
             justifyContent="center"
@@ -36,7 +37,9 @@ export function ConfirmationErrorState({
           </Box>
 
           <VStack gap={2}>
-            <Heading size="lg">Error en la transferencia</Heading>
+            <Heading data-testid="error-message" size="lg">
+              Error en la transferencia
+            </Heading>
             <Text color="gray.600" textAlign="center">
               Ocurrió un error al procesar tu transferencia. Por favor, intenta
               nuevamente.
@@ -44,11 +47,23 @@ export function ConfirmationErrorState({
           </VStack>
 
           <VStack gap={3} w="full">
-            <Button colorScheme="blue" onClick={onRetry} size="lg" width="full">
+            <Button
+              colorScheme="blue"
+              data-testid="retry-button"
+              onClick={onRetry}
+              size="lg"
+              width="full"
+            >
               <RefreshCw size={20} />
               Reintentar
             </Button>
-            <Button onClick={onGoHome} size="lg" variant="outline" width="full">
+            <Button
+              data-testid="cancel-button"
+              onClick={onGoHome}
+              size="lg"
+              variant="outline"
+              width="full"
+            >
               <Home size={20} />
               Volver al inicio
             </Button>

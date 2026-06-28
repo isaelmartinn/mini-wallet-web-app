@@ -1,49 +1,87 @@
-import { expect, test } from "@playwright/test";
+import { test, testUser } from "../fixtures";
+import { HomePage, LoginPage } from "../page-objects";
 
 test.describe("Wallet Home Page", () => {
   test.describe("Given an authenticated user", () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto("/login");
-      await page.fill('[data-testid="credential-input"]', "test@example.com");
-      await page.click('[data-testid="login-button"]');
-      await page.waitForURL("/home");
+      const loginPage = new LoginPage(page);
+      await loginPage.goto();
+      await loginPage.loginAndWaitForHome(testUser.email);
     });
 
     test.describe("When viewing the home page", () => {
-      test("Then should display user profile information", async ({ page }) => {
-        await expect(
-          page.getByText(/buenos días|buenas tardes|buenas noches/i)
-        ).toBeVisible();
+      test("Then should display user greeting", async ({ page }) => {
+        const homePage = new HomePage(page);
 
-        await expect(page.getByRole("heading")).toBeVisible();
+        await homePage.expectGreetingVisible();
       });
 
       test("Then should display balance card", async ({ page }) => {
-        await expect(page.getByText(/saldo disponible/i)).toBeVisible();
+        const homePage = new HomePage(page);
 
-        await expect(page.getByText(/\$/)).toBeVisible();
+        await homePage.expectBalanceCardVisible();
+        await homePage.expectBalanceAmountVisible();
       });
 
-      test("Then should allow toggling balance visibility", async ({
+      test("Then should display transaction items", async ({ page }) => {
+        const homePage = new HomePage(page);
+
+        await homePage.expectTransactionItemsVisible();
+      });
+    });
+
+    test.describe("When toggling balance visibility", () => {
+      test("Then should hide balance when clicking hide button", async ({
         page,
       }) => {
-        await page.click('[aria-label*="Ocultar saldo"]');
+        const homePage = new HomePage(page);
 
-        await expect(page.getByText("••••••")).toBeVisible();
+        await homePage.hideBalance();
 
-        await page.click('[aria-label*="Mostrar saldo"]');
+        await homePage.expectBalanceHidden();
+      });
 
-        await expect(page.getByText(/\$/)).toBeVisible();
+      test("Then should show balance when clicking show button", async ({
+        page,
+      }) => {
+        const homePage = new HomePage(page);
+
+        await homePage.hideBalance();
+        await homePage.expectBalanceHidden();
+
+        await homePage.showBalance();
+
+        await homePage.expectBalanceAmountVisible();
       });
     });
 
     test.describe("When the page loads", () => {
       test("Then should show loading skeletons initially", async ({ page }) => {
-        await page.goto("/home");
+        const homePage = new HomePage(page);
 
-        const skeletons = page.locator('[data-loading="true"]');
+        await homePage.goto();
 
-        await expect(skeletons.first()).toBeVisible();
+        await homePage.expectSkeletonsVisible();
+      });
+
+      test("Then should replace skeletons with content after loading", async ({
+        page,
+      }) => {
+        const homePage = new HomePage(page);
+
+        await homePage.goto();
+
+        await homePage.expectTransactionItemsVisible();
+      });
+    });
+
+    test.describe("When balance data loads successfully", () => {
+      test("Then should display formatted balance amount", async ({ page }) => {
+        const homePage = new HomePage(page);
+
+        const balance = await homePage.getBalanceAmount();
+
+        test.expect(balance).toMatch(/\$[\d,]+\.\d{2}/);
       });
     });
   });
@@ -51,9 +89,12 @@ test.describe("Wallet Home Page", () => {
   test.describe("Given an unauthenticated user", () => {
     test.describe("When trying to access home page", () => {
       test("Then should redirect to login", async ({ page }) => {
-        await page.goto("/home");
+        const homePage = new HomePage(page);
+        const loginPage = new LoginPage(page);
 
-        await expect(page).toHaveURL("/login");
+        await homePage.goto();
+
+        await loginPage.expectToBeOnLoginPage();
       });
     });
   });

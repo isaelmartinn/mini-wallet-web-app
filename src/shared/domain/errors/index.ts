@@ -1,4 +1,5 @@
 export { AmountInvalidError } from "./amountInvalid.error";
+export { AmountMustBeGreaterThanZeroError } from "./amountMustBeGreaterThanZero.error";
 export { AmountNegativeError } from "./amountNegative.error";
 export { DomainError } from "./domainError";
 export { EmailEmptyError } from "./emailEmptyError";

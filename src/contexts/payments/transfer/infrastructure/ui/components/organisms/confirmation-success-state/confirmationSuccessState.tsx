@@ -25,6 +25,7 @@ export function ConfirmationSuccessState({
               alignItems="center"
               bg="green.50"
               borderRadius="full"
+              data-testid="success-icon"
               display="flex"
               h={20}
               justifyContent="center"
@@ -46,7 +47,13 @@ export function ConfirmationSuccessState({
             transferId={transferId}
           />
 
-          <Button colorScheme="blue" onClick={onGoHome} size="lg" width="full">
+          <Button
+            colorScheme="blue"
+            data-testid="back-to-home-button"
+            onClick={onGoHome}
+            size="lg"
+            width="full"
+          >
             <Home size={20} />
             Volver al inicio
           </Button>

@@ -9,6 +9,7 @@ import {
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
+import { AmountMustBeGreaterThanZeroError } from "#shared/domain/errors";
 import { Amount, Email, Phone } from "#shared/domain/value-objects";
 import { Balance } from "#wallet/domain/entities";
 import { WalletRepository } from "#wallet/domain/repositories";
@@ -16,6 +17,49 @@ import { WalletRepository } from "#wallet/domain/repositories";
 import { PrepareTransferUseCase } from "./prepareTransfer.useCase";
 
 describe("PrepareTransferUseCase", () => {
+  describe("Given amount is zero", () => {
+    describe("When preparing a transfer", () => {
+      it("Then should throw AmountMustBeGreaterThanZeroError", async () => {
+        const mockWalletRepository: WalletRepository = {
+          getBalance: vi.fn(),
+          getUserProfile: vi.fn(),
+          updateBalance: vi.fn(),
+        };
+
+        const mockTransferRepository: TransferRepository = {
+          confirm: vi.fn(),
+          create: vi.fn(),
+          findById: vi.fn(),
+          findByUserId: vi.fn(),
+        };
+
+        const mockContactRepository: ContactRepository = {
+          add: vi.fn(),
+          findAll: vi.fn(),
+          findByEmail: vi.fn(),
+          findById: vi.fn(),
+          findByName: vi.fn(),
+          findByPhone: vi.fn(),
+          findFavorites: vi.fn(),
+        };
+
+        const useCase = new PrepareTransferUseCase(
+          mockTransferRepository,
+          mockWalletRepository,
+          mockContactRepository
+        );
+
+        await expect(
+          useCase.execute({
+            amount: 0,
+            recipientId: "recipient-1",
+            userId: "user-1",
+          })
+        ).rejects.toThrow(AmountMustBeGreaterThanZeroError);
+      });
+    });
+  });
+
   describe("Given insufficient balance", () => {
     describe("When preparing a transfer", () => {
       it("Then should throw InsufficientBalanceError", async () => {

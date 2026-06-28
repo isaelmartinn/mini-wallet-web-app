@@ -32,14 +32,14 @@ export function ReceiptCard({
   const formattedAmount = currencyFormatter.format(amount, "MXN");
 
   return (
-    <Card.Root>
+    <Card.Root data-testid="receipt-card">
       <Card.Body p={6}>
         <VStack align="stretch" gap={6}>
           <Box>
             <Heading as="h3" color="gray.600" fontWeight="normal">
               Monto
             </Heading>
-            <Text fontSize="2xl" fontWeight="bold">
+            <Text data-testid="receipt-amount" fontSize="2xl" fontWeight="bold">
               {formattedAmount}
             </Text>
           </Box>
@@ -51,7 +51,7 @@ export function ReceiptCard({
               <Text color="gray.600" fontSize="sm">
                 ID de transferencia
               </Text>
-              <Text fontSize="sm" fontWeight="bold">
+              <Text data-testid="receipt-id" fontSize="sm" fontWeight="bold">
                 {transferId}
               </Text>
             </HStack>
@@ -60,7 +60,11 @@ export function ReceiptCard({
               <Text color="gray.600" fontSize="sm">
                 Destinatario
               </Text>
-              <Text fontSize="sm" fontWeight="bold">
+              <Text
+                data-testid="receipt-recipient"
+                fontSize="sm"
+                fontWeight="bold"
+              >
                 {recipient}
               </Text>
             </HStack>
@@ -69,7 +73,7 @@ export function ReceiptCard({
               <Text color="gray.600" fontSize="sm">
                 Fecha
               </Text>
-              <Text fontSize="sm" fontWeight="bold">
+              <Text data-testid="receipt-date" fontSize="sm" fontWeight="bold">
                 {date}
               </Text>
             </HStack>

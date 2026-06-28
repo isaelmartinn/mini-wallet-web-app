@@ -29,6 +29,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       lang="es"
     >
+      <head>
+        <title>Mini Wallet</title>
+      </head>
       <body className="flex min-h-full flex-col">
         <ChakraProvider value={chakraSystem}>
           <AuthProvider>

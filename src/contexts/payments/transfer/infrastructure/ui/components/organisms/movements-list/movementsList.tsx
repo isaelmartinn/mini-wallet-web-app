@@ -17,7 +17,7 @@ export function MovementsList({
 }: MovementsListProps) {
   if (isLoading) {
     return (
-      <Card.Root width="full">
+      <Card.Root data-loading="true" width="full">
         <Card.Body>
           <VStack gap={4} py={8}>
             <Spinner color="brand.500" size="lg" />
@@ -30,13 +30,17 @@ export function MovementsList({
 
   if (error) {
     return (
-      <Card.Root width="full">
+      <Card.Root data-testid="error-state" width="full">
         <Card.Body>
           <VStack gap={3} py={8}>
             <Box color="red.500">
               <AlertCircle size={48} />
             </Box>
-            <Text color="gray.900" fontWeight="semibold">
+            <Text
+              color="gray.900"
+              data-testid="error-message"
+              fontWeight="semibold"
+            >
               Error al cargar movimientos
             </Text>
             <Text color="gray.600" textAlign="center">

@@ -1,9 +1,10 @@
-import { AmountInvalidError, AmountNegativeError } from "#shared/domain/errors";
+import {
+  AmountInvalidError,
+  AmountMustBeGreaterThanZeroError,
+} from "#shared/domain/errors";
 import { CurrencyFormatter } from "#shared/domain/interfaces";
 
 import { Amount as AmountInterface } from "./amount.interface";
-
-const MIN_AMOUNT = 0;
 
 export class Amount implements AmountInterface {
   private constructor(private readonly value: number) {}
@@ -13,8 +14,8 @@ export class Amount implements AmountInterface {
       throw new AmountInvalidError();
     }
 
-    if (value < MIN_AMOUNT) {
-      throw new AmountNegativeError();
+    if (value <= 0) {
+      throw new AmountMustBeGreaterThanZeroError();
     }
 
     const roundedValue = Math.round(value * 100) / 100;

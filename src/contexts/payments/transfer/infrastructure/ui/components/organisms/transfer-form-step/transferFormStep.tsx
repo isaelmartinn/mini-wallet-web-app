@@ -24,7 +24,13 @@ import {
 } from "./transferFormStep.interface";
 
 const newTransferSchema = z.object({
-  amount: z.string().min(1, "El monto es requerido"),
+  amount: z
+    .string()
+    .min(1, "El monto es requerido")
+    .refine((val) => {
+      const num = parseFloat(val);
+      return !isNaN(num) && num > 0;
+    }, "El monto debe ser mayor a cero"),
   recipientId: z.string().min(1, "Debes seleccionar un destinatario"),
 });
 
@@ -89,13 +95,13 @@ export function TransferFormStep({
                 )}
               </HStack>
               <NumberInput.Root
+                data-testid="amount-input"
                 disabled={isSubmitting}
                 formatOptions={{
                   currency: "MXN",
                   currencyDisplay: "symbol",
                   style: "currency",
                 }}
-                min={0}
                 onValueChange={(details) => {
                   form.setValue(
                     "amount",
@@ -138,6 +144,7 @@ export function TransferFormStep({
 
             <Button
               colorScheme="blue"
+              data-testid="continue-button"
               loading={isSubmitting}
               size="lg"
               type="submit"
