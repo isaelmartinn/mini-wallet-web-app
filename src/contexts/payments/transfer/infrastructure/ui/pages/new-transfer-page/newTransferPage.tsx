@@ -30,7 +30,6 @@ import { AuthStore, UserWithId } from "#shared/domain/interfaces";
 import { BalanceProvider } from "#shared/domain/interfaces/balanceProvider.interface";
 import { useAuthContext } from "#shared/infrastructure/hooks";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-import { WalletRepository } from "#wallet/balance/infrastructure/repositories";
 
 interface NewTransferPageProps<TUser extends UserWithId> {
   authStore: AuthStore<TUser>;
@@ -116,11 +115,10 @@ export function NewTransferPage<TUser extends UserWithId>({
     setIsSubmitting(true);
     try {
       const transferRepository = new TransferRepositoryImpl();
-      const walletRepository = WalletRepository.getInstance();
       const contactRepository = new ContactRepository();
       const prepareTransferUseCase = new PrepareTransferUseCase(
         transferRepository,
-        walletRepository,
+        balanceProvider,
         contactRepository
       );
 

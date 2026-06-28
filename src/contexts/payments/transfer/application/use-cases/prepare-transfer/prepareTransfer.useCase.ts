@@ -2,7 +2,7 @@ import { ContactRepository } from "#payments/contact/domain/repositories";
 import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
 import { TransferRepository } from "#payments/transfer/domain/repositories";
 import { TransferAmount } from "#payments/transfer/domain/value-objects";
-import { WalletRepository } from "#wallet/balance/domain/repositories";
+import { BalanceProvider } from "#shared/domain/interfaces";
 
 import {
   PrepareTransferParams,
@@ -13,16 +13,18 @@ import {
 export class PrepareTransferUseCase implements PrepareTransferUseCaseInterface {
   constructor(
     private readonly transferRepository: TransferRepository,
-    private readonly walletRepository: WalletRepository,
+    private readonly balanceProvider: BalanceProvider,
     private readonly contactRepository: ContactRepository
   ) {}
 
   async execute(params: PrepareTransferParams): Promise<PrepareTransferResult> {
     const amount = TransferAmount.create(params.amount);
 
-    const balance = await this.walletRepository.getBalance(params.userId);
+    const availableBalance = await this.balanceProvider.getAvailableBalance(
+      params.userId
+    );
 
-    if (balance.getAmount().isLessThan(amount)) {
+    if (availableBalance < params.amount) {
       throw new InsufficientBalanceError();
     }
 

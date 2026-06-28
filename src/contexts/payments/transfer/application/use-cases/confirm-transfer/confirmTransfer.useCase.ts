@@ -2,9 +2,7 @@ import { Transfer } from "#payments/transfer/domain/entities";
 import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
 import { TransferRepository } from "#payments/transfer/domain/repositories";
 import { TransferAmount } from "#payments/transfer/domain/value-objects";
-import { Balance } from "#wallet/balance/domain/entities";
-import { WalletRepository } from "#wallet/balance/domain/repositories";
-import { BalanceAmount } from "#wallet/balance/domain/value-objects";
+import { BalanceProvider } from "#shared/domain/interfaces";
 
 import {
   ConfirmTransferParams,
@@ -14,35 +12,24 @@ import {
 export class ConfirmTransferUseCase implements ConfirmTransferUseCaseInterface {
   constructor(
     private readonly transferRepository: TransferRepository,
-    private readonly walletRepository: WalletRepository
+    private readonly balanceProvider: BalanceProvider
   ) {}
 
   async execute(params: ConfirmTransferParams): Promise<Transfer> {
-    const currentBalance = await this.walletRepository.getBalance(
+    const currentBalance = await this.balanceProvider.getAvailableBalance(
       params.userId
     );
     const transferAmount = TransferAmount.create(params.amount);
 
-    if (currentBalance.getAmount().isLessThan(transferAmount)) {
+    if (currentBalance < transferAmount.getValue()) {
       throw new InsufficientBalanceError();
     }
 
     const result = await this.transferRepository.confirm(params.transferId);
 
     if (result.success) {
-      const newAmountValue =
-        currentBalance.getAmount().getValue() - transferAmount.getValue();
-      const newAmount = BalanceAmount.create(newAmountValue);
-      const newBalance = Balance.create({
-        amount: newAmount,
-        currency: currentBalance.getCurrency(),
-        userId: currentBalance.getUserId(),
-      });
-
-      await this.walletRepository.updateBalance(
-        currentBalance.getUserId(),
-        newBalance
-      );
+      const newAmountValue = currentBalance - transferAmount.getValue();
+      await this.balanceProvider.updateBalance(params.userId, newAmountValue);
     }
 
     return result.transfer;
