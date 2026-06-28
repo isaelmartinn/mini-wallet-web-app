@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useAuthStore } from "#auth/infrastructure/store";
+import { useAuthStore } from "#auth/session/infrastructure/store";
 import { ContactRepository } from "#payments/contact/infrastructure/repositories";
 import { ConfirmTransferUseCase } from "#payments/transfer/application/use-cases";
 import { Transfer } from "#payments/transfer/domain/entities";

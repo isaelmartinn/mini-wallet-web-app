@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "#auth/infrastructure/store";
+import { useAuthStore } from "#auth/session/infrastructure/store";
 import { NewTransferPage } from "#payments/transfer/infrastructure/ui/pages";
 import { BalanceProviderAdapter } from "#wallet/infrastructure/providers/balance-provider/balance-provider.adapter";
 import { WalletRepository } from "#wallet/infrastructure/repositories";

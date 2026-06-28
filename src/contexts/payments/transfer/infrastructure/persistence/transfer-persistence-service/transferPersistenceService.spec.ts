@@ -5,7 +5,7 @@ import {
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
-import { Amount } from "#shared/domain/value-objects";
+import { TransferAmount } from "#payments/transfer/domain/value-objects";
 import { LocalStorageService } from "#shared/infrastructure/storage";
 
 import { TransferPersistenceService } from "./transferPersistenceService";
@@ -30,7 +30,7 @@ describe("TransferPersistenceService", () => {
         const userId = "user-123";
         const transfers = [
           Transfer.create({
-            amount: Amount.create(1000),
+            amount: TransferAmount.create(1000),
             date: new Date("2024-01-15T10:00:00Z"),
             description: "Test transfer",
             id: "transfer-1",
@@ -146,7 +146,7 @@ describe("TransferPersistenceService", () => {
     describe("When saving transfers for different users", () => {
       it("Then should use different storage keys", () => {
         const transfer1 = Transfer.create({
-          amount: Amount.create(1000),
+          amount: TransferAmount.create(1000),
           date: new Date(),
           description: "Transfer 1",
           id: "transfer-1",
@@ -157,7 +157,7 @@ describe("TransferPersistenceService", () => {
         });
 
         const transfer2 = Transfer.create({
-          amount: Amount.create(2000),
+          amount: TransferAmount.create(2000),
           date: new Date(),
           description: "Transfer 2",
           id: "transfer-2",

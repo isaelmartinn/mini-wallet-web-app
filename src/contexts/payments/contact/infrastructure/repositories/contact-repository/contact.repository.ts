@@ -1,4 +1,4 @@
-import { useAuthStore } from "#auth/infrastructure/store/auth-store/auth.store";
+import { useAuthStore } from "#auth/session/infrastructure/store/auth-store/auth.store";
 import { Contact } from "#payments/contact/domain/entities";
 import { ContactRepository as ContactRepositoryInterface } from "#payments/contact/domain/repositories";
 import { Email, Phone } from "#shared/domain/value-objects";

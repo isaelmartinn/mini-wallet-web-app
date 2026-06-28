@@ -10,14 +10,14 @@ import {
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
-import { Amount } from "#shared/domain/value-objects";
+import { TransferAmount } from "#payments/transfer/domain/value-objects";
 
 describe("Transfer", () => {
   describe("Given valid transfer parameters", () => {
     describe("When creating a transfer", () => {
       it("Then should create transfer successfully", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1500.0),
+          amount: TransferAmount.create(1500.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test transfer",
           id: "txn-001",
@@ -39,7 +39,7 @@ describe("Transfer", () => {
     describe("When creating an income transfer", () => {
       it("Then should have income type", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(2000.0),
+          amount: TransferAmount.create(2000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Income",
           id: "txn-002",
@@ -57,7 +57,7 @@ describe("Transfer", () => {
     describe("When creating a pending transfer", () => {
       it("Then should have pending status", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(500.0),
+          amount: TransferAmount.create(500.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Pending payment",
           id: "txn-003",
@@ -76,7 +76,7 @@ describe("Transfer", () => {
     describe("When creating a failed transfer", () => {
       it("Then should have failed status", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(300.0),
+          amount: TransferAmount.create(300.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Failed payment",
           id: "txn-004",
@@ -98,7 +98,7 @@ describe("Transfer", () => {
       it("Then should return TransferDate value object", () => {
         const inputDate = new Date("2024-06-25T10:00:00");
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: inputDate,
           description: "Test",
           id: "txn-005",
@@ -118,7 +118,7 @@ describe("Transfer", () => {
     describe("When accessing userId", () => {
       it("Then should return the correct userId", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-006",
@@ -138,7 +138,7 @@ describe("Transfer", () => {
       it("Then should throw RecipientRequiredError", () => {
         expect(() =>
           Transfer.create({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "Test",
             id: "txn-007",
@@ -155,7 +155,7 @@ describe("Transfer", () => {
       it("Then should throw RecipientRequiredError", () => {
         expect(() =>
           Transfer.create({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "Test",
             id: "txn-008",
@@ -174,7 +174,7 @@ describe("Transfer", () => {
       it("Then should throw InvalidDescriptionError", () => {
         expect(() =>
           Transfer.create({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "",
             id: "txn-009",
@@ -191,7 +191,7 @@ describe("Transfer", () => {
       it("Then should throw InvalidDescriptionError", () => {
         expect(() =>
           Transfer.create({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "   ",
             id: "txn-010",
@@ -209,7 +209,7 @@ describe("Transfer", () => {
     describe("When confirming the transfer", () => {
       it("Then should transition to success status", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-011",
@@ -232,7 +232,7 @@ describe("Transfer", () => {
     describe("When failing the transfer", () => {
       it("Then should transition to failed status", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-012",
@@ -252,7 +252,7 @@ describe("Transfer", () => {
     describe("When cancelling the transfer", () => {
       it("Then should transition to failed status", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-013",
@@ -274,7 +274,7 @@ describe("Transfer", () => {
     describe("When trying to confirm again", () => {
       it("Then should throw InvalidStateTransitionError", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-014",
@@ -291,7 +291,7 @@ describe("Transfer", () => {
     describe("When trying to fail", () => {
       it("Then should throw InvalidStateTransitionError", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-015",
@@ -308,7 +308,7 @@ describe("Transfer", () => {
     describe("When trying to cancel", () => {
       it("Then should throw InvalidStateTransitionError", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-016",
@@ -327,7 +327,7 @@ describe("Transfer", () => {
     describe("When trying to confirm", () => {
       it("Then should throw InvalidStateTransitionError", () => {
         const transfer = Transfer.create({
-          amount: Amount.create(1000.0),
+          amount: TransferAmount.create(1000.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Test",
           id: "txn-017",
@@ -346,7 +346,7 @@ describe("Transfer", () => {
     describe("When rehydrating with valid data", () => {
       it("Then should reconstruct transfer without validations", () => {
         const transfer = Transfer.rehydrate({
-          amount: Amount.create(1500.0),
+          amount: TransferAmount.create(1500.0),
           date: new Date("2024-06-25T10:00:00"),
           description: "Rehydrated transfer",
           id: "txn-018",
@@ -370,7 +370,7 @@ describe("Transfer", () => {
       it("Then should NOT throw RecipientRequiredError", () => {
         expect(() =>
           Transfer.rehydrate({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "Test",
             id: "txn-019",
@@ -385,7 +385,7 @@ describe("Transfer", () => {
       it("Then create() should throw RecipientRequiredError for comparison", () => {
         expect(() =>
           Transfer.create({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "Test",
             id: "txn-020",
@@ -402,7 +402,7 @@ describe("Transfer", () => {
       it("Then should NOT throw InvalidDescriptionError", () => {
         expect(() =>
           Transfer.rehydrate({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "",
             id: "txn-021",
@@ -417,7 +417,7 @@ describe("Transfer", () => {
       it("Then create() should throw InvalidDescriptionError for comparison", () => {
         expect(() =>
           Transfer.create({
-            amount: Amount.create(1000.0),
+            amount: TransferAmount.create(1000.0),
             date: new Date("2024-06-25T10:00:00"),
             description: "",
             id: "txn-022",

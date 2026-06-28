@@ -21,7 +21,10 @@ describe("GetContactsUseCase", () => {
         const mockRepository: ContactRepository = {
           add: vi.fn(),
           findAll: vi.fn().mockResolvedValue([mockContact]),
+          findByEmail: vi.fn(),
           findById: vi.fn(),
+          findByName: vi.fn(),
+          findByPhone: vi.fn(),
           findFavorites: vi.fn(),
         };
 
@@ -42,7 +45,10 @@ describe("GetContactsUseCase", () => {
         const mockRepository: ContactRepository = {
           add: vi.fn(),
           findAll: vi.fn().mockResolvedValue([]),
+          findByEmail: vi.fn(),
           findById: vi.fn(),
+          findByName: vi.fn(),
+          findByPhone: vi.fn(),
           findFavorites: vi.fn(),
         };
 

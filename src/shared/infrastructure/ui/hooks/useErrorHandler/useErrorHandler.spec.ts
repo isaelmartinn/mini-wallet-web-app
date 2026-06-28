@@ -1,13 +1,9 @@
-/**
- * @vitest-environment jsdom
- */
-
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type {
+  ErrorMapper,
   ErrorPresentation,
-  IErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
 import { useErrorHandler } from "./useErrorHandler";
@@ -18,7 +14,7 @@ vi.mock("sileo", () => ({
   },
 }));
 
-class MockErrorMapperA implements IErrorMapper {
+class MockErrorMapperA implements ErrorMapper {
   toFormError(): null {
     return null;
   }
@@ -34,7 +30,7 @@ class MockErrorMapperA implements IErrorMapper {
   }
 }
 
-class MockErrorMapperB implements IErrorMapper {
+class MockErrorMapperB implements ErrorMapper {
   toFormError(): null {
     return null;
   }

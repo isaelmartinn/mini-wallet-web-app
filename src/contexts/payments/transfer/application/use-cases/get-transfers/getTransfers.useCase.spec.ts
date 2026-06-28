@@ -5,7 +5,7 @@ import {
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
-import { Amount } from "#shared/domain/value-objects";
+import { TransferAmount } from "#payments/transfer/domain/value-objects";
 
 import { GetTransfersUseCase } from "./getTransfers.useCase";
 
@@ -28,7 +28,7 @@ describe("GetTransfersUseCase", () => {
       it("Then should return all transfers", async () => {
         const mockTransfers = [
           Transfer.create({
-            amount: Amount.create(1000),
+            amount: TransferAmount.create(1000),
             date: new Date("2024-06-25"),
             description: "Transfer 1",
             id: "1",
@@ -38,7 +38,7 @@ describe("GetTransfersUseCase", () => {
             userId: "user-1",
           }),
           Transfer.create({
-            amount: Amount.create(2000),
+            amount: TransferAmount.create(2000),
             date: new Date("2024-06-24"),
             description: "Transfer 2",
             id: "2",
@@ -61,7 +61,7 @@ describe("GetTransfersUseCase", () => {
     describe("When transfers are in random order", () => {
       it("Then should return transfers sorted by date (most recent first)", async () => {
         const oldTransfer = Transfer.create({
-          amount: Amount.create(1000),
+          amount: TransferAmount.create(1000),
           date: new Date("2024-06-20"),
           description: "Old transfer",
           id: "1",
@@ -72,7 +72,7 @@ describe("GetTransfersUseCase", () => {
         });
 
         const recentTransfer = Transfer.create({
-          amount: Amount.create(2000),
+          amount: TransferAmount.create(2000),
           date: new Date("2024-06-25"),
           description: "Recent transfer",
           id: "2",
@@ -83,7 +83,7 @@ describe("GetTransfersUseCase", () => {
         });
 
         const middleTransfer = Transfer.create({
-          amount: Amount.create(1500),
+          amount: TransferAmount.create(1500),
           date: new Date("2024-06-23"),
           description: "Middle transfer",
           id: "3",
