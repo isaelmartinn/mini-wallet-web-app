@@ -1,3 +1,4 @@
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -8,6 +9,10 @@ vi.mock("#shared/infrastructure/ui/hooks", () => ({
   useThemeToken: vi.fn(() => "#e53e3e"),
 }));
 
+function renderWithChakra(ui: React.ReactElement) {
+  return render(<ChakraProvider value={defaultSystem}>{ui}</ChakraProvider>);
+}
+
 describe("ConfirmationErrorState", () => {
   describe("Given the component is rendered", () => {
     describe("When the component loads", () => {
@@ -15,7 +20,7 @@ describe("ConfirmationErrorState", () => {
         const mockOnRetry = vi.fn();
         const mockOnGoHome = vi.fn();
 
-        render(
+        renderWithChakra(
           <ConfirmationErrorState
             onGoHome={mockOnGoHome}
             onRetry={mockOnRetry}
@@ -36,7 +41,7 @@ describe("ConfirmationErrorState", () => {
         const mockOnRetry = vi.fn();
         const mockOnGoHome = vi.fn();
 
-        render(
+        renderWithChakra(
           <ConfirmationErrorState
             onGoHome={mockOnGoHome}
             onRetry={mockOnRetry}
@@ -58,7 +63,7 @@ describe("ConfirmationErrorState", () => {
         const mockOnRetry = vi.fn();
         const mockOnGoHome = vi.fn();
 
-        render(
+        renderWithChakra(
           <ConfirmationErrorState
             onGoHome={mockOnGoHome}
             onRetry={mockOnRetry}
@@ -78,7 +83,7 @@ describe("ConfirmationErrorState", () => {
         const mockOnRetry = vi.fn();
         const mockOnGoHome = vi.fn();
 
-        render(
+        renderWithChakra(
           <ConfirmationErrorState
             onGoHome={mockOnGoHome}
             onRetry={mockOnRetry}

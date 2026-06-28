@@ -5,11 +5,6 @@ import type {
 
 import { DomainError } from "#shared/domain/errors";
 
-/**
- * Contact context form error mapper.
- * Translates contact domain errors to inline form field error messages.
- * Implements the Registry pattern for error code to form field mapping.
- */
 export class ContactFormErrorMapper implements FormErrorMapper {
   private static readonly FORM_ERROR_MAPPINGS: Record<
     string,

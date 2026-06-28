@@ -6,14 +6,6 @@ import type {
   PresentationErrorMapper,
 } from "#shared/infrastructure/ui/error-mapper";
 
-/**
- * Hook for handling errors using a chain of responsibility pattern.
- * Accepts an array of error mappers and tries each one until a match is found.
- * Falls back to a generic error message if no mapper handles the error.
- *
- * @param mappers - Array of error mappers to try in order
- * @returns Object with handleError function
- */
 export function useErrorHandler(mappers: PresentationErrorMapper[] = []) {
   const handleError = useCallback(
     (error: unknown) => {

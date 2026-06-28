@@ -5,11 +5,6 @@ import type {
 
 import { DomainError } from "#shared/domain/errors";
 
-/**
- * Auth context error mapper for toast notifications.
- * Translates auth domain errors to user-facing Spanish messages for Sileo toasts.
- * Implements the Registry pattern for error code to presentation mapping.
- */
 export class AuthErrorMapper implements PresentationErrorMapper {
   private static readonly ERROR_MESSAGES: Record<string, ErrorPresentation> = {
     EMAIL_EMPTY: {

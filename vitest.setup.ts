@@ -7,12 +7,16 @@ vi.mock("lucide-react", () => ({
   ArrowDownLeft: () => null,
   ArrowLeft: () => null,
   ArrowUpRight: () => null,
+  Check: () => null,
   Clock: () => null,
   Eye: () => null,
   EyeOff: () => null,
+  Home: () => null,
+  RefreshCw: () => null,
   Send: () => null,
   User: () => null,
   UserPlus: () => null,
+  Wallet: () => null,
   XCircle: () => null,
 }));
 
