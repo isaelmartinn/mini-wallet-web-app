@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { User } from "#auth/domain/entities";
+import { Email, Phone } from "#shared/domain/value-objects";
 
 interface AuthState {
   clearSession: () => void;
@@ -42,7 +43,46 @@ export const useAuthStore = create<AuthState>()(
       user: null,
     }),
     {
+      merge: (persistedState, currentState) => {
+        const persisted = persistedState as Partial<{
+          isAuthenticated: boolean;
+          user: null | {
+            email: null | string;
+            id: string;
+            name: string;
+            phone: null | string;
+          };
+        }>;
+
+        return {
+          ...currentState,
+          isAuthenticated: persisted.isAuthenticated ?? false,
+          user: persisted.user
+            ? User.create({
+                email: persisted.user.email
+                  ? Email.rehydrate(persisted.user.email)
+                  : undefined,
+                id: persisted.user.id,
+                name: persisted.user.name,
+                phone: persisted.user.phone
+                  ? Phone.rehydrate(persisted.user.phone)
+                  : undefined,
+              })
+            : null,
+        };
+      },
       name: "auth-storage",
+      partialize: (state) => ({
+        isAuthenticated: state.isAuthenticated,
+        user: state.user
+          ? {
+              email: state.user.getEmail()?.getValue() ?? null,
+              id: state.user.getId(),
+              name: state.user.getName(),
+              phone: state.user.getPhone()?.getValue() ?? null,
+            }
+          : null,
+      }),
       storage: createJSONStorage(() => cookieStorage),
     }
   )
