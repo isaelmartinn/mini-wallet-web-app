@@ -11,20 +11,30 @@ import {
   CreateTransferParams,
 } from "#payments/transfer/domain/repositories";
 import {
+  TransferAmount,
   TransferStatus,
   TransferType,
 } from "#payments/transfer/domain/value-objects";
 import { TransferPersistenceService } from "#payments/transfer/infrastructure/persistence";
 import { TRANSACTION_FIXTURES } from "#payments/transfer/infrastructure/repositories/transfer-repository/transfer.fixtures";
-import { MOCK_CONFIG } from "#shared/infrastructure/config/mock.config";
+import { HttpClient, HttpError } from "#shared/infrastructure";
+import { MockTransactionData } from "#shared/infrastructure/mocks";
 import { LocalStorageService } from "#shared/infrastructure/storage";
+
+interface ConfirmTransferResponse {
+  success: boolean;
+  transfer: MockTransactionData;
+}
 
 export class TransferRepositoryImpl implements TransferRepository {
   private static instance: TransferRepositoryImpl;
   private static persistenceService: TransferPersistenceService;
   private static transfersByUser: Map<string, Transfer[]> = new Map();
+  private readonly httpClient: HttpClient;
 
   constructor() {
+    this.httpClient = new HttpClient();
+
     if (TransferRepositoryImpl.instance) {
       return TransferRepositoryImpl.instance;
     }
@@ -40,31 +50,15 @@ export class TransferRepositoryImpl implements TransferRepository {
   }
 
   async confirm(transferId: string): Promise<ConfirmTransferResult> {
-    const { delays, errorRates } = MOCK_CONFIG;
-    const delay = Math.random() * (delays.max - delays.min) + delays.min;
+    try {
+      const response = await this.httpClient.post<ConfirmTransferResponse>(
+        `/api/transfers/${transferId}/confirm`,
+        {}
+      );
 
-    await new Promise((resolve) => setTimeout(resolve, delay));
+      const confirmedTransfer = this.mapToTransfer(response.transfer);
 
-    const transfer = await this.findById(transferId);
-
-    if (!transfer) {
-      throw new TransferFetchFailedError();
-    }
-
-    if (transfer.getStatus().isSuccess()) {
-      return { success: true, transfer };
-    }
-
-    const random = Math.random();
-    const scenarios = errorRates.transfers.confirmTransfer;
-
-    let cumulative = 0;
-
-    cumulative += scenarios.SUCCESS;
-    if (random < cumulative) {
-      const confirmedTransfer = transfer.confirm();
-
-      const userId = transfer.getUserId();
+      const userId = confirmedTransfer.getUserId();
       const userTransfers =
         TransferRepositoryImpl.transfersByUser.get(userId) || [];
       const transferIndex = userTransfers.findIndex(
@@ -81,44 +75,43 @@ export class TransferRepositoryImpl implements TransferRepository {
       }
 
       return { success: true, transfer: confirmedTransfer };
+    } catch (error) {
+      if (error instanceof HttpError) {
+        if (error.status === 400) {
+          const body = error.body as { error?: string };
+          if (body?.error === "INSUFFICIENT_FUNDS") {
+            throw new InsufficientBalanceError();
+          }
+        }
+        if (error.status === 500) {
+          const body = error.body as { error?: string };
+          if (body?.error === "NETWORK_ERROR") {
+            throw new TransferNetworkError();
+          }
+          if (body?.error === "UNKNOWN_ERROR") {
+            throw new TransferUnknownError();
+          }
+        }
+        if (error.status === 504) {
+          throw new TransferTimeoutError();
+        }
+      }
+      throw error;
     }
-
-    cumulative += scenarios.NETWORK_ERROR;
-    if (random < cumulative) {
-      throw new TransferNetworkError();
-    }
-
-    cumulative += scenarios.INSUFFICIENT_FUNDS;
-    if (random < cumulative) {
-      throw new InsufficientBalanceError();
-    }
-
-    cumulative += scenarios.TIMEOUT;
-    if (random < cumulative) {
-      throw new TransferTimeoutError();
-    }
-
-    throw new TransferUnknownError();
   }
 
   async create(params: CreateTransferParams): Promise<Transfer> {
-    const { delays } = MOCK_CONFIG;
-    const delay = Math.random() * (delays.max - delays.min) + delays.min;
+    const response = await this.httpClient.post<MockTransactionData>(
+      "/api/transfers",
+      {
+        amount: params.amount.getValue(),
+        description: params.description,
+        recipientId: params.recipientId,
+        userId: params.userId,
+      }
+    );
 
-    await new Promise((resolve) => setTimeout(resolve, delay));
-
-    const transferId = `transfer-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-
-    const newTransfer = Transfer.create({
-      amount: params.amount,
-      date: new Date(),
-      description: params.description,
-      id: transferId,
-      recipientId: params.recipientId,
-      status: TransferStatus.pending(),
-      type: TransferType.expense(),
-      userId: params.userId,
-    });
+    const newTransfer = this.mapToTransfer(response);
 
     const userTransfers =
       TransferRepositoryImpl.transfersByUser.get(params.userId) || [];
@@ -133,11 +126,6 @@ export class TransferRepositoryImpl implements TransferRepository {
   }
 
   async findById(transferId: string): Promise<null | Transfer> {
-    const { delays } = MOCK_CONFIG;
-    const delay = Math.random() * (delays.max - delays.min) + delays.min;
-
-    await new Promise((resolve) => setTimeout(resolve, delay));
-
     for (const transfers of TransferRepositoryImpl.transfersByUser.values()) {
       const transfer = transfers.find((t) => t.getId() === transferId);
       if (transfer) {
@@ -145,22 +133,20 @@ export class TransferRepositoryImpl implements TransferRepository {
       }
     }
 
-    return null;
+    try {
+      const response = await this.httpClient.get<MockTransactionData>(
+        `/api/transfers/${transferId}`
+      );
+      return this.mapToTransfer(response);
+    } catch (error) {
+      if (error instanceof HttpError && error.status === 404) {
+        return null;
+      }
+      throw error;
+    }
   }
 
   async findByUserId(userId: string): Promise<Transfer[]> {
-    const { delays, errorRates } = MOCK_CONFIG;
-    const delay = Math.random() * (delays.max - delays.min) + delays.min;
-
-    await new Promise((resolve) => setTimeout(resolve, delay));
-
-    const shouldFail =
-      Math.random() > errorRates.transfers.getTransfers.SUCCESS;
-
-    if (shouldFail) {
-      throw new TransferFetchFailedError();
-    }
-
     const cachedTransfers = TransferRepositoryImpl.transfersByUser.get(userId);
     if (cachedTransfers && cachedTransfers.length > 0) {
       return [...cachedTransfers];
@@ -173,19 +159,26 @@ export class TransferRepositoryImpl implements TransferRepository {
       return [...persistedTransfers];
     }
 
-    const userFixtures = TRANSACTION_FIXTURES.filter(
-      (t) => t.getUserId() === userId
-    );
-    if (userFixtures.length > 0) {
-      TransferRepositoryImpl.transfersByUser.set(userId, userFixtures);
+    try {
+      const response = await this.httpClient.get<MockTransactionData[]>(
+        `/api/transfers?userId=${userId}`
+      );
+
+      const transfers = response.map((data) => this.mapToTransfer(data));
+
+      TransferRepositoryImpl.transfersByUser.set(userId, transfers);
       TransferRepositoryImpl.persistenceService.saveTransfers(
         userId,
-        userFixtures
+        transfers
       );
-      return [...userFixtures];
-    }
 
-    return [];
+      return transfers;
+    } catch (error) {
+      if (error instanceof HttpError && error.status === 500) {
+        throw new TransferFetchFailedError();
+      }
+      throw error;
+    }
   }
 
   private initializeFixtures(): void {
@@ -213,6 +206,25 @@ export class TransferRepositoryImpl implements TransferRepository {
         userId,
         userFixtures
       );
+    });
+  }
+
+  private mapToTransfer(data: MockTransactionData): Transfer {
+    return Transfer.create({
+      amount: TransferAmount.create(data.amount),
+      date: new Date(data.date),
+      description: data.description,
+      id: data.id,
+      recipientId: data.recipientId,
+      status:
+        data.status === "success"
+          ? TransferStatus.success()
+          : data.status === "failed"
+            ? TransferStatus.failed()
+            : TransferStatus.pending(),
+      type:
+        data.type === "income" ? TransferType.income() : TransferType.expense(),
+      userId: data.userId,
     });
   }
 }

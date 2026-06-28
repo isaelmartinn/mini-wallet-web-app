@@ -1,8 +1,7 @@
 import { User } from "#auth/session/domain";
 import { AuthRepository as AuthRepositoryInterface } from "#auth/session/domain/repositories";
 import { Email, Phone } from "#shared/domain/value-objects";
-
-import { mockUsers } from "./auth.fixtures";
+import { HttpClient, HttpError } from "#shared/infrastructure";
 
 interface StoredUserData {
   email?: string;
@@ -11,39 +10,48 @@ interface StoredUserData {
   phone?: string;
 }
 
+interface UserResponse {
+  email: string;
+  id: string;
+  name: string;
+  phone: string;
+}
+
 export class AuthRepository implements AuthRepositoryInterface {
+  private readonly httpClient: HttpClient;
+
+  constructor() {
+    this.httpClient = new HttpClient();
+  }
   async clearSession(): Promise<void> {
     localStorage.removeItem("auth_user");
   }
 
   async findByCredential(credential: Email | Phone): Promise<null | User> {
-    await this.simulateDelay();
+    try {
+      const response = await this.httpClient.post<UserResponse>(
+        "/api/auth/login",
+        {
+          credential: credential.getValue(),
+        }
+      );
 
-    const credentialValue = credential.getValue();
+      const user = User.create({
+        email: response.email ? Email.create(response.email) : undefined,
+        id: response.id,
+        name: response.name,
+        phone: response.phone ? Phone.create(response.phone) : undefined,
+      });
 
-    const user = mockUsers.find((u) => {
-      const email = u.getEmail();
-      const phone = u.getPhone();
-
-      if (
-        email &&
-        email.getValue().toLowerCase() === credentialValue.toLowerCase()
-      ) {
-        return true;
-      }
-
-      if (phone && phone.getValue() === credentialValue) {
-        return true;
-      }
-
-      return false;
-    });
-
-    if (user) {
       this.persistSession(user);
-    }
 
-    return user ?? null;
+      return user;
+    } catch (error) {
+      if (error instanceof HttpError && error.status === 401) {
+        return null;
+      }
+      throw error;
+    }
   }
 
   async getStoredSession(): Promise<null | User> {
@@ -77,10 +85,5 @@ export class AuthRepository implements AuthRepositoryInterface {
     };
 
     localStorage.setItem("auth_user", JSON.stringify(userData));
-  }
-
-  private async simulateDelay(): Promise<void> {
-    const delay = Math.random() * 1000 + 500;
-    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 }
