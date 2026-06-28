@@ -30,7 +30,7 @@ import { AuthStore, UserWithId } from "#shared/domain/interfaces";
 import { BalanceProvider } from "#shared/domain/interfaces/balanceProvider.interface";
 import { useAuthContext } from "#shared/infrastructure/hooks";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-import { WalletRepository } from "#wallet/infrastructure/repositories";
+import { WalletRepository } from "#wallet/balance/infrastructure/repositories";
 
 interface NewTransferPageProps<TUser extends UserWithId> {
   authStore: AuthStore<TUser>;

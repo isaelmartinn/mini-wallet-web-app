@@ -2,8 +2,8 @@
 
 import { useAuthStore } from "#auth/session/infrastructure/store";
 import { NewTransferPage } from "#payments/transfer/infrastructure/ui/pages";
-import { BalanceProviderAdapter } from "#wallet/infrastructure/providers/balance-provider/balance-provider.adapter";
-import { WalletRepository } from "#wallet/infrastructure/repositories";
+import { BalanceProviderAdapter } from "#wallet/balance/infrastructure/providers/balance-provider/balance-provider.adapter";
+import { WalletRepository } from "#wallet/balance/infrastructure/repositories";
 
 const walletRepository = WalletRepository.getInstance();
 const balanceProvider = new BalanceProviderAdapter(walletRepository);

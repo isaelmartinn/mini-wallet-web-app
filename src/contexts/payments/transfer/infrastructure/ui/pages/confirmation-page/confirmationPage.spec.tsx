@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useAuthStore } from "#auth/session/infrastructure/store";
 import { TransferRepositoryImpl } from "#payments/transfer/infrastructure/repositories";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-import { useWalletStore } from "#wallet/infrastructure/store";
+import { useWalletStore } from "#wallet/balance/infrastructure/store";
 
 import { ConfirmationPage } from "./confirmationPage";
 
@@ -19,7 +19,7 @@ vi.mock("#auth/session/infrastructure/store", () => ({
   useAuthStore: vi.fn(),
 }));
 
-vi.mock("#wallet/infrastructure/store", () => ({
+vi.mock("#wallet/balance/infrastructure/store", () => ({
   useWalletStore: vi.fn(),
 }));
 

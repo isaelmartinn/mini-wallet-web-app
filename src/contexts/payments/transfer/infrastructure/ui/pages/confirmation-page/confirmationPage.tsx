@@ -15,8 +15,8 @@ import {
 import { TransferConfirmErrorMapper } from "#payments/transfer/infrastructure/ui/error-mapper/transferConfirmErrorMapper";
 import { mapDomainErrorToType } from "#payments/transfer/infrastructure/ui/utils/errorTypeMapper";
 import { useErrorHandler } from "#shared/infrastructure/ui/hooks";
-import { WalletRepository } from "#wallet/infrastructure/repositories";
-import { useWalletStore } from "#wallet/infrastructure/store";
+import { WalletRepository } from "#wallet/balance/infrastructure/repositories";
+import { useWalletStore } from "#wallet/balance/infrastructure/store";
 
 type ConfirmationState = "loading" | "success";
 

@@ -2,7 +2,7 @@ import { ContactRepository } from "#payments/contact/domain/repositories";
 import { InsufficientBalanceError } from "#payments/transfer/domain/errors";
 import { TransferRepository } from "#payments/transfer/domain/repositories";
 import { TransferAmount } from "#payments/transfer/domain/value-objects";
-import { WalletRepository } from "#wallet/domain/repositories";
+import { WalletRepository } from "#wallet/balance/domain/repositories";
 
 import {
   PrepareTransferParams,

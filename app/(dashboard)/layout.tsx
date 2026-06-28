@@ -8,8 +8,8 @@ import { useAuthStore } from "#auth/session/infrastructure/store";
 import { useLogout } from "#auth/session/infrastructure/ui";
 import { UserHeaderCompact } from "#shared/infrastructure/ui/components";
 import { useThemeToken } from "#shared/infrastructure/ui/hooks";
-import { useWalletStore } from "#wallet/infrastructure/store";
-import { useWalletData } from "#wallet/infrastructure/ui/hooks";
+import { useWalletStore } from "#wallet/balance/infrastructure/store";
+import { useWalletData } from "#wallet/balance/infrastructure/ui/hooks";
 
 export default function DashboardLayout({
   children,
