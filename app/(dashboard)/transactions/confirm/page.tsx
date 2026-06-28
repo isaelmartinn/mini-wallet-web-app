@@ -1,9 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
+
 import { ConfirmationPage } from "#payments/transfer/infrastructure/ui/pages";
 
-export const dynamic = "force-dynamic";
-
 export default function ConfirmRoute() {
-  return <ConfirmationPage />;
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <ConfirmationPage />
+    </Suspense>
+  );
 }

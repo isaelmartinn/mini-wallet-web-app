@@ -1,9 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
+
 import { TransferErrorPage } from "#payments/transfer/infrastructure/ui/pages";
 
-export const dynamic = "force-dynamic";
-
 export default function TransferErrorRoute() {
-  return <TransferErrorPage />;
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <TransferErrorPage />
+    </Suspense>
+  );
 }
