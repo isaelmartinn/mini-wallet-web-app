@@ -36,6 +36,7 @@ export class ContactRepository implements ContactRepositoryInterface {
       "/api/contacts",
       {
         email: contact.getEmail().getValue(),
+        id: contact.getId(),
         isFavorite: contact.isFavorite(),
         name: contact.getName(),
         phone: contact.getPhone().getValue(),
@@ -43,7 +44,10 @@ export class ContactRepository implements ContactRepositoryInterface {
       }
     );
 
-    this.contactsCache.delete(userId);
+    const cached = this.contactsCache.get(userId);
+    if (cached) {
+      this.contactsCache.set(userId, [...cached, contact]);
+    }
 
     const stored = this.getFromStorage();
     stored.push({

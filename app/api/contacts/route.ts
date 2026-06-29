@@ -8,6 +8,7 @@ import {
 
 interface CreateContactRequest {
   email: string;
+  id: string;
   isFavorite: boolean;
   name: string;
   phone: string;
@@ -51,7 +52,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = (await request.json()) as CreateContactRequest;
-    const { email, isFavorite, name, phone } = body;
+    const { email, id, isFavorite, name, phone } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        {
+          error: "BAD_REQUEST",
+          message: "id is required",
+        },
+        { status: 400 }
+      );
+    }
 
     if (!name || (!email && !phone)) {
       return NextResponse.json(
@@ -68,11 +79,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       MOCK_CONFIG.delays.min;
     await new Promise((resolve) => setTimeout(resolve, delay));
 
-    const contactId = `contact-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-
     const newContact: MockContactData = {
       email: email || "",
-      id: contactId,
+      id: id,
       isFavorite: isFavorite || false,
       name,
       phone: phone || "",
